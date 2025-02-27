@@ -9,6 +9,10 @@ lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.8.0"
 composeBom = "2024.04.01"
 
+firebasebom = "33.9.0"  # Define la versión del Firebase BoM
+service = "4.4.2"
+crashlytics = "3.0.3"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -25,8 +29,18 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
+
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref="firebasebom"} #archivo especial que gestiona todas las bibliotecas de firebase, en lugar de especificar cada dependencia de firebase
+firebase-crashlytics = {module = "com.google.firebase:firebase-crashlytics"} # Permite monitorear y analizar fallos (crashes), proporcionando informes detallados sobre los errores
+
 [plugins]
+googleServices = { id = "com.google.gms.google-services", version.ref = "service" } # para configurar servicios de google, su función principal procesar archivos google-service-json, generando los recursos necesarios para que firebase funcione
+crashlytics = {id = "com.google.firebase.crashlytics", version.ref = "crashlytics"}
+
+
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
+
 
