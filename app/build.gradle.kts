@@ -6,6 +6,7 @@ plugins {
     //Plugins añadidos
     alias(libs.plugins.googleServices)
     alias(libs.plugins.crashlytics)
+    alias(libs.plugins.jetbrainsKotlinSerialization)
 
 }
 
@@ -65,5 +66,11 @@ dependencies {
     //Nuevas librerias
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
+
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
+
+
+
 
 }
