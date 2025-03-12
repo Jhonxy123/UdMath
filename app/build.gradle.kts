@@ -8,6 +8,9 @@ plugins {
     alias(libs.plugins.crashlytics)
     alias(libs.plugins.jetbrainsKotlinSerialization)
 
+    alias(libs.plugins.hilt)
+    id("kotlin-kapt")
+
 }
 
 android {
@@ -54,6 +57,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -66,11 +70,12 @@ dependencies {
     //Nuevas librerias
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.auth.ktx)
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
 
-
-
-
+    //hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 }

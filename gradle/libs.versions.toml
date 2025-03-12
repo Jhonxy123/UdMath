@@ -14,6 +14,10 @@ service = "4.4.2"
 crashlytics = "3.0.3"
 navegationCompose = "2.8.8"
 kotlinxSerialization = "1.8.0"
+hilt = "2.51.1"
+firebaseAuthKtx = "23.2.0"
+
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -39,9 +43,19 @@ firebase-auth = {module = "com.google.firebase:firebase-auth-ktx"} # Para la aut
 androidx-navigation-compose = {module = "androidx.navigation:navigation-compose", version.ref = "navegationCompose"} # una biblioteca que permite manejar la navegacion entre jetpack compose
 kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization"} # permite convertir objetos kotlin en formatos como JSON, XML, etc, y viceversa
 
+#hilt
+hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
+hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+
+
+
+
 [plugins]
 googleServices = { id = "com.google.gms.google-services", version.ref = "service" } # para configurar servicios de google, su función principal procesar archivos google-service-json, generando los recursos necesarios para que firebase funcione
 crashlytics = {id = "com.google.firebase.crashlytics", version.ref = "crashlytics"}
+
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt"}
 
 
 android-application = { id = "com.android.application", version.ref = "agp" }

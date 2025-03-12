@@ -26,18 +26,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.udmath.R
 import com.example.udmath.presentation.components.AutoResizedText
 import com.example.udmath.ui.theme.Blue
 import com.example.udmath.ui.theme.DarkBlue
 
 @Composable
-fun RegisterScreen(){
+fun RegisterScreen(viewModel: RegisterViewModel){
 
-    var Nombre by rememberSaveable { mutableStateOf("") }
-    var Codigo by rememberSaveable { mutableStateOf("") }
-    var Correo by rememberSaveable { mutableStateOf("") }
-    var password by rememberSaveable { mutableStateOf("") }
+    var Correo by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+
+    val name by viewModel.name.collectAsStateWithLifecycle()
+    val code by viewModel.code.collectAsStateWithLifecycle()
 
     Column( modifier= Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
@@ -57,21 +59,11 @@ fun RegisterScreen(){
 
         Spacer(modifier = Modifier.height(35.dp))
 
-        OutlinedTextField(
-            value = Nombre,
-            onValueChange = { Nombre = it },
-            label = { Text("Nombre") },
-            textStyle = TextStyle(color = DarkBlue)
-        )
+        NameText(name,{viewModel.onNameChanged(it)})
 
-        Spacer(modifier = Modifier.height(48.dp))
+        //Spacer(modifier = Modifier.height(48.dp))
 
-        OutlinedTextField(
-            value = Codigo,
-            onValueChange = { Codigo = it },
-            label = { Text("Código") },
-            textStyle = TextStyle(color = DarkBlue)
-        )
+        //CodeText(code,{onCodeChanged(it)})
 
         Spacer(modifier = Modifier.height(48.dp))
 
@@ -112,4 +104,23 @@ fun RegisterScreen(){
 
     }
 
+}
+
+@Composable
+fun NameText(name: String, onTextChanged: (String) -> Unit){
+
+    TextField(
+        value = name,
+        onValueChange = {onTextChanged(it)},
+        label = { Text("Nombre") }
+    )
+}
+
+@Composable
+fun CodeText(code: String, onTextChanged: (String) -> Unit){
+    TextField(
+        value = code,
+        onValueChange = {onTextChanged(it)},
+        label = { Text("Código") }
+    )
 }
