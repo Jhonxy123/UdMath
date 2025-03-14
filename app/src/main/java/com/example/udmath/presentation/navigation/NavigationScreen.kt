@@ -1,6 +1,7 @@
 package com.example.udmath.presentation.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -19,7 +20,7 @@ fun NavigationScreen(){
         }
 
         composable<Register> {
-            val viewModel: RegisterViewModel = viewModel()
+            val viewModel: RegisterViewModel = hiltViewModel()
             RegisterScreen(viewModel)
         }
 

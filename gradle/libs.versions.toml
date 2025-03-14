@@ -16,6 +16,7 @@ navegationCompose = "2.8.8"
 kotlinxSerialization = "1.8.0"
 hilt = "2.51.1"
 firebaseAuthKtx = "23.2.0"
+hiltNavigationCompose = "1.2.0"
 
 
 
@@ -42,6 +43,10 @@ firebase-auth = {module = "com.google.firebase:firebase-auth-ktx"} # Para la aut
 
 androidx-navigation-compose = {module = "androidx.navigation:navigation-compose", version.ref = "navegationCompose"} # una biblioteca que permite manejar la navegacion entre jetpack compose
 kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization"} # permite convertir objetos kotlin en formatos como JSON, XML, etc, y viceversa
+
+#hiltNavigationCompose
+androidx-hilt-navigation-compose = {module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose"}
+
 
 #hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }

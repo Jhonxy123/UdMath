@@ -16,7 +16,7 @@ import com.example.udmath.presentation.navigation.NavigationScreen
 import com.example.udmath.ui.theme.UdMathTheme
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint //
+@AndroidEntryPoint //Hilt genera automaticamenete el código para inyectar dependencias en esa clase
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

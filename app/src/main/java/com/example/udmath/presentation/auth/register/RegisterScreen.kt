@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.udmath.R
+import com.example.udmath.domain.model.User
 import com.example.udmath.presentation.components.AutoResizedText
 import com.example.udmath.ui.theme.Blue
 import com.example.udmath.ui.theme.DarkBlue
@@ -88,7 +89,10 @@ fun RegisterScreen(viewModel: RegisterViewModel){
 
         Spacer(modifier = Modifier.height(48.dp))
 
-        Button(onClick = {},
+        Button(onClick = {
+            val user = User(name, password)
+            viewModel.onRegister(user)
+        },
             modifier = Modifier.width(280.dp).height(50.dp),
             shape = RoundedCornerShape(16.dp)
         ) {

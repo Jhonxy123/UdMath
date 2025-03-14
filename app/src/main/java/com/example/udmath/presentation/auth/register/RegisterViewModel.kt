@@ -1,14 +1,19 @@
 package com.example.udmath.presentation.auth.register
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.udmath.domain.UseCases.RegisterUserUseCase
+import com.example.udmath.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class RegisterViewModel @Inject constructor(): ViewModel(){
+class RegisterViewModel @Inject constructor(
+    private val registerUserUseCase: RegisterUserUseCase
+): ViewModel(){
 
     private val _name = MutableStateFlow<String>("")
     val name: StateFlow<String> = _name
@@ -25,6 +30,12 @@ class RegisterViewModel @Inject constructor(): ViewModel(){
 
     fun onPasswordChanged(password: String){
         _password.value = password
+    }
+
+    fun onRegister(user: User){
+        viewModelScope.launch {
+            val result = registerUserUseCase(user) // ✅ Se ejecuta en una corrutina
+        }
     }
 
 
