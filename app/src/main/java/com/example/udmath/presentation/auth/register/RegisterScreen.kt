@@ -35,10 +35,9 @@ import com.example.udmath.ui.theme.DarkBlue
 @Composable
 fun RegisterScreen(viewModel: RegisterViewModel){
 
-    var Correo by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
 
     val name by viewModel.name.collectAsStateWithLifecycle()
+    val password by viewModel.password.collectAsStateWithLifecycle()
     val code by viewModel.code.collectAsStateWithLifecycle()
 
     Column( modifier= Modifier.fillMaxSize(),
@@ -67,7 +66,7 @@ fun RegisterScreen(viewModel: RegisterViewModel){
 
         Spacer(modifier = Modifier.height(48.dp))
 
-        OutlinedTextField(
+        /*OutlinedTextField(
             value = Correo,
             onValueChange = { Correo = it },
             label = { Text("Correo") },
@@ -84,13 +83,8 @@ fun RegisterScreen(viewModel: RegisterViewModel){
         )
 
         Spacer(modifier = Modifier.height(48.dp))
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Confirmar contraseña") },
-            textStyle = TextStyle(color = DarkBlue)
-        )
+*/
+        passwordText(password,{viewModel.onPasswordChanged(it)})
 
         Spacer(modifier = Modifier.height(48.dp))
 
@@ -108,11 +102,19 @@ fun RegisterScreen(viewModel: RegisterViewModel){
 
 @Composable
 fun NameText(name: String, onTextChanged: (String) -> Unit){
-
     TextField(
         value = name,
         onValueChange = {onTextChanged(it)},
         label = { Text("Nombre") }
+    )
+}
+
+@Composable
+fun passwordText(name: String, onTextChanged: (String) -> Unit){
+    TextField(
+        value = name,
+        onValueChange = {onTextChanged(it)},
+        label = { Text("password") }
     )
 }
 
