@@ -36,18 +36,17 @@ import com.example.udmath.ui.theme.DarkBlue
 @Composable
 fun RegisterScreen(viewModel: RegisterViewModel){
 
-
     val name by viewModel.name.collectAsStateWithLifecycle()
-    val password by viewModel.password.collectAsStateWithLifecycle()
     val code by viewModel.code.collectAsStateWithLifecycle()
+    val email by viewModel.email.collectAsStateWithLifecycle()
+    val password by viewModel.password.collectAsStateWithLifecycle()
+
 
     Column( modifier= Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally
     ){
 
-        AutoResizedText(
-            imagePainter = painterResource(id = R.drawable.logo_ud),
-            text = "Registro")
+        AutoResizedText(imagePainter = painterResource(id = R.drawable.logo_ud), text = "Registro")
 
         Spacer(modifier = Modifier.height(20.dp))
 
@@ -58,51 +57,33 @@ fun RegisterScreen(viewModel: RegisterViewModel){
         )
 
         Spacer(modifier = Modifier.height(35.dp))
-
-        NameText(name,{viewModel.onNameChanged(it)})
-
-        //Spacer(modifier = Modifier.height(48.dp))
-
-        //CodeText(code,{onCodeChanged(it)})
-
+        NameText(name,{viewModel.onNameChanged(it)}) //Campo de texto para el nombre del usuario
+        Spacer(modifier = Modifier.height(48.dp))
+        CodeText(code,{viewModel.onCodeChanged(it)}) //Campo de texto para el codigo del usuario
+        Spacer(modifier = Modifier.height(48.dp))
+        emailText(email,{viewModel.onEmailChanged(it)}) //Campo de texto para el email del usuario
+        Spacer(modifier = Modifier.height(48.dp))
+        passwordText(password,{viewModel.onPasswordChanged(it)}) //Campo de texto para el codigo del usuario
         Spacer(modifier = Modifier.height(48.dp))
 
-        /*OutlinedTextField(
-            value = Correo,
-            onValueChange = { Correo = it },
-            label = { Text("Correo") },
-            textStyle = TextStyle(color = DarkBlue)
-        )
-
-        Spacer(modifier = Modifier.height(48.dp))
-
-        OutlinedTextField(
-            value = password,
-            onValueChange = { password = it },
-            label = { Text("Contraseña") },
-            textStyle = TextStyle(color = DarkBlue)
-        )
-
-        Spacer(modifier = Modifier.height(48.dp))
-*/
-        passwordText(password,{viewModel.onPasswordChanged(it)})
-
-        Spacer(modifier = Modifier.height(48.dp))
 
         Button(onClick = {
-            val user = User(name, password)
-            viewModel.onRegister(user)
+            //val user = User(name, code, email, password) // Crea un objeto User con los datos ingresados, pero genera problemas, ¿problemas con la recomposición?
+            viewModel.onRegister(
+                User(name, code, email, password)
+            )
         },
             modifier = Modifier.width(280.dp).height(50.dp),
             shape = RoundedCornerShape(16.dp)
         ) {
-            Text(text = "Navegar al login")
+            Text(text = "Registrarse")
         }
-
 
     }
 
 }
+
+// ¿SE PODRA REUTILIZAR UN MISMO COMPONENTE PARA LOS CAMPOS DE TEXTO?
 
 @Composable
 fun NameText(name: String, onTextChanged: (String) -> Unit){
@@ -114,15 +95,6 @@ fun NameText(name: String, onTextChanged: (String) -> Unit){
 }
 
 @Composable
-fun passwordText(name: String, onTextChanged: (String) -> Unit){
-    TextField(
-        value = name,
-        onValueChange = {onTextChanged(it)},
-        label = { Text("password") }
-    )
-}
-
-@Composable
 fun CodeText(code: String, onTextChanged: (String) -> Unit){
     TextField(
         value = code,
@@ -130,3 +102,23 @@ fun CodeText(code: String, onTextChanged: (String) -> Unit){
         label = { Text("Código") }
     )
 }
+
+@Composable
+fun emailText(email: String, onTextChanged: (String) -> Unit){
+    TextField(
+        value = email,
+        onValueChange = {onTextChanged(it)},
+        label = { Text("Correo") }
+    )
+}
+
+@Composable
+fun passwordText(password: String, onTextChanged: (String) -> Unit){
+    TextField(
+        value = password,
+        onValueChange = {onTextChanged(it)},
+        label = { Text("Password") }
+    )
+}
+
+

@@ -21,6 +21,9 @@ class RegisterViewModel @Inject constructor(
     private val _code = MutableStateFlow<String>("")
     val code: StateFlow<String> = _code
 
+    private val _email = MutableStateFlow<String>("")
+    val email: StateFlow<String> = _email
+
     private val _password = MutableStateFlow<String>("")
     val password: StateFlow<String> = _password
 
@@ -28,13 +31,21 @@ class RegisterViewModel @Inject constructor(
         _name.value = name
     }
 
+    fun onCodeChanged(code: String){
+        _code.value = code
+    }
+
+    fun onEmailChanged(email: String){
+        _email.value = email
+    }
+
     fun onPasswordChanged(password: String){
         _password.value = password
     }
 
     fun onRegister(user: User){
-        viewModelScope.launch {
-            val result = registerUserUseCase(user) // ✅ Se ejecuta en una corrutina
+        viewModelScope.launch {// live cycle de viewmodel para que no se corte la corrutina
+            registerUserUseCase(user) // Se ejecuta en una corrutina
         }
     }
 

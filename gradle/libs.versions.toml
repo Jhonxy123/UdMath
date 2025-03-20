@@ -40,6 +40,7 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref="firebasebom"} #archivo especial que gestiona todas las bibliotecas de firebase, en lugar de especificar cada dependencia de firebase
 firebase-crashlytics = {module = "com.google.firebase:firebase-crashlytics"} # Permite monitorear y analizar fallos (crashes), proporcionando informes detallados sobre los errores
 firebase-auth = {module = "com.google.firebase:firebase-auth-ktx"} # Para la autentificación de los usuarios
+firebase-firestore = {module="com.google.firebase:firebase-firestore"}
 
 androidx-navigation-compose = {module = "androidx.navigation:navigation-compose", version.ref = "navegationCompose"} # una biblioteca que permite manejar la navegacion entre jetpack compose
 kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization"} # permite convertir objetos kotlin en formatos como JSON, XML, etc, y viceversa

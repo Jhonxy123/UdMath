@@ -12,7 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.udmath.presentation.navigation.NavigationScreen
+import com.example.udmath.presentation.navigation.Navigation
 import com.example.udmath.ui.theme.UdMathTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             UdMathTheme {
-                NavigationScreen()
+                Navigation()
             }
         }
     }
