@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
+//inyección de dependecias con hilt
 class RegisterViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase
 ): ViewModel(){
