@@ -1,5 +1,6 @@
 package com.example.udmath.presentation.auth.register
 
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -13,6 +14,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -21,7 +23,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
@@ -36,10 +40,23 @@ import com.example.udmath.ui.theme.DarkBlue
 @Composable
 fun RegisterScreen(viewModel: RegisterViewModel){
 
+    //valores para los campos de texto
     val name by viewModel.name.collectAsStateWithLifecycle()
     val code by viewModel.code.collectAsStateWithLifecycle()
     val email by viewModel.email.collectAsStateWithLifecycle()
     val password by viewModel.password.collectAsStateWithLifecycle()
+    val ConfirmPassword by viewModel.confirmPassword.collectAsStateWithLifecycle()
+
+    //valores para el toast
+    val context = LocalContext.current
+    val toastMessage by viewModel.toastMessage.collectAsStateWithLifecycle()
+
+    LaunchedEffect(toastMessage) { // Se activa cuando cambia toastMessage
+        toastMessage?.let {
+            Toast.makeText(context, it, Toast.LENGTH_SHORT).show() // Muestra el Toast
+            viewModel.clearToastMessage() // Limpiar el mensaje después de mostrarlo
+        }
+    }
 
 
     Column( modifier= Modifier.fillMaxSize(),
@@ -63,7 +80,9 @@ fun RegisterScreen(viewModel: RegisterViewModel){
         Spacer(modifier = Modifier.height(48.dp))
         emailText(email,{viewModel.onEmailChanged(it)}) //Campo de texto para el email del usuario
         Spacer(modifier = Modifier.height(48.dp))
-        passwordText(password,{viewModel.onPasswordChanged(it)}) //Campo de texto para el codigo del usuario
+        passwordText(password,{viewModel.onPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
+        Spacer(modifier = Modifier.height(48.dp))
+        ConfirmPasswordText(ConfirmPassword,{viewModel.onConfirmPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
         Spacer(modifier = Modifier.height(48.dp))
 
 
@@ -87,10 +106,18 @@ fun RegisterScreen(viewModel: RegisterViewModel){
 
 @Composable
 fun NameText(name: String, onTextChanged: (String) -> Unit){
-    TextField(
+    OutlinedTextField(
         value = name,
-        onValueChange = {onTextChanged(it)},
-        label = { Text("Nombre") }
+        onValueChange = {newText ->
+                            // Validación: solo permite letras y espacios
+                            if (newText.matches(Regex("^[A-Za-z ]*$"))) {
+                                onTextChanged(newText) // Solo actualiza si el texto es válido
+                            }
+                        },
+        label = { Text("Nombre") },
+        isError = !name.matches(Regex("^[A-Za-z ]+\$")), // Muestra error si el texto no es válido
+        singleLine = true,
+        textStyle = TextStyle(Color.Black)
     )
 }
 
@@ -117,8 +144,18 @@ fun passwordText(password: String, onTextChanged: (String) -> Unit){
     TextField(
         value = password,
         onValueChange = {onTextChanged(it)},
-        label = { Text("Password") }
+        label = { Text("Contraseña") }
     )
 }
+
+@Composable
+fun ConfirmPasswordText(password: String, onTextChanged: (String) -> Unit){
+    TextField(
+        value = password,
+        onValueChange = {onTextChanged(it)},
+        label = { Text("Confirmar contraseña") }
+    )
+}
+
 
 

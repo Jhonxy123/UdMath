@@ -9,12 +9,14 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+
+// para manejar los servicios en las dependencias
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     @Provides
-    @Singleton
+    @Singleton // indica que solo se creara una unica instancia de la dependencia durante la vida de la aplicacion
     fun provideFirebaseAuth(): FirebaseAuth {
         return FirebaseAuth.getInstance()
     }

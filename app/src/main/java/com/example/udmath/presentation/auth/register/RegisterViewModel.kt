@@ -1,5 +1,6 @@
 package com.example.udmath.presentation.auth.register
 
+import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.udmath.domain.UseCases.RegisterUserUseCase
@@ -15,6 +16,7 @@ class RegisterViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase
 ): ViewModel(){
 
+
     private val _name = MutableStateFlow<String>("")
     val name: StateFlow<String> = _name
 
@@ -27,8 +29,18 @@ class RegisterViewModel @Inject constructor(
     private val _password = MutableStateFlow<String>("")
     val password: StateFlow<String> = _password
 
+    private val _confirmPassword = MutableStateFlow<String>("")
+    val confirmPassword: StateFlow<String> = _confirmPassword
+
+    private val _toastMessage = MutableStateFlow<String?>(null)
+    val toastMessage: StateFlow<String?> = _toastMessage
+
     fun onNameChanged(name: String){
-        _name.value = name
+        if(isValidName(name) || name.isEmpty()){
+            _name.value = name
+        }else{
+            _toastMessage.value = "El nombre solo puede contener letras y espacios"
+        }
     }
 
     fun onCodeChanged(code: String){
@@ -43,11 +55,49 @@ class RegisterViewModel @Inject constructor(
         _password.value = password
     }
 
-    fun onRegister(user: User){
-        viewModelScope.launch {// live cycle de viewmodel para que no se corte la corrutina
-            registerUserUseCase(user) // Se ejecuta en una corrutina
-        }
+    fun onConfirmPasswordChanged(confirmPassword: String){
+        _confirmPassword.value = confirmPassword
     }
+
+    //validar nombre
+    fun isValidName(name: String): Boolean {
+        return name.matches(Regex("^[A-Za-z ]+\$"))
+    }
+
+    // Resetea el mensaje de error después de mostrarlo
+    fun clearToastMessage() {
+        _toastMessage.value = null
+    }
+
+    //funcion para validar que el campo de la contraseña y confirmar contraseña sean iguales
+    fun validatePassword(): Boolean{
+        return password.value == confirmPassword.value
+    }
+
+
+    // funcion para registrar un usuario
+    fun onRegister(user: User){
+
+        if(!validatePassword()){
+
+            _toastMessage.value = "La contraseña no coincide"
+
+        }else if (name.value.isEmpty() || code.value.isEmpty() || email.value.isEmpty() || password.value.isEmpty()){
+
+            _toastMessage.value = "Complete todos los campos"
+
+        } else{
+
+            viewModelScope.launch {// live cycle de viewmodel para que no se corte la corrutina
+                registerUserUseCase(user) // Se ejecuta en una corrutina
+            }
+
+        }
+
+
+    }
+
+
 
 
 }
