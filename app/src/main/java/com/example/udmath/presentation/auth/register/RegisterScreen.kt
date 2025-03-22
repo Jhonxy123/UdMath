@@ -41,11 +41,13 @@ import com.example.udmath.ui.theme.DarkBlue
 fun RegisterScreen(viewModel: RegisterViewModel){
 
     //valores para los campos de texto
-    val name by viewModel.name.collectAsStateWithLifecycle()
-    val code by viewModel.code.collectAsStateWithLifecycle()
-    val email by viewModel.email.collectAsStateWithLifecycle()
-    val password by viewModel.password.collectAsStateWithLifecycle()
-    val ConfirmPassword by viewModel.confirmPassword.collectAsStateWithLifecycle()
+    //val name by viewModel.name.collectAsStateWithLifecycle()
+    //val code by viewModel.code.collectAsStateWithLifecycle()
+    //val email by viewModel.email.collectAsStateWithLifecycle()
+    //val password by viewModel.password.collectAsStateWithLifecycle()
+    //val ConfirmPassword by viewModel.confirmPassword.collectAsStateWithLifecycle()
+
+    val state by viewModel.state.collectAsStateWithLifecycle()
 
     //valores para el toast
     val context = LocalContext.current
@@ -74,22 +76,21 @@ fun RegisterScreen(viewModel: RegisterViewModel){
         )
 
         Spacer(modifier = Modifier.height(35.dp))
-        NameText(name,{viewModel.onNameChanged(it)}) //Campo de texto para el nombre del usuario
+        NameText(state.name,{viewModel.onNameChanged(it)}) //Campo de texto para el nombre del usuario
         Spacer(modifier = Modifier.height(48.dp))
-        CodeText(code,{viewModel.onCodeChanged(it)}) //Campo de texto para el codigo del usuario
+        CodeText(state.code,{viewModel.onCodeChanged(it)}) //Campo de texto para el codigo del usuario
         Spacer(modifier = Modifier.height(48.dp))
-        emailText(email,{viewModel.onEmailChanged(it)}) //Campo de texto para el email del usuario
+        emailText(state.email,{viewModel.onEmailChanged(it)}) //Campo de texto para el email del usuario
         Spacer(modifier = Modifier.height(48.dp))
-        passwordText(password,{viewModel.onPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
+        passwordText(state.password,{viewModel.onPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
         Spacer(modifier = Modifier.height(48.dp))
-        ConfirmPasswordText(ConfirmPassword,{viewModel.onConfirmPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
+        ConfirmPasswordText(state.confirmPassword,{viewModel.onConfirmPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
         Spacer(modifier = Modifier.height(48.dp))
-
 
         Button(onClick = {
             //val user = User(name, code, email, password) // Crea un objeto User con los datos ingresados, pero genera problemas, ¿problemas con la recomposición?
             viewModel.onRegister(
-                User(name, code, email, password)
+                User(state.name, state.code, state.email, state.password)
             )
         },
             modifier = Modifier.width(280.dp).height(50.dp),
@@ -108,12 +109,7 @@ fun RegisterScreen(viewModel: RegisterViewModel){
 fun NameText(name: String, onTextChanged: (String) -> Unit){
     OutlinedTextField(
         value = name,
-        onValueChange = {newText ->
-                            // Validación: solo permite letras y espacios
-                            if (newText.matches(Regex("^[A-Za-z ]*$"))) {
-                                onTextChanged(newText) // Solo actualiza si el texto es válido
-                            }
-                        },
+        onValueChange = {onTextChanged(it)},
         label = { Text("Nombre") },
         isError = !name.matches(Regex("^[A-Za-z ]+\$")), // Muestra error si el texto no es válido
         singleLine = true,
@@ -123,37 +119,44 @@ fun NameText(name: String, onTextChanged: (String) -> Unit){
 
 @Composable
 fun CodeText(code: String, onTextChanged: (String) -> Unit){
-    TextField(
+    OutlinedTextField(
         value = code,
         onValueChange = {onTextChanged(it)},
-        label = { Text("Código") }
+        label = { Text("Código") },
+        isError = !code.matches(Regex("\\d+")), // Muestra error si el texto no es válido
+        singleLine = true,
+        textStyle = TextStyle(Color.Black)
     )
 }
 
 @Composable
 fun emailText(email: String, onTextChanged: (String) -> Unit){
-    TextField(
+    OutlinedTextField(
         value = email,
         onValueChange = {onTextChanged(it)},
-        label = { Text("Correo") }
+        label = { Text("Correo") },
+        textStyle = TextStyle(Color.Black),
+        isError = !email.matches(Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) // Muestra error si el texto no es válido
     )
 }
 
 @Composable
 fun passwordText(password: String, onTextChanged: (String) -> Unit){
-    TextField(
+    OutlinedTextField(
         value = password,
         onValueChange = {onTextChanged(it)},
-        label = { Text("Contraseña") }
+        label = { Text("Contraseña") },
+        textStyle = TextStyle(Color.Black)
     )
 }
 
 @Composable
 fun ConfirmPasswordText(password: String, onTextChanged: (String) -> Unit){
-    TextField(
+    OutlinedTextField(
         value = password,
         onValueChange = {onTextChanged(it)},
-        label = { Text("Confirmar contraseña") }
+        label = { Text("Confirmar contraseña") },
+        textStyle = TextStyle(Color.Black)
     )
 }
 
