@@ -14,11 +14,11 @@ class RegisterUserUseCase @Inject constructor(
     //suspend indica que la función fue suspendida, por lo que se ejecutara en un hilo secundario, una corrutina
     suspend operator fun invoke(user: User): Boolean {
         return try {
-             authRepository.registerUser(user.email, user.password) != null
+            authRepository.registerUser(user.email, user.password) != null
+            authRepository.registerUserInFirestore(user)!= null
         }catch (e:Exception){
             false
         }
-
     }
 
 }

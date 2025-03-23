@@ -3,6 +3,7 @@ package com.example.udmath.di
 import com.example.udmath.data.repository.AuthClientService
 import com.example.udmath.domain.repository.AuthRepository
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,8 +24,14 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideAuthRepository(firebaseAuth: FirebaseAuth): AuthRepository {
-        return AuthClientService(firebaseAuth)  // Debe devolver la implementación correcta
+    fun provideFirestore(): FirebaseFirestore {
+        return FirebaseFirestore.getInstance()
+    }
+
+    @Provides
+    @Singleton
+    fun provideAuthRepository(firebaseAuth: FirebaseAuth, FirebaseFirestore: FirebaseFirestore): AuthRepository {
+        return AuthClientService(firebaseAuth,FirebaseFirestore)  // Debe devolver la implementación correcta
     }
 
 }
