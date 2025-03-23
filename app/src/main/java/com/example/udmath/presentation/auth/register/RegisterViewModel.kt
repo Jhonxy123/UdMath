@@ -1,12 +1,15 @@
 package com.example.udmath.presentation.auth.register
 
+import android.media.metrics.Event
 import android.widget.Toast
 import androidx.compose.ui.graphics.Path
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.udmath.domain.UseCases.RegisterUserUseCase
 import com.example.udmath.domain.model.User
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
@@ -56,6 +59,7 @@ class RegisterViewModel @Inject constructor(
         return _state.value.name.matches(Regex("^[A-Za-z ]+\$"))
     }
 
+    //validar codigo
     fun isValidCode(): Boolean {
         return _state.value.code.matches(Regex("\\d+"))
     }
@@ -65,46 +69,57 @@ class RegisterViewModel @Inject constructor(
         return _state.value.password == _state.value.confirmPassword
     }
 
+    //funcion para validar que el email sea valido
     fun validateEmail(): Boolean{
         return _state.value.email.matches(Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"))
     }
 
+    suspend fun onRegisterSelected(){
+        _state.update { it.copy(isLoading = true) } //actualiza solo la propiedad "isLoading" en el estado sin modificar las demás propiedades
+        delay(4000)
+        _state.update { it.copy(isLoading = false) }
+    }
 
     // funcion para registrar un usuario
-    fun onRegister(user: User){
+    suspend fun onRegister(user: User): Boolean{
 
         if(!isValidName()){
 
             _toastMessage.value = "El nombre solo puede contener letras y espacios"
 
+            return false
+
         }else if(!isValidCode()){
 
             _toastMessage.value = "El código solo puede contener números"
+            return false
 
         }else if(!validatePassword()){
 
             _toastMessage.value = "La contraseña no coincide"
+            return false
 
         }else if (!validateEmail()){
 
             _toastMessage.value = "El email no es válido"
+            return false
 
         }else if (state.value.name.isEmpty() || state.value.code.isEmpty() || state.value.email.isEmpty() || state.value.password.isEmpty()){
 
-        _toastMessage.value = "Complete todos los campos"
+            _toastMessage.value = "Complete todos los campos"
+            return false
 
         }else{
-
-            viewModelScope.launch {// live cycle de viewmodel para que no se corte la corrutina
-                registerUserUseCase(user) // Se ejecuta en una corrutina
+                val userCreated = registerUserUseCase(user) // Se ejecuta en una corrutina
+                if(userCreated){
+                    _toastMessage.value = "Registro exitoso"
+                    return true
+                }else{
+                    _toastMessage.value = "Error al registrarse, por favor verifique los datos"
+                    return false
+                }
             }
 
         }
 
-
     }
-
-
-
-
-}
