@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -36,6 +37,7 @@ import com.example.udmath.domain.model.User
 import com.example.udmath.presentation.components.AutoResizedText
 import com.example.udmath.ui.theme.Blue
 import com.example.udmath.ui.theme.DarkBlue
+
 
 @Composable
 fun RegisterScreen(viewModel: RegisterViewModel){

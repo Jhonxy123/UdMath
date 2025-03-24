@@ -7,3 +7,6 @@ object Login
 
 @Serializable
 object Register
+
+@Serializable
+object Menu
