@@ -44,7 +44,7 @@ fun LoginScreen(viewModel: LoginViewModel,navigateToRegister: () -> Unit,navigat
         passwordText(password,{viewModel.onPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
         Spacer(modifier = Modifier.height(48.dp))
 
-        Button(onClick = {}) {
+        Button(onClick = {navigateToMenu()}) {
             Text(text = "Sign in")
         }
         Button(onClick = {navigateToRegister()}) {

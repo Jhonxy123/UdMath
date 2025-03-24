@@ -1,10 +1,14 @@
 package com.example.udmath.presentation.auth.register
 
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.udmath.domain.UseCases.RegisterUserUseCase
 import com.example.udmath.domain.model.User
+import com.google.firebase.Firebase
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,7 +20,6 @@ import javax.inject.Inject
 class RegisterViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase
 ): ViewModel(){
-
 
     private val _name = MutableStateFlow<String>("")
     val name: StateFlow<String> = _name
