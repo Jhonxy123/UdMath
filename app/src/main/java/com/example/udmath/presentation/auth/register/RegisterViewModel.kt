@@ -66,7 +66,7 @@ class RegisterViewModel @Inject constructor(
 
     //funcion para validar que el campo de la contraseña y confirmar contraseña sean iguales
     fun validatePassword(): Boolean{
-        return _state.value.password == _state.value.confirmPassword
+        return _state.value.password == _state.value.confirmPassword && _state.value.password.length > 5
     }
 
     //funcion para validar que el email sea valido
@@ -83,43 +83,47 @@ class RegisterViewModel @Inject constructor(
     // funcion para registrar un usuario
     suspend fun onRegister(user: User): Boolean{
 
-        if(!isValidName()){
+        _state.update { it.copy(btnEnabled = false) }
 
-            _toastMessage.value = "El nombre solo puede contener letras y espacios"
+        return try {
+            if(!isValidName()){
 
-            return false
+                _toastMessage.value = "El nombre solo puede contener letras y espacios"
 
-        }else if(!isValidCode()){
+                false
 
-            _toastMessage.value = "El código solo puede contener números"
-            return false
+            }else if(!isValidCode()){
 
-        }else if(!validatePassword()){
+                _toastMessage.value = "El código solo puede contener números"
+                false
 
-            _toastMessage.value = "La contraseña no coincide"
-            return false
+            }else if(!validatePassword()){
 
-        }else if (!validateEmail()){
+                _toastMessage.value = "La contraseña no coincide, o es muy corta"
+                false
 
-            _toastMessage.value = "El email no es válido"
-            return false
+            }else if (!validateEmail()){
 
-        }else if (state.value.name.isEmpty() || state.value.code.isEmpty() || state.value.email.isEmpty() || state.value.password.isEmpty()){
+                _toastMessage.value = "El email no es válido"
+                false
 
-            _toastMessage.value = "Complete todos los campos"
-            return false
+            }else if (state.value.name.isEmpty() || state.value.code.isEmpty() || state.value.email.isEmpty() || state.value.password.isEmpty()){
 
-        }else{
+                _toastMessage.value = "Complete todos los campos"
+                false
+
+            }else{
                 val userCreated = registerUserUseCase(user) // Se ejecuta en una corrutina
                 if(userCreated){
                     _toastMessage.value = "Registro exitoso"
-                    return true
+                    true
                 }else{
                     _toastMessage.value = "Error al registrarse, por favor verifique los datos"
-                    return false
+                    false
                 }
             }
-
+        }finally {
+            _state.update { it.copy(btnEnabled = true) }
         }
-
     }
+}

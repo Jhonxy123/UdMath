@@ -5,7 +5,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -95,7 +97,6 @@ fun RegisterScreen(viewModel: RegisterViewModel, navController: NavController){
                 //val user = User(name, code, email, password) // Crea un objeto User con los datos ingresados, pero genera problemas, ¿problemas con la recomposición?
 
                 corrutine.launch {
-
                     if (viewModel.onRegister(User(state.name, state.code, state.email, state.password))){
                         viewModel.onRegisterSelected()
                         navController.navigate(Login)
@@ -104,8 +105,9 @@ fun RegisterScreen(viewModel: RegisterViewModel, navController: NavController){
                 }
 
             },
-                modifier = Modifier.width(280.dp).height(50.dp),
-                shape = RoundedCornerShape(16.dp)
+            modifier = Modifier.width(280.dp).height(50.dp),
+            shape = RoundedCornerShape(16.dp),
+            enabled = state.btnEnabled
             ) {
                 Text(text = "Registrarse")
             }
@@ -125,7 +127,8 @@ fun NameText(name: String, onTextChanged: (String) -> Unit){
         label = { Text("Nombre") },
         isError = !name.matches(Regex("^[A-Za-z ]+\$")), // Muestra error si el texto no es válido
         singleLine = true,
-        textStyle = TextStyle(Color.Black)
+        textStyle = TextStyle(Color.Black),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     )
 }
 
@@ -137,7 +140,8 @@ fun CodeText(code: String, onTextChanged: (String) -> Unit){
         label = { Text("Código") },
         isError = !code.matches(Regex("\\d+")), // Muestra error si el texto no es válido
         singleLine = true,
-        textStyle = TextStyle(Color.Black)
+        textStyle = TextStyle(Color.Black),
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     )
 }
 
@@ -148,7 +152,9 @@ fun emailText(email: String, onTextChanged: (String) -> Unit){
         onValueChange = {onTextChanged(it)},
         label = { Text("Correo") },
         textStyle = TextStyle(Color.Black),
-        isError = !email.matches(Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")) // Muestra error si el texto no es válido
+        isError = !email.matches(Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")),// Muestra error si el texto no es válido
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        singleLine = true
     )
 }
 
@@ -158,7 +164,9 @@ fun passwordText(password: String, onTextChanged: (String) -> Unit){
         value = password,
         onValueChange = {onTextChanged(it)},
         label = { Text("Contraseña") },
-        textStyle = TextStyle(Color.Black)
+        textStyle = TextStyle(Color.Black),
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     )
 }
 
@@ -168,7 +176,9 @@ fun ConfirmPasswordText(password: String, onTextChanged: (String) -> Unit){
         value = password,
         onValueChange = {onTextChanged(it)},
         label = { Text("Confirmar contraseña") },
-        textStyle = TextStyle(Color.Black)
+        textStyle = TextStyle(Color.Black),
+        singleLine = true,
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     )
 }
 

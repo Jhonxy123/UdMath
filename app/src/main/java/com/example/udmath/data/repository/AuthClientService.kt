@@ -21,7 +21,12 @@ class AuthClientService @Inject constructor(
     }
 
     override suspend fun registerUserInFirestore(User: User): Boolean {
-       return firestore.collection("estudiantes").add(User).isSuccessful
+       return try{
+           firestore.collection("estudiantes").add(User).await()
+           true
+       }catch (e:Exception){
+           false
+       }
     }
 
 }
