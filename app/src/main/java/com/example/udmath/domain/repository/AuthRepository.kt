@@ -6,4 +6,6 @@ import com.google.firebase.auth.AuthResult
 //Implementar funcion abstracta
 interface AuthRepository{
     suspend fun registerUser(email: String, password: String): AuthResult?
+
+    suspend fun registerUserInFirestore(User: User): Boolean
 }

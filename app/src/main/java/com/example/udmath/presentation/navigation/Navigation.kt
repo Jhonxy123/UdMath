@@ -29,7 +29,7 @@ fun Navigation(){
 
         composable<Register> {
             val viewModel: RegisterViewModel = hiltViewModel()
-            RegisterScreen(viewModel)
+            RegisterScreen(viewModel, navController)
         }
 
         composable<Menu>{

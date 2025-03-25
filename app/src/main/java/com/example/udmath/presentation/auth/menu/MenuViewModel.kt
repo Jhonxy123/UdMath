@@ -1,4 +1,10 @@
 package com.example.udmath.presentation.auth.menu
 
-class MenuViewModel {
+import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+
+
+@HiltViewModel
+class MenuViewModel @Inject constructor() : ViewModel() {
 }
