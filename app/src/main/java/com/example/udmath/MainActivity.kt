@@ -14,16 +14,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.udmath.presentation.navigation.Navigation
 import com.example.udmath.ui.theme.UdMathTheme
+import com.google.firebase.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.auth
 
 @AndroidEntryPoint //Hilt genera automaticamenete el código para inyectar dependencias en esa clase
 class MainActivity : ComponentActivity() {
+    private lateinit var auth: FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        auth = Firebase.auth
         enableEdgeToEdge()
         setContent {
             UdMathTheme {
-                Navigation()
+                Navigation(auth)
             }
         }
     }

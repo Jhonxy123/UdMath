@@ -85,15 +85,15 @@ fun RegisterScreen(viewModel: RegisterViewModel, navController: NavController){
 
             Spacer(modifier = Modifier.height(35.dp))
             NameText(state.name,{viewModel.onNameChanged(it)}) //Campo de texto para el nombre del usuario
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             CodeText(state.code,{viewModel.onCodeChanged(it)}) //Campo de texto para el codigo del usuario
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             emailText(state.email,{viewModel.onEmailChanged(it)}) //Campo de texto para el email del usuario
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             passwordText(state.password,{viewModel.onPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(20.dp))
             ConfirmPasswordText(state.confirmPassword,{viewModel.onConfirmPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
-            Spacer(modifier = Modifier.height(48.dp))
+            Spacer(modifier = Modifier.height(20.dp))
 
             Button(onClick = {
                 //val user = User(name, code, email, password) // Crea un objeto User con los datos ingresados, pero genera problemas, ¿problemas con la recomposición?
