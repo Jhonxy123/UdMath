@@ -27,7 +27,8 @@ import com.example.udmath.ui.theme.white
 import com.example.udmath.ui.theme.Black
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel,navigateToRegister: () -> Unit,navigateToMenu: () -> Unit){
+fun LoginScreen(viewModel: LoginViewModel, navigateToRegister: () -> Unit, navigateToMenu: () -> Unit){
+
     val email by viewModel.email.collectAsStateWithLifecycle()
     val password by viewModel.password.collectAsStateWithLifecycle()
 

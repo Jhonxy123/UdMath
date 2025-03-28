@@ -10,3 +10,6 @@ object Register
 
 @Serializable
 object Menu
+
+@Serializable
+object Home
