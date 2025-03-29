@@ -12,6 +12,8 @@ import com.example.udmath.presentation.auth.menu.MenuViewModel
 import com.example.udmath.presentation.auth.register.RegisterScreen
 import com.example.udmath.presentation.auth.register.RegisterViewModel
 import com.example.udmath.presentation.auth.menu.MenuScreen
+import com.example.udmath.presentation.home.HomeScreen
+import com.example.udmath.presentation.home.HomeViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -28,7 +30,7 @@ fun Navigation(
                 viewModel = viewModel,
                 auth = auth,
                 navigateToRegister = { navController.navigate(Register) },
-                navigateToMenu = { navController.navigate(Menu) }
+                navigateToMenu = { navController.navigate(Home) }
             )
         }
 
@@ -40,6 +42,11 @@ fun Navigation(
         composable<Menu>{
             val viewModel: MenuViewModel = hiltViewModel()
             MenuScreen(viewModel)
+        }
+
+        composable<Home>{
+            val viewModel: HomeViewModel = hiltViewModel()
+            HomeScreen()
         }
 
     }

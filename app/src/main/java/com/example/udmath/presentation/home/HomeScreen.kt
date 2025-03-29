@@ -18,9 +18,12 @@ import com.example.udmath.presentation.components.TopBar
 import kotlinx.coroutines.launch
 
 
+@Preview
 @Composable
 fun HomeScreen() {
 
+
+    //COMO PUEDO HACERLO CON VIEWMODEL??
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
