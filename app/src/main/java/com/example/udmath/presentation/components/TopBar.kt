@@ -14,9 +14,11 @@ import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DrawerValue
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -35,25 +37,23 @@ import java.sql.Time
 @Composable
 fun TopBar(
     onDrawerClicked: () -> Unit
-){
-
-    val scope = rememberCoroutineScope()
-
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)
             .background(color = Blue),
-            verticalAlignment = Alignment.CenterVertically
-    ){
+        verticalAlignment = Alignment.CenterVertically
+    ) {
 
         IconButton(
             onClick = {
                 onDrawerClicked()
             },
             modifier = Modifier.size(70.dp)
-        ){
-            Icon(imageVector = Icons.Default.Menu,
+        ) {
+            Icon(
+                imageVector = Icons.Default.Menu,
                 contentDescription = "Menu",
                 tint = Color.White,
                 modifier = Modifier.size(48.dp)
@@ -70,5 +70,5 @@ fun TopBar(
         )
 
     }
-
 }
+

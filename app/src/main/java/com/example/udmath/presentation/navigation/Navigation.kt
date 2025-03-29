@@ -33,7 +33,7 @@ fun Navigation(){
 
         composable<Home>{
             val viewModel: HomeViewModel = hiltViewModel()
-            HomeScreen(viewModel)
+            HomeScreen()
         }
 
         composable<Register> {
