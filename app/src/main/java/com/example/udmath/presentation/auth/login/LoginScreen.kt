@@ -1,5 +1,6 @@
 package com.example.udmath.presentation.auth.login
 
+import android.util.Log
 import android.R.color.black
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.udmath.presentation.auth.register.emailText
 import com.example.udmath.presentation.auth.register.passwordText
@@ -25,9 +27,12 @@ import com.example.udmath.ui.theme.Blue
 import com.example.udmath.ui.theme.DarkBlue
 import com.example.udmath.ui.theme.white
 import com.example.udmath.ui.theme.Black
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun LoginScreen(viewModel: LoginViewModel,navigateToRegister: () -> Unit,navigateToMenu: () -> Unit){
+fun LoginScreen(auth: FirebaseAuth, viewModel: LoginViewModel = viewModel(),
+                navigateToRegister: () -> Unit, navigateToMenu: () -> Unit,
+                ){
     val email by viewModel.email.collectAsStateWithLifecycle()
     val password by viewModel.password.collectAsStateWithLifecycle()
 
@@ -44,7 +49,19 @@ fun LoginScreen(viewModel: LoginViewModel,navigateToRegister: () -> Unit,navigat
         passwordText(password,{viewModel.onPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
         Spacer(modifier = Modifier.height(48.dp))
 
-        Button(onClick = {navigateToMenu()}) {
+        Button(
+            onClick = {
+                auth.signInWithEmailAndPassword(email, password).addOnCompleteListener{ task ->
+                    if(task.isSuccessful){
+                        navigateToMenu()
+                        Log.i("aris", "LOGIN OK")
+                    }else{
+                        //Error
+                        Log.i("aris", "LOGIN KO")
+                    }
+                }
+            }
+        ) {
             Text(text = "Sign in")
         }
         Button(onClick = {navigateToRegister()}) {

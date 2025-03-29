@@ -1,107 +1,129 @@
 package com.example.udmath.presentation.auth.register
 
+import android.media.metrics.Event
 import android.widget.Toast
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.ui.graphics.Path
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavController
 import com.example.udmath.domain.UseCases.RegisterUserUseCase
 import com.example.udmath.domain.model.User
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.intellij.lang.annotations.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
-//inyección de dependecias con hilt
 class RegisterViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase
 ): ViewModel(){
 
-    private val _name = MutableStateFlow<String>("")
-    val name: StateFlow<String> = _name
-
-    private val _code = MutableStateFlow<String>("")
-    val code: StateFlow<String> = _code
-
-    private val _email = MutableStateFlow<String>("")
-    val email: StateFlow<String> = _email
-
-    private val _password = MutableStateFlow<String>("")
-    val password: StateFlow<String> = _password
-
-    private val _confirmPassword = MutableStateFlow<String>("")
-    val confirmPassword: StateFlow<String> = _confirmPassword
+    private val _state = MutableStateFlow(RegisterViewState())
+    val state: StateFlow<RegisterViewState> = _state
 
     private val _toastMessage = MutableStateFlow<String?>(null)
     val toastMessage: StateFlow<String?> = _toastMessage
 
     fun onNameChanged(name: String){
-        if(isValidName(name) || name.isEmpty()){
-            _name.value = name
-        }else{
-            _toastMessage.value = "El nombre solo puede contener letras y espacios"
-        }
+            _state.update { it.copy(name = name) }
     }
 
-    fun onCodeChanged(code: String){
-        _code.value = code
+    fun onCodeChanged(code: String) {
+        _state.update { it.copy(code = code) }
     }
 
-    fun onEmailChanged(email: String){
-        _email.value = email
+    fun onEmailChanged(email: String) {
+        _state.update { it.copy(email = email) }
     }
 
-    fun onPasswordChanged(password: String){
-        _password.value = password
+    fun onPasswordChanged(password: String) {
+        _state.update { it.copy(password = password) }
     }
 
-    fun onConfirmPasswordChanged(confirmPassword: String){
-        _confirmPassword.value = confirmPassword
+    fun onConfirmPasswordChanged(confirmPassword: String) {
+        _state.update { it.copy(confirmPassword = confirmPassword) }
     }
 
-    //validar nombre
-    fun isValidName(name: String): Boolean {
-        return name.matches(Regex("^[A-Za-z ]+\$"))
-    }
 
     // Resetea el mensaje de error después de mostrarlo
     fun clearToastMessage() {
         _toastMessage.value = null
     }
 
+    //validar nombre
+    fun isValidName(): Boolean {
+        return _state.value.name.matches(Regex("^[A-Za-z ]+\$"))
+    }
+
+    //validar codigo
+    fun isValidCode(): Boolean {
+        return _state.value.code.matches(Regex("\\d+"))
+    }
+
     //funcion para validar que el campo de la contraseña y confirmar contraseña sean iguales
     fun validatePassword(): Boolean{
-        return password.value == confirmPassword.value
+        return _state.value.password == _state.value.confirmPassword && _state.value.password.length > 5
     }
 
+    //funcion para validar que el email sea valido
+    fun validateEmail(): Boolean{
+        return _state.value.email.matches(Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"))
+    }
+
+    suspend fun onRegisterSelected(){
+        _state.update { it.copy(isLoading = true) } //actualiza solo la propiedad "isLoading" en el estado sin modificar las demás propiedades
+        delay(4000)
+        _state.update { it.copy(isLoading = false) }
+    }
 
     // funcion para registrar un usuario
-    fun onRegister(user: User){
+    suspend fun onRegister(user: User): Boolean{
 
-        if(!validatePassword()){
+        _state.update { it.copy(btnEnabled = false) }
 
-            _toastMessage.value = "La contraseña no coincide"
+        return try {
+            if(!isValidName()){
 
-        }else if (name.value.isEmpty() || code.value.isEmpty() || email.value.isEmpty() || password.value.isEmpty()){
+                _toastMessage.value = "El nombre solo puede contener letras y espacios"
 
-            _toastMessage.value = "Complete todos los campos"
+                false
 
-        } else{
+            }else if(!isValidCode()){
 
-            viewModelScope.launch {// live cycle de viewmodel para que no se corte la corrutina
-                registerUserUseCase(user) // Se ejecuta en una corrutina
+                _toastMessage.value = "El código solo puede contener números"
+                false
+
+            }else if(!validatePassword()){
+
+                _toastMessage.value = "La contraseña no coincide, o es muy corta"
+                false
+
+            }else if (!validateEmail()){
+
+                _toastMessage.value = "El email no es válido"
+                false
+
+            }else if (state.value.name.isEmpty() || state.value.code.isEmpty() || state.value.email.isEmpty() || state.value.password.isEmpty()){
+
+                _toastMessage.value = "Complete todos los campos"
+                false
+
+            }else{
+                val userCreated = registerUserUseCase(user) // Se ejecuta en una corrutina
+                if(userCreated){
+                    _toastMessage.value = "Registro exitoso"
+                    true
+                }else{
+                    _toastMessage.value = "Error al registrarse, por favor verifique los datos"
+                    false
+                }
             }
-
+        }finally {
+            _state.update { it.copy(btnEnabled = true) }
         }
-
-
     }
-
-
-
-
 }
