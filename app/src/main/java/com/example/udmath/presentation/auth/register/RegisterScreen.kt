@@ -97,14 +97,9 @@ fun RegisterScreen(viewModel: RegisterViewModel, navController: NavController){
 
             Button(onClick = {
                 //val user = User(name, code, email, password) // Crea un objeto User con los datos ingresados, pero genera problemas, ¿problemas con la recomposición?
-
-                corrutine.launch {
-                    viewModel.onRegisterSelected()
-                }
-
                 corrutine.launch {
                     if (viewModel.onRegister(User(state.name, state.code, state.email, state.password))){
-
+                        viewModel.onRegisterSelected()
                         navController.navigate(Login)
                     }
                 }
