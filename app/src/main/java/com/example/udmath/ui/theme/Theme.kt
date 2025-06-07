@@ -34,6 +34,15 @@ private val LightColorScheme = lightColorScheme(
 )
 
 @Composable
+fun FocusTimerYTTheme(content: @Composable () -> Unit) {
+    MaterialTheme(
+        colorScheme = LightColorScheme,
+        typography = Typography,
+        content = content
+    )
+}
+
+@Composable
 fun UdMathTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
