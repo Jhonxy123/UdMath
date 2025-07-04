@@ -12,6 +12,7 @@ import com.example.udmath.presentation.auth.register.RegisterScreen
 import com.example.udmath.presentation.auth.register.RegisterViewModel
 import com.example.udmath.presentation.home.HomeScreen
 import com.example.udmath.presentation.home.HomeViewModel
+import com.example.udmath.presentation.home.retos.game.sudoku.SudokuScreen
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -37,9 +38,13 @@ fun Navigation(
             RegisterScreen(viewModel, navController)
         }
 
-        composable<Home>{
+        composable<Home> {
             val viewModel: HomeViewModel = hiltViewModel()
-            HomeScreen()
+            HomeScreen(viewModel = viewModel, navController = navController)
+        }
+
+        composable<Sudoku> {
+            SudokuScreen()
         }
 
     }

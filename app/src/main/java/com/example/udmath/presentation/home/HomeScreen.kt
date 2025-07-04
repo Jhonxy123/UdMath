@@ -23,6 +23,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -35,12 +37,17 @@ import com.example.udmath.presentation.home.main.MainScreen
 import com.example.udmath.presentation.home.materiales.MaterialApoyoScreen
 import com.example.udmath.presentation.home.recomendaciones.RecomendacionesScreen
 import com.example.udmath.presentation.home.retos.RetosScreen
+import com.example.udmath.presentation.home.retos.game._48.GameScreen
+import com.example.udmath.presentation.home.retos.game.sudoku.SudokuScreen
 import kotlinx.coroutines.launch
 
 
-@Preview
+
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    navController: NavHostController
+) {
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val navController = rememberNavController()
@@ -110,12 +117,21 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
                 }
 
                 composable(HomeRoutes.Retos.route) {
-                    RetosScreen()
+                    RetosScreen(navController = navController)
                 }
 
                 composable(HomeRoutes.Interesante.route) {
                     MaterialInteresanteScreen()
                 }
+
+                composable("sudoku") {
+                    SudokuScreen()
+                }
+
+                composable("_48") {
+                    GameScreen()
+                }
+
             }
         }
     }

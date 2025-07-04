@@ -1,3 +1,4 @@
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -48,6 +49,16 @@ android {
     }
 }
 
+kapt {
+    correctErrorTypes = true
+
+    // Opcional, mejora compilación con Dagger
+    arguments {
+        arg("dagger.hilt.android.internal.projectType", "application")
+    }
+}
+
+
 dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -82,4 +93,10 @@ dependencies {
 
     //hiltNavigation
     implementation(libs.androidx.hilt.navigation.compose)
+
+    //LiveData
+    /*implementation(libs.androidx.lifecycle.livedata.ktx)
+    implementation(libs.androidx.lifecycle.viewmodel.ktx)*/
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.1")
+    implementation("androidx.compose.runtime:runtime-livedata:1.6.8")
 }

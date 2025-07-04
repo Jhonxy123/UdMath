@@ -9,7 +9,7 @@ object Login
 object Register
 
 @Serializable
-object Menu
+object Home
 
 @Serializable
-object Home
+object Sudoku
