@@ -8,10 +8,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.udmath.presentation.auth.login.LoginScreen
 import com.example.udmath.presentation.auth.login.LoginViewModel
-import com.example.udmath.presentation.auth.menu.MenuViewModel
 import com.example.udmath.presentation.auth.register.RegisterScreen
 import com.example.udmath.presentation.auth.register.RegisterViewModel
-import com.example.udmath.presentation.auth.menu.MenuScreen
 import com.example.udmath.presentation.home.HomeScreen
 import com.example.udmath.presentation.home.HomeViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -37,11 +35,6 @@ fun Navigation(
         composable<Register> {
             val viewModel: RegisterViewModel = hiltViewModel()
             RegisterScreen(viewModel, navController)
-        }
-
-        composable<Menu>{
-            val viewModel: MenuViewModel = hiltViewModel()
-            MenuScreen(viewModel)
         }
 
         composable<Home>{

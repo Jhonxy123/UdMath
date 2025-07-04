@@ -1,6 +1,8 @@
-package com.example.udmath.presentation.auth.interesante
+package com.example.udmath.presentation.home.interesante
 
+import com.example.udmath.R
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.*
@@ -12,7 +14,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -23,57 +24,16 @@ import androidx.compose.material.icons.filled.Face
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.painterResource
+
+// import androidx.navigation.NavController // ← Descomenta esto si usas Navigation
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
+// fun MaterialInteresanteScreen(navController: NavController) { // ← cuando uses navegación
 fun MaterialInteresanteScreen() {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Material de Interesante") },
-                actions = {
-                    IconButton(onClick = { /* Menú */ }) {
-                        Icon(Icons.Default.Menu, contentDescription = "Menú")
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.White)
-            )
-        },
-        bottomBar = {
-            NavigationBar(containerColor = Color.White) {
-                NavigationBarItem(
-                    selected = false,
-                    onClick = {},
-                    icon = { Icon(Icons.Default.Home, contentDescription = "Inicio") },
-                    label = { Text("Inicio") }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = {},
-                    icon = { Icon(Icons.Default.Check, contentDescription = "Tareas") },
-                    label = { Text("Tareas") }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = {},
-                    icon = { Icon(Icons.Default.Share, contentDescription = "Apoyo") },
-                    label = { Text("Apoyo") }
-                )
-                NavigationBarItem(
-                    selected = true,
-                    onClick = {},
-                    icon = { Icon(Icons.Default.Face, contentDescription = "Interesante") },
-                    label = { Text("Interesante") }
-                )
-                NavigationBarItem(
-                    selected = false,
-                    onClick = {},
-                    icon = { Icon(Icons.Default.AddCircle, contentDescription = "Progreso") },
-                    label = { Text("Progreso") }
-                )
-            }
-        }
-    ) { paddingValues ->
+    Scaffold { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -86,8 +46,10 @@ fun MaterialInteresanteScreen() {
                 .padding(16.dp)
         ) {
             val items = listOf(
-                "Artículos", "Programación",
-                "Datos Curiosos", "Material Audiovisual"
+                Triple("Artículos", R.drawable.articulos, "articulos"),
+                Triple("Programación", R.drawable.programacion, "programacion"),
+                Triple("Datos Curiosos", R.drawable.datos, "curioso"),
+                Triple("Material Audiovisual", R.drawable.audiovisual, "audiovisual")
             )
 
             LazyVerticalGrid(
@@ -97,8 +59,14 @@ fun MaterialInteresanteScreen() {
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(items.size) { index ->
-                    TarjetaInteresante(titulo = items[index])
+                items(items) { (titulo, iconRes, route) ->
+                    TarjetaInteresante(
+                        titulo = titulo,
+                        iconRes = iconRes,
+                        onClick = {
+                            // navController.navigate(route) // ← activa esto cuando tengas rutas
+                        }
+                    )
                 }
             }
         }
@@ -106,11 +74,16 @@ fun MaterialInteresanteScreen() {
 }
 
 @Composable
-fun TarjetaInteresante(titulo: String) {
+fun TarjetaInteresante(
+    titulo: String,
+    iconRes: Int,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .aspectRatio(1f),
+            .aspectRatio(1f)
+            .clickable { onClick() },
         shape = MaterialTheme.shapes.medium,
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(4.dp)
@@ -120,13 +93,13 @@ fun TarjetaInteresante(titulo: String) {
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Box(
-                modifier = Modifier
-                    .size(80.dp)
-                    .background(Color.LightGray, shape = CircleShape)
-            ) {
-                // Aquí se puede agregar una imagen real en el futuro
-            }
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = titulo,
+                tint = Color.Unspecified,
+                modifier = Modifier.size(40.dp)
+            )
+
 
             Spacer(modifier = Modifier.height(8.dp))
 
