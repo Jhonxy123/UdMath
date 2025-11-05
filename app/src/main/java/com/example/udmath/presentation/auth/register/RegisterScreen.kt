@@ -105,9 +105,9 @@ fun RegisterScreen(viewModel: RegisterViewModel, navController: NavController){
                 }
 
             },
-            modifier = Modifier.width(280.dp).height(50.dp),
-            shape = RoundedCornerShape(16.dp),
-            enabled = state.btnEnabled
+                modifier = Modifier.width(280.dp).height(50.dp),
+                shape = RoundedCornerShape(16.dp),
+                enabled = state.btnEnabled
             ) {
                 Text(text = "Registrarse")
             }
@@ -181,6 +181,5 @@ fun ConfirmPasswordText(password: String, onTextChanged: (String) -> Unit){
         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
     )
 }
-
 
 
