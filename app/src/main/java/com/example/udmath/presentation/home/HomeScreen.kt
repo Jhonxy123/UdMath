@@ -17,8 +17,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -32,49 +32,58 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.udmath.R
 import com.example.udmath.ui.theme.white
+import androidx.hilt.navigation.compose.hiltViewModel
 
-@Preview
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    viewModel: HomeViewModel = hiltViewModel(),
+    onLoggedOut: () -> Unit = {}   // navController lo pasará; para Preview queda vacío
+) {
 
-    // 🔹 Estado del Drawer (menú lateral)
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-
-    // 🔹 Alcance para ejecutar corrutinas (abrir/cerrar el Drawer)
     val scope = rememberCoroutineScope()
 
-    // 🔹 Creación de un fondo degradado (de azul claro a azul oscuro)
     val blueGradient = Brush.verticalGradient(
         colors = listOf(
-            Color(0xFF3980C2),  // Azul claro (parte superior)
-            Color(0xFF184998)   // Azul oscuro (parte inferior)
+            Color(0xFF3980C2),
+            Color(0xFF184998)
         )
     )
 
-    // 🔹 Contenedor principal que incluye el Drawer lateral
+    // Escuchamos eventos del ViewModel (por ejemplo, LoggedOut)
+    LaunchedEffect(Unit) {
+        viewModel.events.collect { event ->
+            when (event) {
+                HomeUiEvent.LoggedOut -> onLoggedOut()
+            }
+        }
+    }
+
     ModalNavigationDrawer(
-        drawerState = drawerState, // Estado del Drawer
+        drawerState = drawerState,
         drawerContent = {
-            // 🔹 Contenido del menú lateral
             ModalDrawerSheet {
-                NavigationDrawer() // Aquí va tu componente de navegación lateral
+                NavigationDrawer(
+                    onLogout = {
+                        // 1. Cerramos el drawer
+                        scope.launch { drawerState.close() }
+                        // 2. Avisamos al ViewModel que se pidió logout
+                        viewModel.onLogoutClicked()
+                    }
+                )
             }
         }
     ) {
-        // 🔹 Box principal que ocupa toda la pantalla y aplica el fondo degradado
         Box(
             modifier = Modifier
-                .background(blueGradient) // Aplica el fondo con gradiente
-                .fillMaxSize()             // Asegura que ocupe todo el espacio disponible
+                .background(blueGradient)
+                .fillMaxSize()
         ) {
-            // 🔹 Scaffold: estructura base que contiene la TopBar y el contenido principal
             Scaffold(
-                containerColor = Color.Transparent, // Evita que el Scaffold tape el fondo
+                containerColor = Color.Transparent,
                 topBar = {
-                    // 🔹 Barra superior personalizada (TopBar)
                     TopBar(
                         onDrawerClicked = {
-                            // Cuando se hace clic en el icono del Drawer, se abre
                             scope.launch {
                                 drawerState.open()
                             }
@@ -82,18 +91,19 @@ fun HomeScreen() {
                     )
                 }
             ) { paddingValues ->
-                // 🔹 Contenedor para el contenido principal de la pantalla
                 Box(
                     modifier = Modifier
-                        .padding(paddingValues) // Respeta el espacio de la TopBar
-                        .fillMaxSize()          // Ocupa todo el espacio restante
+                        .padding(paddingValues)
+                        .fillMaxSize()
                 ) {
                     Column(
-                        //horizontalAlignment = Alignment.CenterHorizontally,
-                        modifier = Modifier.fillMaxSize()) {
-                        // 🔹 Aquí va el contenido principal de tu pantalla
-
-                        Spacer(modifier = Modifier.fillMaxWidth().height(50.dp))
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Spacer(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(50.dp)
+                        )
 
                         Image(
                             painter = painterResource(id = R.drawable.logo_inicio),
@@ -114,7 +124,7 @@ fun HomeScreen() {
                             text = "Bienvenido a UdMath usuario, esta aplicación ha sido diseñada para ayudarte en " +
                                     "el recorrido de tus materias de ciencias basicas, " +
                                     "para comenzar selecciona en la parte inferior la sección a la que desea ingresar. ",
-                            color = Color.White // Color del texto para resaltar sobre el fondo azul
+                            color = Color.White
                         )
                     }
                 }
@@ -122,3 +132,4 @@ fun HomeScreen() {
         }
     }
 }
+

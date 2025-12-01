@@ -36,6 +36,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.udmath.R
@@ -50,9 +51,11 @@ val blueGradient = Brush.verticalGradient(
 )
 
 
-
+@Preview
 @Composable
-fun NavigationDrawer(){
+fun NavigationDrawer(
+    onLogout: () -> Unit = {}  // Función de cierre de sesión callback
+){
 
     Column(modifier = Modifier.fillMaxSize()
         .background(blueGradient)
@@ -92,7 +95,7 @@ fun NavigationDrawer(){
         // 🔹 Este Spacer empuja el siguiente contenido hacia abajo 👇
         Spacer(modifier = Modifier.weight(1f))
 
-        NavigationDrawerButton("Cerrar Sesión", Icons.Default.ExitToApp, onclick = {})
+        NavigationDrawerButton("Cerrar Sesión", Icons.Default.ExitToApp, onclick = { onLogout() })
 
     }
 

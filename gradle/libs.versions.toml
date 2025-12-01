@@ -17,6 +17,7 @@ kotlinxSerialization = "1.8.0"
 hilt = "2.51.1"
 hiltNavigationCompose = "1.2.0"
 firebaseAuth = "24.0.1"
+foundation = "1.9.5"
 
 
 [libraries]
@@ -52,6 +53,7 @@ androidx-hilt-navigation-compose = {module = "androidx.hilt:hilt-navigation-comp
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
 google-firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 
 
 

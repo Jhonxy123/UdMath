@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.udmath.presentation.auth.register.emailText
-import com.example.udmath.presentation.auth.register.passwordText
+// import com.example.udmath.presentation.auth.register.emailText
+//  import com.example.udmath.presentation.auth.register.passwordText
 import com.example.udmath.presentation.components.AutoResizedText
 import com.example.udmath.presentation.components.MyBanner
 import com.example.udmath.ui.theme.Blue
@@ -49,11 +49,11 @@ fun LoginScreen(auth: FirebaseAuth, viewModel: LoginViewModel = viewModel(), nav
         //Spacer(modifier = Modifier.weight(1f))
         Spacer(modifier = Modifier.height(35.dp))
 
-        emailText(email,{viewModel.onEmailChanged(it)}) //Campo de texto para el email del usuario
+        //emailText(email,{viewModel.onEmailChanged(it)}) //Campo de texto para el email del usuario
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        passwordText(password,{viewModel.onPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
+        //passwordText(password,{viewModel.onPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
 
         Spacer(modifier = Modifier.height(48.dp))
 
