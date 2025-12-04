@@ -7,5 +7,7 @@ data class RegisterViewState(
     val password: String = "",
     val confirmPassword: String = "",
     val btnEnabled: Boolean = true,
-    val isLoading: Boolean = false
+    val isLoading: Boolean = false,
+    val isSuccess: Boolean = false,
+    val errorMessage: String? = null
 )

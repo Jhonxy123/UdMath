@@ -1,5 +1,6 @@
 package com.example.udmath.presentation.auth.login
 
+import android.app.Activity
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -47,4 +48,30 @@ class LoginViewModel @Inject constructor() : ViewModel() {
             Log.d("UdMath","signInWithEmailAndPassword: ${ex.message}")
         }
     }
+
+
+    // NECESITAMOS QUE LA VISTA ESTÉ LISTA PARA IMPLEMENTAR EL INICIO DE SESI´N CON MICROSOFT
+
+    /*fun signInWithMicrosoft(activity: Activity, home: () -> Unit) = viewModelScope.launch {
+        try {
+            _loading.value = true
+
+            val result = authRepository.loginWithMicrosoft(activity)
+
+            result
+                .onSuccess { user ->
+                    Log.d("UdMath", "signInWithMicrosoft: Bienvenido ${user.email}")
+                    home()
+                }
+                .onFailure { e ->
+                    Log.d("UdMath", "signInWithMicrosoft error: ${e.message}")
+                }
+
+        } catch (ex: Exception) {
+            Log.d("UdMath", "signInWithMicrosoft: ${ex.message}")
+        } finally {
+            _loading.value = false
+        }
+    }*/
+
 }

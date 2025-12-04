@@ -1,45 +1,101 @@
 package com.example.udmath.presentation.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.material3.DrawerState
-import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults.buttonColors
+import androidx.compose.material3.ButtonDefaults.buttonElevation
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.udmath.R
+import com.example.udmath.ui.theme.white
 
 
+val blueGradient = Brush.verticalGradient(
+    colors = listOf(
+        Color(0xFF3980C2),  // Azul claro (parte superior)
+        Color(0xFF184998)   // Azul oscuro (parte inferior)
+    )
+)
+
+
+@Preview
 @Composable
-fun NavigationDrawer(){
+fun NavigationDrawer(
+    onLogout: () -> Unit = {}  // Función de cierre de sesión callback
+){
 
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxSize()
+        .background(blueGradient)
+        .padding(horizontal = 15.dp, vertical = 30.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
 
-        Image(painter = painterResource(id = R.drawable.logo_ud),
+        Spacer(modifier = Modifier.fillMaxWidth().height(25.dp))
+
+        Image(
+            modifier = Modifier.size(200.dp).clip(CircleShape),
+            painter = painterResource(id = R.drawable.logo_ud),
             contentDescription = "Logo",
-            modifier = Modifier.height(160.dp).
-            fillMaxWidth(),
-            contentScale = androidx.compose.ui.layout.ContentScale.FillWidth
+            contentScale = ContentScale.Crop,
         )
 
         Spacer(modifier = Modifier.fillMaxWidth().height(15.dp))
 
-        TextButton(
-            onClick = {},
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text("Primera opción")
-        }
+        Text(
+            text = "Nombre Usuario",
+            color = white,
+            fontWeight = FontWeight.Bold //Para poner el texto en negrita
+        )
+
+        Spacer(modifier = Modifier.fillMaxWidth().height(50.dp))
+
+        NavigationDrawerButton("Editar Perfil", Icons.Default.Edit, onclick = {})
+
+        Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
+
+        NavigationDrawerButton("Ajustes", Icons.Default.Settings, onclick = {})
+
+        Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
+
+        NavigationDrawerButton("Progreso", Icons.Default.DateRange, onclick = {})
+
+        // 🔹 Este Spacer empuja el siguiente contenido hacia abajo 👇
+        Spacer(modifier = Modifier.weight(1f))
+
+        NavigationDrawerButton("Cerrar Sesión", Icons.Default.ExitToApp, onclick = { onLogout() })
 
     }
 

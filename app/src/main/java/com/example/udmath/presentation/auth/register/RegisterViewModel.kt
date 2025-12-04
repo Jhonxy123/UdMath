@@ -1,129 +1,96 @@
+// presentation/auth/register/RegisterViewModel.kt
 package com.example.udmath.presentation.auth.register
 
-import android.media.metrics.Event
-import android.widget.Toast
-import androidx.compose.ui.graphics.Path
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
-import com.example.udmath.domain.UseCases.RegisterUserUseCase
 import com.example.udmath.domain.model.User
+import com.example.udmath.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.intellij.lang.annotations.Pattern
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val registerUserUseCase: RegisterUserUseCase
-): ViewModel(){
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
-    private val _state = MutableStateFlow(RegisterViewState())
-    val state: StateFlow<RegisterViewState> = _state
+    private val _uiState = MutableStateFlow(RegisterViewState())
+    val uiState: StateFlow<RegisterViewState> = _uiState
 
-    private val _toastMessage = MutableStateFlow<String?>(null)
-    val toastMessage: StateFlow<String?> = _toastMessage
-
-    fun onNameChanged(name: String){
-            _state.update { it.copy(name = name) }
+    // 🔹 actualiza el nombre a medida que el usuario escribe
+    fun onNameChange(name: String) {
+        _uiState.value = _uiState.value.copy(name = name)
     }
 
-    fun onCodeChanged(code: String) {
-        _state.update { it.copy(code = code) }
+    // actualiza el código a medida que el usuario escribe
+    fun onCodeChange(code: String) {
+        _uiState.value = _uiState.value.copy(code = code)
     }
 
-    fun onEmailChanged(email: String) {
-        _state.update { it.copy(email = email) }
+    // 🔹 actualiza el email
+    fun onEmailChange(email: String) {
+        _uiState.value = _uiState.value.copy(email = email)
     }
 
-    fun onPasswordChanged(password: String) {
-        _state.update { it.copy(password = password) }
-    }
-
-    fun onConfirmPasswordChanged(confirmPassword: String) {
-        _state.update { it.copy(confirmPassword = confirmPassword) }
+    // 🔹 actualiza la contraseña
+    fun onPasswordChange(password: String) {
+        _uiState.value = _uiState.value.copy(password = password)
     }
 
 
-    // Resetea el mensaje de error después de mostrarlo
-    fun clearToastMessage() {
-        _toastMessage.value = null
-    }
+    // 🔹 acción de registrar
+    fun register(onSuccess: () -> Unit) {
+        val state = _uiState.value
 
-    //validar nombre
-    fun isValidName(): Boolean {
-        return _state.value.name.matches(Regex("^[A-Za-z ]+\$"))
-    }
+        if (state.isLoading) return
 
-    //validar codigo
-    fun isValidCode(): Boolean {
-        return _state.value.code.matches(Regex("\\d+"))
-    }
+        // Validaciones básicas (puedes mejorarlas luego)
+        if (state.email.isBlank() || state.password.isBlank()) {
+            _uiState.value = state.copy(errorMessage = "Correo y contraseña son obligatorios")
+            return
+        }
 
-    //funcion para validar que el campo de la contraseña y confirmar contraseña sean iguales
-    fun validatePassword(): Boolean{
-        return _state.value.password == _state.value.confirmPassword && _state.value.password.length > 5
-    }
+        viewModelScope.launch {
+            try {
+                _uiState.value = state.copy(isLoading = true, errorMessage = null)
 
-    //funcion para validar que el email sea valido
-    fun validateEmail(): Boolean{
-        return _state.value.email.matches(Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"))
-    }
+                // 1. Crear usuario en Firebase Auth
+                val authResult = authRepository.registerUser(state.email, state.password)
 
-    suspend fun onRegisterSelected(){
-        _state.update { it.copy(isLoading = true) } //actualiza solo la propiedad "isLoading" en el estado sin modificar las demás propiedades
-        delay(4000)
-        _state.update { it.copy(isLoading = false) }
-    }
+                // 2. Guardar datos en Firestore (si quieres)
+                val firebaseUser = authResult?.user
+                val user = User(
+                    id = firebaseUser?.uid ?: "",
+                    code = state.code,
+                    name = state.name,
+                    email = state.email,
+                    password = state.password  // o "" si no quieres guardarla
+                )
 
-    // funcion para registrar un usuario
-    suspend fun onRegister(user: User): Boolean{
+                val saved = authRepository.registerUserInFirestore(user)
 
-        _state.update { it.copy(btnEnabled = false) }
-
-        return try {
-            if(!isValidName()){
-
-                _toastMessage.value = "El nombre solo puede contener letras y espacios"
-
-                false
-
-            }else if(!isValidCode()){
-
-                _toastMessage.value = "El código solo puede contener números"
-                false
-
-            }else if(!validatePassword()){
-
-                _toastMessage.value = "La contraseña no coincide, o es muy corta"
-                false
-
-            }else if (!validateEmail()){
-
-                _toastMessage.value = "El email no es válido"
-                false
-
-            }else if (state.value.name.isEmpty() || state.value.code.isEmpty() || state.value.email.isEmpty() || state.value.password.isEmpty()){
-
-                _toastMessage.value = "Complete todos los campos"
-                false
-
-            }else{
-                val userCreated = registerUserUseCase(user) // Se ejecuta en una corrutina
-                if(userCreated){
-                    _toastMessage.value = "Registro exitoso"
-                    true
-                }else{
-                    _toastMessage.value = "Error al registrarse, por favor verifique los datos"
-                    false
+                if (authResult != null && saved) {
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        isSuccess = true
+                    )
+                    onSuccess()
+                } else {
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = "No se pudo registrar el usuario"
+                    )
                 }
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    errorMessage = e.message ?: "Error desconocido"
+                )
             }
-        }finally {
-            _state.update { it.copy(btnEnabled = true) }
         }
     }
 }
