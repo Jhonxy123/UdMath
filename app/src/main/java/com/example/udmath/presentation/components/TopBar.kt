@@ -25,10 +25,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.udmath.ui.theme.Blue
+import com.example.udmath.ui.theme.white
 import kotlinx.coroutines.launch
 import java.sql.Time
 
@@ -42,9 +44,25 @@ fun TopBar(
         modifier = Modifier
             .fillMaxWidth()
             .height(70.dp)
-            .background(color = Blue),
-        verticalAlignment = Alignment.CenterVertically
+            .background(color = white),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
     ) {
+
+
+        Text(
+            text = "Inicio",
+            textAlign = TextAlign.Left,
+            color = Color(0xFF184998),
+            fontSize = 30.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(
+                start = 20.dp
+            )
+        )
+
+
+        Spacer(modifier = Modifier.width(20.dp))
 
         IconButton(
             onClick = {
@@ -55,19 +73,10 @@ fun TopBar(
             Icon(
                 imageVector = Icons.Default.Menu,
                 contentDescription = "Menu",
-                tint = Color.White,
+                tint = Color(0xFF184998),
                 modifier = Modifier.size(48.dp)
             )
         }
-
-        Spacer(modifier = Modifier.width(20.dp))
-
-        Text(
-            text = "INICIO",
-            color = Color.White,
-            fontSize = 30.sp,
-            fontWeight = FontWeight.Bold
-        )
 
     }
 }
