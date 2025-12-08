@@ -20,8 +20,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-// import com.example.udmath.presentation.auth.register.emailText
-//  import com.example.udmath.presentation.auth.register.passwordText
+//import com.example.udmath.presentation.auth.register.emailText
+//import com.example.udmath.presentation.auth.register.passwordText
 import com.example.udmath.presentation.components.AutoResizedText
 import com.example.udmath.presentation.components.MyBanner
 import com.example.udmath.ui.theme.Blue
