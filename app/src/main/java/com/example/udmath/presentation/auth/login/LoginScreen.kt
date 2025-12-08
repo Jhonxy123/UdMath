@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -33,7 +34,7 @@ import com.example.udmath.ui.theme.Black
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun LoginScreen(auth: FirebaseAuth, viewModel: LoginViewModel = viewModel(), navigateToRegister: () -> Unit, navigateToMenu: () -> Unit)
+fun LoginScreen(auth: FirebaseAuth, viewModel: LoginViewModel = viewModel(), navigateToRegister: () -> Unit, navigateToMenu: () -> Unit, navigateBack: () -> Unit)
 {
 
     val email by viewModel.email.collectAsStateWithLifecycle()
@@ -81,6 +82,11 @@ fun LoginScreen(auth: FirebaseAuth, viewModel: LoginViewModel = viewModel(), nav
 
         Button(onClick = {navigateToRegister()}) {
             Text(text = "Navegar al registro")
+        }
+
+        // Botón atrás opcional
+        TextButton(onClick = navigateBack) {
+            Text("Volver")
         }
 
         Spacer(modifier = Modifier.weight(1f))

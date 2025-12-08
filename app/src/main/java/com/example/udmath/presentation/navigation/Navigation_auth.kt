@@ -13,6 +13,8 @@ import com.example.udmath.presentation.auth.register.RegisterScreen
 import com.example.udmath.presentation.auth.register.RegisterViewModel
 import com.example.udmath.presentation.home.HomeScreen
 import com.example.udmath.presentation.home.HomeViewModel
+import com.example.udmath.presentation.welcome.WelcomeScreen
+import com.example.udmath.presentation.welcome.WelcomeViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
@@ -23,8 +25,15 @@ fun Navigation(
 
     NavHost(
         navController = navController,
-        startDestination = Login
+        startDestination = Welcome//Login
     ) {
+
+        composable<Welcome> {
+            val viewModel: WelcomeViewModel = hiltViewModel()
+
+            WelcomeScreen(viewModel = viewModel, navigateToRegister = { navController.navigate(Register) },navigationToLogin = {navController.navigate(Login)},navigationToMicrosoft = {navController.navigate(Login)})
+        }
+
         composable<Login> {
             val viewModel: LoginViewModel = hiltViewModel()
 
@@ -32,7 +41,8 @@ fun Navigation(
                 viewModel = viewModel,
                 auth = auth,
                 navigateToRegister = { navController.navigate(Register) },
-                navigateToMenu = { navController.navigate(Home) }
+                navigateToMenu = { navController.navigate(Home) },
+                navigateBack = { navController.popBackStack() }
             )
         }
 
