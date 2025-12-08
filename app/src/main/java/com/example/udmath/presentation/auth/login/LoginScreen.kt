@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -20,8 +21,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.findViewTreeViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
-//import com.example.udmath.presentation.auth.register.emailText
-//import com.example.udmath.presentation.auth.register.passwordText
+// import com.example.udmath.presentation.auth.register.emailText
+import com.example.udmath.presentation.components.emailText
+//  import com.example.udmath.presentation.auth.register.passwordText
+import com.example.udmath.presentation.components.passwordText
 import com.example.udmath.presentation.components.AutoResizedText
 import com.example.udmath.presentation.components.MyBanner
 import com.example.udmath.ui.theme.Blue
@@ -31,7 +34,7 @@ import com.example.udmath.ui.theme.Black
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun LoginScreen(auth: FirebaseAuth, viewModel: LoginViewModel = viewModel(), navigateToRegister: () -> Unit, navigateToMenu: () -> Unit)
+fun LoginScreen(auth: FirebaseAuth, viewModel: LoginViewModel = viewModel(), navigateToRegister: () -> Unit, navigateToMenu: () -> Unit, navigateBack: () -> Unit)
 {
 
     val email by viewModel.email.collectAsStateWithLifecycle()
@@ -49,11 +52,11 @@ fun LoginScreen(auth: FirebaseAuth, viewModel: LoginViewModel = viewModel(), nav
         //Spacer(modifier = Modifier.weight(1f))
         Spacer(modifier = Modifier.height(35.dp))
 
-        //emailText(email,{viewModel.onEmailChanged(it)}) //Campo de texto para el email del usuario
+        emailText(email,{viewModel.onEmailChanged(it)}) //Campo de texto para el email del usuario
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        //passwordText(password,{viewModel.onPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
+        passwordText(password,{viewModel.onPasswordChanged(it)}) //Campo de texto para la contraseña del usuario
 
         Spacer(modifier = Modifier.height(48.dp))
 
@@ -79,6 +82,11 @@ fun LoginScreen(auth: FirebaseAuth, viewModel: LoginViewModel = viewModel(), nav
 
         Button(onClick = {navigateToRegister()}) {
             Text(text = "Navegar al registro")
+        }
+
+        // Botón atrás opcional
+        TextButton(onClick = navigateBack) {
+            Text("Volver")
         }
 
         Spacer(modifier = Modifier.weight(1f))
