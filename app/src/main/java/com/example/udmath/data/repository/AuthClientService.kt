@@ -38,54 +38,44 @@ class AuthClientService @Inject constructor(
 
 
 
-    override suspend fun loginWithMicrosoft(activity: Activity): Result<User> =
-        suspendCancellableCoroutine { cont ->
-
-            val provider = OAuthProvider.newBuilder("microsoft.com")
-            // Si quisieras scopes extra:
-            // provider.scopes = arrayListOf("openid", "email", "profile")
-
+    override suspend fun loginWithMicrosoft(activity: Activity): Result<User> {
+        return try {
+            // 1) Si hay un login pendiente (por ejemplo si el Activity se recreó)
             val pending = firebaseAuth.pendingAuthResult
-            if (pending != null) {
-                // Ya había un flujo en progreso
-                pending
-                    .addOnSuccessListener { authResult ->
-                        val firebaseUser = authResult.user
-                        if (firebaseUser != null) {
-                            cont.resume(Result.success(firebaseUser.toDomainUser()))
-                        } else {
-                            cont.resume(Result.failure(Exception("Usuario de Microsoft nulo")))
-                        }
-                    }
-                    .addOnFailureListener { e ->
-                        cont.resume(Result.failure(e))
-                    }
+            val authResult = if (pending != null) {
+                pending.await()
             } else {
-                // Iniciamos el flujo de login
-                firebaseAuth
-                    .startActivityForSignInWithProvider(activity, provider.build())
-                    .addOnSuccessListener { authResult ->
-                        val firebaseUser = authResult.user
-                        if (firebaseUser != null) {
-                            cont.resume(Result.success(firebaseUser.toDomainUser()))
-                        } else {
-                            cont.resume(Result.failure(Exception("Usuario de Microsoft nulo")))
-                        }
-                    }
-                    .addOnFailureListener { e ->
-                        cont.resume(Result.failure(e))
-                    }
-            }
-        }
+                // 2) Crear provider de Microsoft
+                val providerBuilder = OAuthProvider.newBuilder("microsoft.com")
 
-    // Mapeo FirebaseUser -> tu modelo de dominio User
-    private fun FirebaseUser.toDomainUser(): User =
-        User(
-            id = uid,
-            name = displayName ?: "",
-            email = email ?: "",
-            password = "" // no aplica para Microsoft
-        )
+                // Scopes básicos (recomendados)
+                providerBuilder.scopes = listOf("openid", "email", "profile")
+
+                // Si luego quieres leer datos con Microsoft Graph, añade por ejemplo:
+                // providerBuilder.scopes = listOf("openid", "email", "profile", "User.Read")
+
+                firebaseAuth
+                    .startActivityForSignInWithProvider(activity, providerBuilder.build())
+                    .await()
+            }
+
+            val fbUser = authResult.user
+                ?: return Result.failure(IllegalStateException("No se obtuvo usuario de Firebase"))
+
+            // 3) Mapear a tu modelo de dominio
+            val user = User(
+                id = fbUser.uid,
+                name = fbUser.displayName ?: "",
+                email = fbUser.email ?: "",
+                password = "" // no guardes password aquí (Microsoft no te la da)
+            )
+
+            Result.success(user)
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 
 
 

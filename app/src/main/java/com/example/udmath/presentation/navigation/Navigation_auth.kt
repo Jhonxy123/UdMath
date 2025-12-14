@@ -17,6 +17,7 @@ import com.example.udmath.presentation.welcome.WelcomeScreen
 import com.example.udmath.presentation.welcome.WelcomeViewModel
 import com.google.firebase.auth.FirebaseAuth
 
+
 @Composable
 fun Navigation(
     auth: FirebaseAuth
@@ -29,9 +30,14 @@ fun Navigation(
     ) {
 
         composable<Welcome> {
-            val viewModel: WelcomeViewModel = hiltViewModel()
+            val vm: WelcomeViewModel = hiltViewModel()
 
-            WelcomeScreen(viewModel = viewModel, navigateToRegister = { navController.navigate(Register) },navigationToLogin = {navController.navigate(Login)},navigationToMicrosoft = {navController.navigate(Login)})
+            WelcomeScreen(
+                viewModel = vm,
+                navigateToRegister = { navController.navigate(Register) },
+                navigationToLogin = { navController.navigate(Login) },
+                navigateToHome = { navController.navigate(Home) }
+            )
         }
 
         composable<Login> {

@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.udmath.domain.repository.AuthRepository
 import com.google.firebase.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.auth
@@ -15,7 +16,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
+class LoginViewModel @Inject constructor(
+
+) : ViewModel() {
 
     private val auth: FirebaseAuth = Firebase.auth
     private val _loading = MutableLiveData(false)
@@ -50,28 +53,7 @@ class LoginViewModel @Inject constructor() : ViewModel() {
     }
 
 
-    // NECESITAMOS QUE LA VISTA ESTÉ LISTA PARA IMPLEMENTAR EL INICIO DE SESI´N CON MICROSOFT
 
-    /*fun signInWithMicrosoft(activity: Activity, home: () -> Unit) = viewModelScope.launch {
-        try {
-            _loading.value = true
 
-            val result = authRepository.loginWithMicrosoft(activity)
-
-            result
-                .onSuccess { user ->
-                    Log.d("UdMath", "signInWithMicrosoft: Bienvenido ${user.email}")
-                    home()
-                }
-                .onFailure { e ->
-                    Log.d("UdMath", "signInWithMicrosoft error: ${e.message}")
-                }
-
-        } catch (ex: Exception) {
-            Log.d("UdMath", "signInWithMicrosoft: ${ex.message}")
-        } finally {
-            _loading.value = false
-        }
-    }*/
 
 }
