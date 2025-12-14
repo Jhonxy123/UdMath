@@ -22,6 +22,9 @@ class AuthClientService @Inject constructor(
 
 ) : AuthRepository {
 
+    override val currentUser: FirebaseUser?
+        get() = firebaseAuth.currentUser
+
     //función abstracta que implementa la interfaz AuthRepository
     override suspend fun registerUser(email: String, password: String): AuthResult? {
         return firebaseAuth.createUserWithEmailAndPassword(email, password).await() //await permite esperar a que se complete la tarea sin bloquear el hilo principal

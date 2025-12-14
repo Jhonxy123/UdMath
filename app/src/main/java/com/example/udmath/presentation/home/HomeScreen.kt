@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
@@ -42,6 +43,7 @@ fun HomeScreen(
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
+    val userState = viewModel.user.collectAsState()
 
     val blueGradient = Brush.verticalGradient(
         colors = listOf(
@@ -64,6 +66,7 @@ fun HomeScreen(
         drawerContent = {
             ModalDrawerSheet {
                 NavigationDrawer(
+                    user = userState.value,
                     onLogout = {
                         // 1. Cerramos el drawer
                         scope.launch { drawerState.close() }

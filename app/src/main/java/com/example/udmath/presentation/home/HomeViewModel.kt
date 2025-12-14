@@ -3,6 +3,7 @@ package com.example.udmath.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.udmath.domain.model.UserUi
 import com.example.udmath.domain.repository.AuthRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -21,6 +22,23 @@ sealed class HomeUiEvent {
 class HomeViewModel @Inject constructor(
     private val authRepository: AuthRepository
 ) : ViewModel() {
+
+    private val _user = MutableStateFlow<UserUi?>(null)
+    val user: StateFlow<UserUi?> = _user
+
+    init {
+        loadUser()
+    }
+
+    private fun loadUser() {
+        val firebaseUser = authRepository.currentUser
+        _user.value = firebaseUser?.let {
+            UserUi(
+                email = it.email.orEmpty(),
+                photoUrl = it.photoUrl?.toString()
+            )
+        }
+    }
 
     // -------- tu estado existente --------
     private val _drawerState = MutableStateFlow(false)

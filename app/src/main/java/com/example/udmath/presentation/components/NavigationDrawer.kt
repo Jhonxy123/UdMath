@@ -39,7 +39,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.udmath.R
+import com.example.udmath.domain.model.UserUi
 import com.example.udmath.ui.theme.white
 
 
@@ -51,9 +53,10 @@ val blueGradient = Brush.verticalGradient(
 )
 
 
-@Preview
+
 @Composable
 fun NavigationDrawer(
+    user: UserUi?,
     onLogout: () -> Unit = {}  // Función de cierre de sesión callback
 ){
 
@@ -65,19 +68,33 @@ fun NavigationDrawer(
 
         Spacer(modifier = Modifier.fillMaxWidth().height(25.dp))
 
-        Image(
-            modifier = Modifier.size(200.dp).clip(CircleShape),
-            painter = painterResource(id = R.drawable.logo_ud),
-            contentDescription = "Logo",
-            contentScale = ContentScale.Crop,
-        )
+        if (user?.photoUrl != null) {
+            AsyncImage(
+                model = user.photoUrl,
+                contentDescription = "Foto de perfil",
+                modifier = Modifier
+                    .size(120.dp)
+                    .clip(CircleShape),
+                contentScale = ContentScale.Crop
+            )
+        } else {
+            Image(
+                modifier = Modifier
+                    .size(120.dp)
+                    .clip(CircleShape),
+                painter = painterResource(id = R.drawable.logo_ud),
+                contentDescription = "Logo"
+            )
+        }
 
         Spacer(modifier = Modifier.fillMaxWidth().height(15.dp))
 
+        // CORREO DEL USUARIO
         Text(
-            text = "Nombre Usuario",
+            text = user?.email ?: "Invitado",
             color = white,
-            fontWeight = FontWeight.Bold //Para poner el texto en negrita
+            fontWeight = FontWeight.Bold,
+            fontSize = 14.sp
         )
 
         Spacer(modifier = Modifier.fillMaxWidth().height(50.dp))
