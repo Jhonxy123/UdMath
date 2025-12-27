@@ -16,3 +16,6 @@ object Menu
 
 @Serializable
 object Home
+
+@Serializable
+object Perfil

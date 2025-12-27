@@ -13,6 +13,8 @@ import com.example.udmath.presentation.auth.register.RegisterScreen
 import com.example.udmath.presentation.auth.register.RegisterViewModel
 import com.example.udmath.presentation.home.HomeScreen
 import com.example.udmath.presentation.home.HomeViewModel
+import com.example.udmath.presentation.profile.PerfilScreen
+import com.example.udmath.presentation.profile.PerfilViewModel
 import com.example.udmath.presentation.welcome.WelcomeScreen
 import com.example.udmath.presentation.welcome.WelcomeViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -80,10 +82,26 @@ fun Navigation(
                     // Cuando el ViewModel emita LoggedOut, navegamos al Login
                     navController.navigate(Login) {
                         // Limpiamos Home del backstack para que no pueda volver atrás
-                        popUpTo(Home) { inclusive = true }
+                        popUpTo(0) { inclusive = true }
+
+                        launchSingleTop = true
                     }
-                }
+                },
+                navigateToProfile = { navController.navigate(Perfil) }
             )
         }
+
+
+        composable<Perfil> {
+            val viewModel: PerfilViewModel = hiltViewModel()
+            PerfilScreen(
+                viewModel = viewModel,
+                navigateBack = { navController.popBackStack() }
+            )
+        }
+
+
+
+
     }
 }

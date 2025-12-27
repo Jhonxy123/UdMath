@@ -38,7 +38,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
-    onLoggedOut: () -> Unit = {}   // navController lo pasará; para Preview queda vacío
+    onLoggedOut: () -> Unit = {},   // navController lo pasará; para Preview queda vacío
+    navigateToProfile: () -> Unit = {}
 ) {
 
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -67,12 +68,20 @@ fun HomeScreen(
             ModalDrawerSheet {
                 NavigationDrawer(
                     user = userState.value,
+                    // 1. Cerramos el drawer
+                    // 2. Avisamos al ViewModel que se pidió logout
                     onLogout = {
                         // 1. Cerramos el drawer
                         scope.launch { drawerState.close() }
                         // 2. Avisamos al ViewModel que se pidió logout
                         viewModel.onLogoutClicked()
+                    },
+
+                    onProfileClicked = {
+                        navigateToProfile()
                     }
+
+
                 )
             }
         }

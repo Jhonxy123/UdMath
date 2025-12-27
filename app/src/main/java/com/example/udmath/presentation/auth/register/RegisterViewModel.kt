@@ -56,24 +56,47 @@ class RegisterViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                _uiState.value = state.copy(isLoading = true, errorMessage = null)
+                _uiState.value = _uiState.value.copy(
+                    isLoading = true,
+                    errorMessage = null
+                )
 
-                // 1. Crear usuario en Firebase Auth
-                val authResult = authRepository.registerUser(state.email, state.password)
+                // 1️⃣ Crear usuario en Firebase Auth
+                val authResult = authRepository.registerUser(
+                    state.email,
+                    state.password
+                )
 
-                // 2. Guardar datos en Firestore (si quieres)
-                val firebaseUser = authResult?.user
+                if (authResult == null) {
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = "No se pudo crear el usuario"
+                    )
+                    return@launch
+                }
+
+                val uid = authResult.user?.uid
+                if (uid.isNullOrBlank()) {
+                    _uiState.value = _uiState.value.copy(
+                        isLoading = false,
+                        errorMessage = "UID inválido"
+                    )
+                    return@launch
+                }
+
+                // 2️⃣ Crear objeto User con UID real
                 val user = User(
-                    id = firebaseUser?.uid ?: "",
+                    id = uid,
                     code = state.code,
                     name = state.name,
                     email = state.email,
-                    password = state.password  // o "" si no quieres guardarla
+                    photoUrl = null
                 )
 
+                // 3️⃣ Guardar en Firestore
                 val saved = authRepository.registerUserInFirestore(user)
 
-                if (authResult != null && saved) {
+                if (saved) {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         isSuccess = true
@@ -82,9 +105,10 @@ class RegisterViewModel @Inject constructor(
                 } else {
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
-                        errorMessage = "No se pudo registrar el usuario"
+                        errorMessage = "No se pudo guardar el perfil"
                     )
                 }
+
             } catch (e: Exception) {
                 _uiState.value = _uiState.value.copy(
                     isLoading = false,
@@ -92,5 +116,7 @@ class RegisterViewModel @Inject constructor(
                 )
             }
         }
+
     }
+
 }

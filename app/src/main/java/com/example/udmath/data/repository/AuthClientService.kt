@@ -30,14 +30,28 @@ class AuthClientService @Inject constructor(
         return firebaseAuth.createUserWithEmailAndPassword(email, password).await() //await permite esperar a que se complete la tarea sin bloquear el hilo principal
     }
 
-    override suspend fun registerUserInFirestore(User: User): Boolean {
-       return try{
-           firestore.collection("estudiantes").add(User).await()
-           true
-       }catch (e:Exception){
-           false
-       }
+
+
+    // Función para registrar un usuario en Firestore
+
+    override suspend fun registerUserInFirestore(user: User): Boolean {
+
+        return try {
+
+            firestore.collection("estudiantes")
+                .document(user.id)   // 🔑 UID como ID del documento
+                .set(user)
+                .await()
+            true
+
+        } catch (e: Exception) {
+
+            false
+
+        }
+
     }
+
 
 
 
@@ -69,8 +83,7 @@ class AuthClientService @Inject constructor(
             val user = User(
                 id = fbUser.uid,
                 name = fbUser.displayName ?: "",
-                email = fbUser.email ?: "",
-                password = "" // no guardes password aquí (Microsoft no te la da)
+                email = fbUser.email ?: ""
             )
 
             Result.success(user)
