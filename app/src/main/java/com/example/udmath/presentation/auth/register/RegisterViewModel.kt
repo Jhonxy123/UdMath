@@ -42,17 +42,47 @@ class RegisterViewModel @Inject constructor(
     }
 
 
+    fun onConfirmPasswordChange(confirmPassword: String) {
+        _uiState.value = _uiState.value.copy(confirmPassword = confirmPassword)
+    }
+
+
+    fun togglePasswordVisibility(){
+        _uiState.value = _uiState.value.copy(
+            showPassword = !_uiState.value.showPassword
+        )
+    }
+
+    fun toggleConfirmPasswordVisibility(){
+        _uiState.value = _uiState.value.copy(
+            showConfirmPassword = !_uiState.value.showConfirmPassword
+        )
+    }
+
+
+
+
     // 🔹 acción de registrar
     fun register(onSuccess: () -> Unit) {
         val state = _uiState.value
 
         if (state.isLoading) return
 
-        // Validaciones básicas (puedes mejorarlas luego)
+        // Validaciones
         if (state.email.isBlank() || state.password.isBlank()) {
             _uiState.value = state.copy(errorMessage = "Correo y contraseña son obligatorios")
             return
+        } else if (state.password != state.confirmPassword) {
+            _uiState.value = state.copy(errorMessage = "Las contraseñas no coinciden")
+            return
+        } else if (state.code.isBlank()) {
+            _uiState.value = state.copy(errorMessage = "El código es obligatorio")
+            return
+        } else if (!state.code.all { it.isDigit() }) {
+            _uiState.value = state.copy(errorMessage = "El código solo debe contener números")
+            return
         }
+
 
         viewModelScope.launch {
             try {

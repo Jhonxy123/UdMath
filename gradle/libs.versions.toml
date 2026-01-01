@@ -40,6 +40,8 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
+androidx-material-icons-extended = { group = "androidx.compose.material",name = "material-icons-extended" }
+
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref="firebasebom"} #archivo especial que gestiona todas las bibliotecas de firebase, en lugar de especificar cada dependencia de firebase
 firebase-crashlytics = {module = "com.google.firebase:firebase-crashlytics"} # Permite monitorear y analizar fallos (crashes), proporcionando informes detallados sobre los errores
@@ -57,7 +59,7 @@ androidx-hilt-navigation-compose = {module = "androidx.hilt:hilt-navigation-comp
 #hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
-androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation"}
 
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 firebase-storage-ktx = { module = "com.google.firebase:firebase-storage"}

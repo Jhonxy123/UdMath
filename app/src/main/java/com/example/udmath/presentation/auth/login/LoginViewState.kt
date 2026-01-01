@@ -1,14 +1,10 @@
-package com.example.udmath.presentation.auth.register
+package com.example.udmath.presentation.auth.login
 
-data class RegisterViewState(
-    val name: String = "",
-    val code: String = "",
+data class LoginViewState(
     val email: String = "",
     val password: String = "",
     val confirmPassword: String = "",
     val showPassword: Boolean = false,
-    val showConfirmPassword: Boolean = false,
-    val btnEnabled: Boolean = true,
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,
     val errorMessage: String? = null

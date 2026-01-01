@@ -77,6 +77,7 @@ dependencies {
     implementation(libs.firebase.storage.ktx)
 
     implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.androidx.material.icons.extended)
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
