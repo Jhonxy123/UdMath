@@ -38,7 +38,9 @@ fun Navigation(
                 viewModel = vm,
                 navigateToRegister = { navController.navigate(Register) },
                 navigationToLogin = { navController.navigate(Login) },
-                navigateToHome = { navController.navigate(Home) }
+                navigateToHome = { navController.navigate(Main){
+                    popUpTo(Welcome) { inclusive = true }
+                } }
             )
         }
 
@@ -49,7 +51,10 @@ fun Navigation(
                 viewModel = viewModel,
                 auth = auth,
                 navigateToRegister = { navController.navigate(Register) },
-                navigateToMenu = { navController.navigate(Home) },
+                navigateToMenu = {
+                    navController.navigate(Main){
+                    popUpTo(Login) { inclusive = true }
+                }},
                 navigateBack = { navController.popBackStack() }
             )
         }
@@ -60,7 +65,7 @@ fun Navigation(
                 viewModel = viewModel,
                 navigateBack = { navController.popBackStack() },
                 onRegisterSuccess = {
-                    navController.navigate(Home) {
+                    navController.navigate(Main) {
                         popUpTo(Login) { inclusive = true }
                     }
                 }
@@ -68,39 +73,19 @@ fun Navigation(
         }
 
 
-        composable<Menu> {
-            val viewModel: MenuViewModel = hiltViewModel()
-            MenuScreen(viewModel)
-        }
 
-        composable<Home> {
-            val viewModel: HomeViewModel = hiltViewModel()
-
-            HomeScreen(
-                viewModel = viewModel,
-                onLoggedOut = {
-                    // Cuando el ViewModel emita LoggedOut, navegamos al Login
-                    navController.navigate(Login) {
-                        // Limpiamos Home del backstack para que no pueda volver atrás
+        //Pantalla que contendra el BottomBar
+        composable<Main> {
+            MainScaffold(
+                auth = auth,
+                onLogout = {
+                    navController.navigate(Welcome) {
                         popUpTo(0) { inclusive = true }
-
-                        launchSingleTop = true
                     }
-                },
-                navigateToProfile = { navController.navigate(Perfil) }
+                }
             )
+
         }
-
-
-        composable<Perfil> {
-            val viewModel: PerfilViewModel = hiltViewModel()
-            PerfilScreen(
-                viewModel = viewModel,
-                navigateBack = { navController.popBackStack() }
-            )
-        }
-
-
 
 
     }

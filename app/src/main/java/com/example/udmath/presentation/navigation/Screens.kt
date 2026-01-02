@@ -19,3 +19,31 @@ object Home
 
 @Serializable
 object Perfil
+
+
+// para el navigation bar
+
+@Serializable
+object Main
+
+@Serializable
+object HomeTab
+
+@Serializable
+object MaterialTab
+
+@Serializable
+object PerfilTab
+
+
+@Serializable
+object MaterialIntTab
+
+@Serializable
+object RecomendacionesTab
+
+@Serializable
+object RetosTab
+
+
+

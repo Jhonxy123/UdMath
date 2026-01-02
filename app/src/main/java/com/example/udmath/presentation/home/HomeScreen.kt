@@ -120,7 +120,7 @@ fun HomeScreen(
                         Image(
                             painter = painterResource(id = R.drawable.logo_inicio),
                             contentDescription = "Logo",
-                            Modifier.size(500.dp)
+                            Modifier.size(400.dp)
                         )
 
                         Text(
