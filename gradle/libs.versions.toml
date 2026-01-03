@@ -19,6 +19,8 @@ hiltNavigationCompose = "1.2.0"
 firebaseAuth = "24.0.1"
 foundation = "1.9.5"
 coil = "2.4.0"
+coroutinesPlayServices = "1.3.9"
+
 
 
 
@@ -38,6 +40,8 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
+androidx-material-icons-extended = { group = "androidx.compose.material",name = "material-icons-extended" }
+
 
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref="firebasebom"} #archivo especial que gestiona todas las bibliotecas de firebase, en lugar de especificar cada dependencia de firebase
 firebase-crashlytics = {module = "com.google.firebase:firebase-crashlytics"} # Permite monitorear y analizar fallos (crashes), proporcionando informes detallados sobre los errores
@@ -46,6 +50,7 @@ firebase-firestore = {module="com.google.firebase:firebase-firestore"}
 
 androidx-navigation-compose = {module = "androidx.navigation:navigation-compose", version.ref = "navegationCompose"} # una biblioteca que permite manejar la navegacion entre jetpack compose
 kotlinx-serialization-json = {module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerialization"} # permite convertir objetos kotlin en formatos como JSON, XML, etc, y viceversa
+kotlinx-coroutines-play-services = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutinesPlayServices" }
 
 #hiltNavigationCompose
 androidx-hilt-navigation-compose = {module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose"}
@@ -54,10 +59,10 @@ androidx-hilt-navigation-compose = {module = "androidx.hilt:hilt-navigation-comp
 #hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
-google-firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebaseAuth" }
-androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation"}
 
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+firebase-storage-ktx = { module = "com.google.firebase:firebase-storage"}
 
 
 

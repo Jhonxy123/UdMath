@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -26,10 +29,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.udmath.R
 import com.example.udmath.presentation.components.CodeText
+import com.example.udmath.presentation.components.PasswordText
 import com.example.udmath.presentation.components.TextCampName
 import com.example.udmath.presentation.components.blueGradient
 import com.example.udmath.presentation.components.emailText
-import com.example.udmath.presentation.components.passwordText
 import com.example.udmath.ui.theme.white
 
 @Composable
@@ -69,7 +72,14 @@ fun RegisterScreen(
                 color = white
             )
 
+
+
+
+
+
         }
+
+        val scrollState = rememberScrollState()
 
         Column(
             modifier = Modifier
@@ -78,52 +88,55 @@ fun RegisterScreen(
                 .fillMaxHeight(0.7f)
                 .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
                 .background(Color.White)
-                .padding(25.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
+                .padding(25.dp)
+                .verticalScroll(scrollState),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+
+            state.errorMessage?.let {
+                Text(text = it, color = Color.Red)
+            }
 
             TextCampName(
                 cadena = state.name,
                 onTextChanged = { viewModel.onNameChange(it) }
             )
 
-            // 🔹 Código
             CodeText(
                 code = state.code,
                 onTextChanged = { viewModel.onCodeChange(it) }
             )
 
-            // 🔹 Correo
             emailText(
                 email = state.email,
                 onTextChanged = { viewModel.onEmailChange(it) }
             )
 
-            // 🔹 Contraseña
-            passwordText(
+            PasswordText(
                 password = state.password,
-                onTextChanged = { viewModel.onPasswordChange(it) }
+                onTextChanged = { viewModel.onPasswordChange(it) },
+                showPassword = state.showPassword,
+                onToggleVisibility = { viewModel.togglePasswordVisibility() }
             )
 
-            // Aquí iría el botón de registrar
+            PasswordText(
+                password = state.confirmPassword,
+                onTextChanged = { viewModel.onConfirmPasswordChange(it) },
+                showPassword = state.showConfirmPassword,
+                onToggleVisibility = { viewModel.toggleConfirmPasswordVisibility() }
+            )
+
             Button(
                 onClick = { viewModel.register(onRegisterSuccess) },
-                enabled = !state.isLoading   // DESACTIVADO mientras está cargando
+                enabled = !state.isLoading
             ) {
                 Text("Crear cuenta")
             }
 
-
-            // Botón atrás opcional
             TextButton(onClick = navigateBack) {
                 Text("Volver")
             }
 
-            // Puedes mostrar errores
-            state.errorMessage?.let {
-                Text(text = it, color = Color.Red)
-            }
 
         }
 

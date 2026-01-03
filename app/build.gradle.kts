@@ -58,7 +58,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    implementation(libs.google.firebase.auth)
+
     implementation(libs.androidx.compose.foundation)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -74,6 +74,10 @@ dependencies {
     implementation(libs.firebase.crashlytics)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.storage.ktx)
+
+    implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.androidx.material.icons.extended)
 
     implementation(libs.androidx.navigation.compose)
     implementation(libs.kotlinx.serialization.json)
