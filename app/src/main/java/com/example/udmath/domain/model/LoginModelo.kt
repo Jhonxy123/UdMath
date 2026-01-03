@@ -1,4 +1,5 @@
 package com.example.udmath.domain.model
 
-class LoginModelo {
-}
+data class LoginModelo (
+    val id: String = ""
+)
