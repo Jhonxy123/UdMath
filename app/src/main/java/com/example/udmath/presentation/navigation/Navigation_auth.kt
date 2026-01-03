@@ -73,7 +73,6 @@ fun Navigation(
         }
 
 
-
         //Pantalla que contendra el BottomBar
         composable<Main> {
             MainScaffold(

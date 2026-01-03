@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.ui.res.painterResource
+import com.example.udmath.presentation.components.NavigationDrawer
 
 // import androidx.navigation.NavController // ← Descomenta esto si usas Navigation
 
@@ -24,6 +25,7 @@ import androidx.compose.ui.res.painterResource
 @Composable
 // fun MaterialInteresanteScreen(navController: NavController) { // ← cuando uses navegación
 fun MaterialApoyoScreen() {
+
     Scaffold { paddingValues ->
         Column(
             modifier = Modifier

@@ -29,7 +29,12 @@ fun MainBottomBar(navController: NavHostController) {
                 onClick = {
                     selectedIndex = index
                     navController.navigate(destination) {
+                        //  esto evita el recorrido hacia atrás por tabs
+                        popUpTo(navController.graph.startDestinationId) {
+                            saveState = true
+                        }
                         launchSingleTop = true
+                        restoreState = true
                     }
                 },
                 icon = { /* luego ponemos iconos */ },
