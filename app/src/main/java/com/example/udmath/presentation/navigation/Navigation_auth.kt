@@ -49,8 +49,8 @@ fun Navigation(
 
             LoginScreen(
                 viewModel = viewModel,
-                auth = auth,
-                navigateToRegister = { navController.navigate(Register) },
+                //auth = auth,
+                //navigateToRegister = { navController.navigate(Register) },
                 navigateToMenu = {
                     navController.navigate(Main){
                     popUpTo(Login) { inclusive = true }

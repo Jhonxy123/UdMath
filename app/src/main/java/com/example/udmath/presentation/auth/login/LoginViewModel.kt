@@ -16,44 +16,57 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor(
-
-) : ViewModel() {
+class LoginViewModel @Inject constructor() : ViewModel() {
 
     private val auth: FirebaseAuth = Firebase.auth
-    private val _loading = MutableLiveData(false)
 
-    private val _email = MutableStateFlow<String>("")
-    val email: StateFlow<String> = _email
+    private val _state = MutableStateFlow(LoginViewState())
+    val state: StateFlow<LoginViewState> = _state
 
-    private val _password = MutableStateFlow<String>("")
-    val password: StateFlow<String> = _password
-
-    fun onEmailChanged(email: String){
-        _email.value = email
-    }
-    fun onPasswordChanged(password: String){
-        _password.value = password
+    fun onEmailChanged(email: String) {
+        _state.value = _state.value.copy(email = email)
     }
 
-    fun signInWithEmailAndPassword(email: String, password: String, home: () -> Unit) = viewModelScope.launch{
-        try{
-            auth.signInWithEmailAndPassword(email,password)
-                .addOnCompleteListener{task->
-                    if(task.isSuccessful){
-                        Log.d("UdMath","signInWithEmailAndPassword Logueado!!")
-                        home()
-                    }else{
-                        Log.d("UdMath","signInWithEmailAndPassword: ${task.result.toString()}")
-                    }
-                }
-        }catch(ex:Exception){
-            Log.d("UdMath","signInWithEmailAndPassword: ${ex.message}")
+    fun onPasswordChanged(password: String) {
+        _state.value = _state.value.copy(password = password)
+    }
+
+    fun login(/*onSuccess: () -> Unit*/) {
+
+        val email = _state.value.email
+        val password = _state.value.password
+
+        // 🔒 VALIDACIONES
+        if (email.isBlank() || password.isBlank()) {
+            _state.value = _state.value.copy(
+                errorMessage = "Por favor llena todos los campos"
+            )
+            return
         }
+
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _state.value = _state.value.copy(
+                errorMessage = "Correo electrónico inválido"
+            )
+            return
+        }
+
+        _state.value = _state.value.copy(isLoading = true, errorMessage = null)
+
+        auth.signInWithEmailAndPassword(email, password)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    _state.value = _state.value.copy(
+                        isLoading = false,
+                        isSuccess = true
+                    )
+                    //onSuccess()
+                } else {
+                    _state.value = _state.value.copy(
+                        isLoading = false,
+                        errorMessage = "Correo o contraseña incorrectos"
+                    )
+                }
+            }
     }
-
-
-
-
-
 }
