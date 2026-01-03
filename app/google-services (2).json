@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "475658522757",
+    "project_id": "udmath-939a1",
+    "storage_bucket": "udmath-939a1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:475658522757:android:9b1c9f734e6ed8a28ed9ec",
+        "android_client_info": {
+          "package_name": "com.example.udmath"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOLWbdCqw56sbRJ1Vw9NlmrUu8IBgrgoI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
