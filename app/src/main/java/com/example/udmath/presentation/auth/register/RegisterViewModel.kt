@@ -60,8 +60,6 @@ class RegisterViewModel @Inject constructor(
     }
 
 
-
-
     // 🔹 acción de registrar
     fun register(onSuccess: () -> Unit) {
         val state = _uiState.value

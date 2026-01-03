@@ -71,12 +71,6 @@ fun RegisterScreen(
                 fontWeight = FontWeight.Bold,
                 color = white
             )
-
-
-
-
-
-
         }
 
         val scrollState = rememberScrollState()

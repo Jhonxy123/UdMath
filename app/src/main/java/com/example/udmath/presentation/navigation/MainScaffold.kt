@@ -31,13 +31,11 @@ fun MainScaffold(
     onLogout: () -> Unit
 ) {
     val tabNavController = rememberNavController()
-
     val backStackEntry by tabNavController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
 
     // Lee el Activity aquí (zona @Composable)
     val activity = LocalContext.current as? Activity
-
 
     val isOnHome = currentRoute?.contains("HomeTab") == true
 
