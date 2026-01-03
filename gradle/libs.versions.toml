@@ -20,6 +20,7 @@ firebaseAuth = "24.0.1"
 foundation = "1.9.5"
 coil = "2.4.0"
 coroutinesPlayServices = "1.3.9"
+foundationLayout = "1.10.0"
 
 
 
@@ -63,6 +64,7 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 firebase-storage-ktx = { module = "com.google.firebase:firebase-storage"}
+androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
 
 
 
