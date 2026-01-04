@@ -104,7 +104,7 @@ fun PerfilScreen(
             val picker = rememberLauncherForActivityResult(
                 ActivityResultContracts.GetContent()
             ) { uri ->
-                if (uri != null) viewModel.uploadProfileImage(uri)
+                //if (uri != null) viewModel.uploadProfileImage(uri)
             }
 
             Button(onClick = { picker.launch("image/*") }) {

@@ -46,6 +46,8 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     val userState = viewModel.user.collectAsState()
 
+
+    //Definimos el gradiente de colores
     val blueGradient = Brush.verticalGradient(
         colors = listOf(
             Color(0xFF3980C2),
@@ -78,6 +80,7 @@ fun HomeScreen(
                     },
 
                     onProfileClicked = {
+                        scope.launch { drawerState.close() }
                         navigateToProfile()
                     }
 
@@ -99,7 +102,8 @@ fun HomeScreen(
                             scope.launch {
                                 drawerState.open()
                             }
-                        }
+                        },
+                        text = "Inicio"
                     )
                 }
             ) { paddingValues ->

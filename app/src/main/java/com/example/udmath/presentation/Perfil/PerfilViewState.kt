@@ -1,7 +1,7 @@
 // presentation/profile/ProfileUiState.kt
 package com.example.udmath.presentation.profile
 
-data class ProfileUiState(
+data class PerfilViewState(
     val isLoading: Boolean = true,
     val email: String = "",
     val name: String = "",

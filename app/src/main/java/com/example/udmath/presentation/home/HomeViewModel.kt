@@ -26,19 +26,19 @@ class HomeViewModel @Inject constructor(
     private val _user = MutableStateFlow<UserUi?>(null)
     val user: StateFlow<UserUi?> = _user
 
-    init {
-        loadUser()
-    }
 
-    private fun loadUser() {
-        val firebaseUser = authRepository.currentUser
-        _user.value = firebaseUser?.let {
-            UserUi(
-                email = it.email.orEmpty(),
-                photoUrl = it.photoUrl?.toString()
-            )
+    init {
+        viewModelScope.launch {
+            authRepository.refreshCurrentUser()
+        }
+        viewModelScope.launch {
+            authRepository.currentUser.collect { user ->
+                _user.value = user?.let { UserUi(email = it.email, photoUrl = it.photoUrl) }
+            }
         }
     }
+
+
 
     // -------- tu estado existente --------
     private val _drawerState = MutableStateFlow(false)

@@ -13,6 +13,8 @@ interface AuthRepository{
 
     val currentUser: StateFlow<User?>
 
+    suspend fun refreshCurrentUser()
+
     suspend fun registerUser(email: String, password: String): AuthResult?
 
     suspend fun loginWithMicrosoft(activity: Activity): Result<User>
