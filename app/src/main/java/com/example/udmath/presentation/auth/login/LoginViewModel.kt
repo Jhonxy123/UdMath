@@ -16,9 +16,9 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginViewModel @Inject constructor() : ViewModel() {
-
-    private val auth: FirebaseAuth = Firebase.auth
+class LoginViewModel @Inject constructor(
+    private val authRepository: AuthRepository
+) : ViewModel() {
 
     private val _state = MutableStateFlow(LoginViewState())
     val state: StateFlow<LoginViewState> = _state
@@ -31,42 +31,84 @@ class LoginViewModel @Inject constructor() : ViewModel() {
         _state.value = _state.value.copy(password = password)
     }
 
-    fun login(/*onSuccess: () -> Unit*/) {
+    fun openResetDialog() {
+        _state.value = _state.value.copy(
+            showResetDialog = true,
+            resetEmail = _state.value.email,
+            resetSuccessMessage = null,
+            errorMessage = null
+        )
+    }
 
-        val email = _state.value.email
+    fun closeResetDialog() {
+        _state.value = _state.value.copy(showResetDialog = false)
+    }
+
+    fun onResetEmailChanged(email: String) {
+        _state.value = _state.value.copy(resetEmail = email)
+    }
+
+    fun clearResetSuccessMessage() {
+        _state.value = _state.value.copy(resetSuccessMessage = null)
+    }
+
+    fun sendPasswordReset() {
+        val email = _state.value.resetEmail.trim()
+
+        if (email.isBlank()) {
+            _state.value = _state.value.copy(errorMessage = "Ingresa tu correo para restablecer la contraseña")
+            return
+        }
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _state.value = _state.value.copy(errorMessage = "Correo electrónico inválido")
+            return
+        }
+
+        _state.value = _state.value.copy(resetLoading = true, errorMessage = null)
+
+        viewModelScope.launch {
+            try {
+                authRepository.sendPasswordReset(email)
+                _state.value = _state.value.copy(
+                    resetLoading = false,
+                    showResetDialog = false,
+                    resetSuccessMessage = "Te enviamos un correo para restablecer tu contraseña."
+                )
+            } catch (e: Exception) {
+                _state.value = _state.value.copy(
+                    resetLoading = false,
+                    errorMessage = e.localizedMessage ?: "No se pudo enviar el correo de restablecimiento"
+                )
+            }
+        }
+    }
+
+    fun login() {
+        val email = _state.value.email.trim()
         val password = _state.value.password
 
-        // 🔒 VALIDACIONES
         if (email.isBlank() || password.isBlank()) {
-            _state.value = _state.value.copy(
-                errorMessage = "Por favor llena todos los campos"
-            )
+            _state.value = _state.value.copy(errorMessage = "Por favor llena todos los campos")
             return
         }
 
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _state.value = _state.value.copy(
-                errorMessage = "Correo electrónico inválido"
-            )
+            _state.value = _state.value.copy(errorMessage = "Correo electrónico inválido")
             return
         }
 
         _state.value = _state.value.copy(isLoading = true, errorMessage = null)
 
-        auth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    _state.value = _state.value.copy(
-                        isLoading = false,
-                        isSuccess = true
-                    )
-                    //onSuccess()
-                } else {
-                    _state.value = _state.value.copy(
-                        isLoading = false,
-                        errorMessage = "Correo o contraseña incorrectos"
-                    )
-                }
+        viewModelScope.launch {
+            try {
+                authRepository.loginWithEmail(email, password)
+                _state.value = _state.value.copy(isLoading = false, isSuccess = true)
+            } catch (e: Exception) {
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    errorMessage = "Correo o contraseña incorrectos"
+                )
             }
+        }
     }
 }

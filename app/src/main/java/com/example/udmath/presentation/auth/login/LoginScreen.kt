@@ -37,6 +37,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.remember
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -124,6 +126,41 @@ fun LoginScreen(
                     fontSize = 16.sp
                 )
             }
+
+            if (state.showResetDialog) {
+                AlertDialog(
+                    onDismissRequest = { viewModel.closeResetDialog() },
+                    title = { Text("Restablecer contraseña") },
+                    text = {
+                        Column {
+                            Text("Ingresa tu correo y te enviaremos un enlace para restablecer tu contraseña.")
+                            Spacer(modifier = Modifier.height(12.dp))
+
+                            OutlinedTextField(
+                                value = state.resetEmail,
+                                onValueChange = { viewModel.onResetEmailChanged(it) },
+                                singleLine = true,
+                                label = { Text("Correo") },
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+                    },
+                    confirmButton = {
+                        TextButton(
+                            onClick = { viewModel.sendPasswordReset() },
+                            enabled = !state.resetLoading
+                        ) {
+                            Text(if (state.resetLoading) "Enviando..." else "Enviar")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { viewModel.closeResetDialog() }) {
+                            Text("Cancelar")
+                        }
+                    }
+                )
+            }
+
         }
 
         Spacer(modifier = Modifier.height(36.dp))
@@ -143,7 +180,7 @@ fun LoginScreen(
         /* =======================
            📧 EMAIL
            ======================= */
-        emailLoginText(state.email) {
+        EmailLoginText(state.email) {
             viewModel.onEmailChanged(it)
         }
 
@@ -152,7 +189,7 @@ fun LoginScreen(
         /* =======================
            🔒 PASSWORD
            ======================= */
-        passwordLoginText(state.password) {
+        PasswordLoginText(state.password) {
             viewModel.onPasswordChanged(it)
         }
 
@@ -162,7 +199,7 @@ fun LoginScreen(
            🔹 OLVIDÉ CONTRASEÑA
            ======================= */
         TextButton(
-            onClick = { /* TODO */ },
+            onClick = {  viewModel.openResetDialog()/* TODO */ },
             modifier = Modifier.align(Alignment.CenterHorizontally)
         ) {
             Text(
@@ -185,6 +222,21 @@ fun LoginScreen(
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
             Spacer(modifier = Modifier.height(16.dp))
+        }
+
+        state.resetSuccessMessage?.let { msg ->
+            Text(
+                text = msg,
+                color = Color(0xFF1B7F3A),
+                fontSize = 13.sp,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            )
+            Spacer(modifier = Modifier.height(12.dp))
+
+            LaunchedEffect(msg) {
+                // opcional: limpiarlo luego de mostrarse
+                // viewModel.clearResetSuccessMessage()
+            }
         }
 
         /* =======================
@@ -241,7 +293,7 @@ fun LoginScreen(
 }
 
 @Composable
-fun emailLoginText(
+fun EmailLoginText(
     value: String,
     onValueChange: (String) -> Unit
 ) {
@@ -291,7 +343,7 @@ fun emailLoginText(
 }
 
 @Composable
-fun passwordLoginText(
+fun PasswordLoginText(
     value: String,
     onValueChange: (String) -> Unit
 ) {
