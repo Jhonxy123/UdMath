@@ -2,6 +2,7 @@ package com.example.udmath.presentation.MaterialInteresante
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -10,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
@@ -20,6 +22,7 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -31,8 +34,11 @@ import androidx.compose.ui.unit.sp
 import com.example.udmath.R
 import com.example.udmath.presentation.components.TopBar
 import com.example.udmath.presentation.components.TopBarStd
+import com.example.udmath.ui.theme.white
+import kotlin.math.round
 
 @OptIn(ExperimentalMaterial3Api::class)
+@Preview
 @Composable
 fun MaterialInteresanteScreen() {
 
@@ -54,8 +60,8 @@ fun MaterialInteresanteScreen() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
-                .background(blueGradient),
+                .background(blueGradient)   // ✅ pinta toda la pantalla
+                .padding(innerPadding)      // ✅ el contenido respeta topBar/bottomBar
         ) {
 
             Column(
@@ -66,18 +72,116 @@ fun MaterialInteresanteScreen() {
 
             ) {
                 Row() {
-                    Column() {
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .size(180.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(white)
+                            .padding(10.dp),
+                    ) {
                         Image(
-                            painter = painterResource(id = R.drawable.articulos),
+                            painter = painterResource(id = R.drawable.articulo),
                             contentDescription = "Logo",
-                            Modifier.size(200.dp)
+                            modifier = Modifier.size(120.dp),
+
                         )
+
+                        Text(
+                            text = "Articulos",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(10.dp),
+                            color = Color.Black
+                        )
+
                     }
-                    Column() {Text("HOLAA") }
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .size(180.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(white)
+                            .padding(10.dp),
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.articulo),
+                            contentDescription = "Logo",
+                            modifier = Modifier.size(120.dp),
+
+                            )
+
+                        Text(
+                            text = "Articulos",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(10.dp),
+                            color = Color.Black
+                        )
+
+                    }
                 }
                 Row() {
-                    Column() { Text("HOLAA")}
-                    Column() { Text("HOLAA")}
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .size(180.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(white)
+                            .padding(10.dp),
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.articulo),
+                            contentDescription = "Logo",
+                            modifier = Modifier.size(120.dp),
+
+                            )
+
+                        Text(
+                            text = "Articulos",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(10.dp),
+                            color = Color.Black
+                        )
+
+                    }
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                        verticalArrangement = Arrangement.Center,
+                        modifier = Modifier
+                            .padding(10.dp)
+                            .size(180.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .background(white)
+                            .padding(10.dp),
+                    ) {
+                        Image(
+                            painter = painterResource(id = R.drawable.articulo),
+                            contentDescription = "Logo",
+                            modifier = Modifier.size(120.dp),
+
+                            )
+
+                        Text(
+                            text = "Articulos",
+                            fontSize = 22.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier.padding(10.dp),
+                            color = Color.Black
+                        )
+
+                    }
                 }
             }
 
