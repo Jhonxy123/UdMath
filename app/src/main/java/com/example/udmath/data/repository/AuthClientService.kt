@@ -52,7 +52,13 @@ class AuthClientService @Inject constructor(
 
     }
 
+    override suspend fun loginWithEmail(email: String, password: String): AuthResult {
+        return firebaseAuth.signInWithEmailAndPassword(email, password).await()
+    }
 
+    override suspend fun sendPasswordReset(email: String) {
+        firebaseAuth.sendPasswordResetEmail(email).await()
+    }
 
 
     override suspend fun loginWithMicrosoft(activity: Activity): Result<User> {
