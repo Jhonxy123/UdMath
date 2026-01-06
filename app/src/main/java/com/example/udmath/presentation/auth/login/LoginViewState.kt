@@ -7,5 +7,11 @@ data class LoginViewState(
     val showPassword: Boolean = false,
     val isLoading: Boolean = false,
     val isSuccess: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+
+    // 🔁 Reset password
+    val showResetDialog: Boolean = false,
+    val resetEmail: String = "",
+    val resetLoading: Boolean = false,
+    val resetSuccessMessage: String? = null
 )

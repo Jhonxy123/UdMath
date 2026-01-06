@@ -17,6 +17,10 @@ interface AuthRepository{
 
     suspend fun registerUser(email: String, password: String): AuthResult?
 
+    suspend fun loginWithEmail(email: String, password: String): AuthResult
+
+    suspend fun sendPasswordReset(email: String)
+
     suspend fun loginWithMicrosoft(activity: Activity): Result<User>
 
     suspend fun registerUserInFirestore(User: User): Boolean
