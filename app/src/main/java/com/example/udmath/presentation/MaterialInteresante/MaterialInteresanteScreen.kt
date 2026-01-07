@@ -85,13 +85,13 @@ fun MaterialInteresanteScreen() {
                         Image(
                             painter = painterResource(id = R.drawable.articulo),
                             contentDescription = "Logo",
-                            modifier = Modifier.size(120.dp),
+                            modifier = Modifier.size(110.dp),
 
                         )
 
                         Text(
-                            text = "Articulos",
-                            fontSize = 22.sp,
+                            text = "Artículos",
+                            fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(10.dp),
@@ -110,15 +110,15 @@ fun MaterialInteresanteScreen() {
                             .padding(10.dp),
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.articulo),
+                            painter = painterResource(id = R.drawable.programacion),
                             contentDescription = "Logo",
-                            modifier = Modifier.size(120.dp),
+                            modifier = Modifier.size(110.dp),
 
                             )
 
                         Text(
-                            text = "Articulos",
-                            fontSize = 22.sp,
+                            text = "Programación",
+                            fontSize = 18.sp,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(10.dp),
@@ -139,15 +139,15 @@ fun MaterialInteresanteScreen() {
                             .padding(10.dp),
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.articulo),
+                            painter = painterResource(id = R.drawable.curiosos),
                             contentDescription = "Logo",
-                            modifier = Modifier.size(120.dp),
+                            modifier = Modifier.size(110.dp),
 
                             )
 
                         Text(
-                            text = "Articulos",
-                            fontSize = 22.sp,
+                            text = "Datos curiosos",
+                            fontSize = 17.sp,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(10.dp),
@@ -166,15 +166,15 @@ fun MaterialInteresanteScreen() {
                             .padding(10.dp),
                     ) {
                         Image(
-                            painter = painterResource(id = R.drawable.articulo),
+                            painter = painterResource(id = R.drawable.audiovisual),
                             contentDescription = "Logo",
-                            modifier = Modifier.size(120.dp),
+                            modifier = Modifier.size(90.dp),
 
                             )
 
                         Text(
-                            text = "Articulos",
-                            fontSize = 22.sp,
+                            text = "Material audiovisual",
+                            fontSize = 17.sp,
                             fontWeight = FontWeight.Bold,
                             textAlign = TextAlign.Center,
                             modifier = Modifier.padding(10.dp),
