@@ -28,7 +28,9 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -300,11 +302,11 @@ fun EmailLoginText(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 42.dp),   // ajusta a tu mockup
+            .padding(horizontal = 42.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ud_math_logo), // tu icono usuario
+            painter = painterResource(id = R.drawable.ud_math_logo),
             contentDescription = null,
             tint = Color(0xFF184998),
             modifier = Modifier.size(22.dp)
@@ -319,24 +321,21 @@ fun EmailLoginText(
             placeholder = {
                 Text(
                     text = "Usuario",
-                    color = Color(0xFFB0B0B0),
                     fontSize = 14.sp
                 )
             },
             modifier = Modifier
                 .weight(1f)
-                .height(44.dp)
-                .clip(RoundedCornerShape(18.dp)),
+                .heightIn(min = 52.dp), // 👈 más alto
+            shape = RoundedCornerShape(18.dp),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color(0xFFE9E9E9),
                 unfocusedContainerColor = Color(0xFFE9E9E9),
-
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-
+                cursorColor = Color(0xFF184998),
                 focusedTextColor = Color(0xFF333333),
-                unfocusedTextColor = Color(0xFF333333),
-                cursorColor = Color(0xFF184998)
+                unfocusedTextColor = Color(0xFF333333)
             )
         )
     }
@@ -354,7 +353,7 @@ fun PasswordLoginText(
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.candado), // tu icono candado (usa el correcto)
+            painter = painterResource(id = R.drawable.candado),
             contentDescription = null,
             tint = Color(0xFF184998),
             modifier = Modifier.size(22.dp)
@@ -370,23 +369,18 @@ fun PasswordLoginText(
             placeholder = {
                 Text(
                     text = "Contraseña",
-                    color = Color(0xFFB0B0B0),
                     fontSize = 14.sp
                 )
             },
             modifier = Modifier
                 .weight(1f)
-                .height(44.dp)
-                .clip(RoundedCornerShape(18.dp)),
+                .heightIn(min = 52.dp),
+            shape = RoundedCornerShape(18.dp),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color(0xFFE9E9E9),
                 unfocusedContainerColor = Color(0xFFE9E9E9),
-
                 focusedIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
-
-                focusedTextColor = Color(0xFF333333),
-                unfocusedTextColor = Color(0xFF333333),
                 cursorColor = Color(0xFF184998)
             )
         )

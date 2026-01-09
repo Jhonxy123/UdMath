@@ -1,10 +1,12 @@
 package com.example.udmath.presentation.auth.register
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +17,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -27,12 +30,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.udmath.R
 import com.example.udmath.presentation.components.CodeText
 import com.example.udmath.presentation.components.PasswordText
 import com.example.udmath.presentation.components.TextCampName
 import com.example.udmath.presentation.components.blueGradient
 import com.example.udmath.presentation.components.emailText
+import com.example.udmath.ui.theme.Blue
 import com.example.udmath.ui.theme.white
 
 @Composable
@@ -120,15 +125,48 @@ fun RegisterScreen(
                 onToggleVisibility = { viewModel.toggleConfirmPasswordVisibility() }
             )
 
+            Spacer(modifier = Modifier.height(18.dp))
+
+            /* =======================
+       🔘 BOTÓN INGRESAR (Mockup)
+       ======================= */
             Button(
                 onClick = { viewModel.register(onRegisterSuccess) },
-                enabled = !state.isLoading
+                enabled = !state.isLoading,
+                modifier = Modifier
+                    .fillMaxWidth(0.75f)
+                    .height(50.dp)
+                    .align(Alignment.CenterHorizontally),
+                shape = RoundedCornerShape(20.dp),
+                border = BorderStroke(1.dp, Color(0xFFE2E2E2)),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.White,
+                    contentColor = Color(0xFF184998),
+                    disabledContainerColor = Color(0xFFF5F5F5),
+                    disabledContentColor = Color(0xFF184998).copy(alpha = 0.5f)
+                ),
+                elevation = ButtonDefaults.buttonElevation(
+                    defaultElevation = 10.dp,
+                    pressedElevation = 2.dp,     // 👈 se “hunde” al presionar
+                    disabledElevation = 0.dp
+                )
             ) {
-                Text("Crear cuenta")
+                Text(
+                    text = if (state.isLoading) "Cargando..." else "Crear cuenta",
+                    fontSize = 16.sp,
+                    color = Color(0xFF184998)
+                )
             }
-
-            TextButton(onClick = navigateBack) {
-                Text("Volver")
+            
+            TextButton(
+                onClick = navigateBack,
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text(
+                    text = "Volver",
+                    color = Blue,      // 👈 mismo azul
+                    fontSize = 14.sp
+                )
             }
 
 
