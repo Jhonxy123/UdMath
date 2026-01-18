@@ -1,5 +1,6 @@
 package com.example.udmath.presentation.navigation
 
+import MainBottomBar
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
@@ -37,7 +38,7 @@ fun MainScaffold(
     // Lee el Activity aquí (zona @Composable)
     val activity = LocalContext.current as? Activity
 
-    val isOnHome = currentRoute?.contains("HomeTab") == true
+    val isOnHome = currentRoute == HomeTab::class.qualifiedName
 
     BackHandler(enabled = true) {
         if (!isOnHome) {
