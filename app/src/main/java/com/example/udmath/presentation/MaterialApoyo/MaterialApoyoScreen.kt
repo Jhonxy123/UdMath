@@ -1,8 +1,10 @@
 package com.example.udmath.presentation.MaterialApoyo
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import com.example.udmath.R
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
@@ -18,9 +20,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Rect
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -35,215 +41,123 @@ import kotlinx.coroutines.launch
 // import androidx.navigation.NavController // ← Descomenta esto si usas Navigation
 
 
+@Preview(showBackground = true)
 @Composable
-@Preview
+fun MaterialApoyoScreenPreview() {
+    MaterialApoyoScreen()
+}
+
+
+@Composable
+//@Preview
 fun MaterialApoyoScreen() {
-    //Definimos el gradiente de colores
     val blueGradient = Brush.verticalGradient(
-        colors = listOf(
-            Color(0xFF3980C2),
-            Color(0xFF184998)
-        )
+        colors = listOf(Color(0xFF3980C2), Color(0xFF184998))
     )
-    //Scafold es la estructura principal que le da el aspecto al screen
+
     Scaffold(
-        topBar = {
-            TopBarStd("Material de Apoyo")
-        }
+        topBar = { TopBarStd("Material de Apoyo") },
+        bottomBar = { /* tu BottomBar */ }
     ) { innerPadding ->
-        Box(
+
+        BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
-                .background(blueGradient)   // ✅ pinta toda la pantalla
-                .padding(innerPadding)      // ✅ el contenido respeta topBar/bottomBar
+                .background(blueGradient)   // ✅ primero
+                .padding(innerPadding)
         ) {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxSize()
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(white)
-                        .padding(10.dp).height(90.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier.size(120.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.fondo),
-                            contentDescription = "Fondo",
-                            modifier = Modifier.fillMaxSize(), // clave
-                            contentScale = ContentScale.Crop
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.aplicaciones),
-                            contentDescription = "Aplicaciones",
-                            modifier = Modifier.size(70.dp) //  más pequeño que el fondo
-                        )
-                    }
+            val bubbleSize = 70.dp
 
-                    Spacer(modifier = Modifier.width(12.dp))
+            // maxWidth / maxHeight están en dp (ya con padding aplicado)
+            val w = maxWidth
+            val h = maxHeight
 
-                    Text(
-                        text = "Aplicaciones",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
+            // --- Curva ---
+            Canvas(modifier = Modifier.fillMaxSize()) {
+                val wPx = size.width
+                val hPx = size.height
+
+                val arcRect = Rect(
+                    left = wPx * 0.30f,
+                    top = hPx * 0.08f,
+                    right = wPx * 1.70f,
+                    bottom = hPx * 0.90f
+                )
+
+                drawArc(
+                    color = Color.White,
+                    startAngle = 90f,
+                    sweepAngle = 180f,
+                    useCenter = false,
+                    topLeft = arcRect.topLeft,
+                    size = arcRect.size,
+                    style = Stroke(width = 16f, cap = StrokeCap.Round)
+                )
+            }
+
+            // --- Burbujas (posiciones RELATIVAS) ---
+            // x e y son fracciones del ancho/alto disponible (0f..1f)
+            val bubbles = listOf(
+                Triple(R.drawable.aplicaciones, "Aplicaciones", 0.60f to 0.09f),
+                Triple(R.drawable.libros, "Libros", 0.43f to 0.18f),
+                Triple(R.drawable.paginasapoyo, "Páginas\nde apoyo", 0.18f to 0.37f),
+                Triple(R.drawable.tutoriasud, "Tutorías UD", 0.14f to 0.62f),
+                Triple(R.drawable.videos, "Videos", 0.43f to 0.80f),
+                Triple(R.drawable.articulo, "Artículos", 0.70f to 0.89f),
+            )
+
+            bubbles.forEach { (img, txt, pos) ->
+                val (xf, yf) = pos
+                Bubble(
+                    image = img,
+                    text = txt,
+                    modifier = Modifier.absoluteOffset(
+                        x = (w * xf) - (bubbleSize / 2),
+                        y = (h * yf) - (bubbleSize / 2)
                     )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(white)
-                        .padding(10.dp).height(90.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier.size(120.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.fondo),
-                            contentDescription = "Fondo",
-                            modifier = Modifier.fillMaxSize(), // clave
-                            contentScale = ContentScale.Crop
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.libros),
-                            contentDescription = "Libros",
-                            modifier = Modifier.size(55.dp) //  más pequeño que el fondo
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Text(
-                        text = "Libros",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(white)
-                        .padding(10.dp).height(90.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier.size(120.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.fondo),
-                            contentDescription = "Fondo",
-                            modifier = Modifier.fillMaxSize(), // clave
-                            contentScale = ContentScale.Crop
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.paginasapoyo),
-                            contentDescription = "Páginas apoyo",
-                            modifier = Modifier.size(70.dp) //  más pequeño que el fondo
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Text(
-                        text = "Página de Apoyo",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(white)
-                        .padding(10.dp).height(90.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier.size(120.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.fondo),
-                            contentDescription = "Fondo",
-                            modifier = Modifier.fillMaxSize(), // clave
-                            contentScale = ContentScale.Crop
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.tutoriasud),
-                            contentDescription = "Tutorías UD",
-                            modifier = Modifier.size(60.dp) //  más pequeño que el fondo
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Text(
-                        text = "Tutorías UD",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                }
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(white)
-                        .padding(10.dp).height(90.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box(
-                        modifier = Modifier.size(120.dp),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.fondo),
-                            contentDescription = "Fondo",
-                            modifier = Modifier.fillMaxSize(), // clave
-                            contentScale = ContentScale.Crop
-                        )
-                        Image(
-                            painter = painterResource(id = R.drawable.videos),
-                            contentDescription = "Videos",
-                            modifier = Modifier.size(55.dp) //  más pequeño que el fondo
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Text(
-                        text = "Videos",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
-                }
-
-
+                )
             }
         }
     }
 }
+
+
+@Composable
+fun Bubble(
+    image: Int,
+    text: String,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier, // ✅ el offset se aplica a TODO (texto + imagen)
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        Text(
+            text = text,
+            fontSize = 14.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color.White,
+            softWrap = true,
+            maxLines = 2,
+            modifier = Modifier.widthIn(max = 120.dp) // ✅ evita que empuje la burbuja infinito
+        )
+
+        Box(
+            modifier = Modifier
+                .size(70.dp)
+                .clip(CircleShape)
+                .background(Color(0xFFF2F2F2))
+                .border(2.dp, Color.Black, CircleShape),
+            contentAlignment = Alignment.Center
+        ) {
+            Image(
+                painter = painterResource(id = image),
+                contentDescription = null,
+                modifier = Modifier.size(40.dp)
+            )
+        }
+    }
+}
+
+

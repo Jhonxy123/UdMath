@@ -79,8 +79,11 @@ fun MaterialInteresanteScreen() {
                             .padding(10.dp)
                             .size(180.dp)
                             .clip(RoundedCornerShape(20.dp))
+                            .border(4.dp, Color.Black)
                             .background(white)
-                            .padding(10.dp),
+                            .padding(10.dp)
+
+                    ,
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.articulo),
@@ -106,8 +109,9 @@ fun MaterialInteresanteScreen() {
                             .padding(10.dp)
                             .size(180.dp)
                             .clip(RoundedCornerShape(20.dp))
+                            .border(4.dp, Color.Black)
                             .background(white)
-                            .padding(10.dp),
+                            .padding(10.dp)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.programacion),
@@ -135,8 +139,9 @@ fun MaterialInteresanteScreen() {
                             .padding(10.dp)
                             .size(180.dp)
                             .clip(RoundedCornerShape(20.dp))
+                            .border(4.dp, Color.Black)
                             .background(white)
-                            .padding(10.dp),
+                            .padding(10.dp)
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.curiosos),
@@ -162,8 +167,10 @@ fun MaterialInteresanteScreen() {
                             .padding(10.dp)
                             .size(180.dp)
                             .clip(RoundedCornerShape(20.dp))
+                            .border(4.dp, Color.Black)
                             .background(white)
-                            .padding(10.dp),
+                            .padding(10.dp)
+
                     ) {
                         Image(
                             painter = painterResource(id = R.drawable.audiovisual),
