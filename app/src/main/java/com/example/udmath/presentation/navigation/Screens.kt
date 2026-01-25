@@ -46,4 +46,14 @@ object RecomendacionesTab
 object RetosTab
 
 
+@Serializable
+object AritmeticaTab
+
+@Serializable
+object AlgebraTab
+
+@Serializable
+object FuncionesTab
+
+
 

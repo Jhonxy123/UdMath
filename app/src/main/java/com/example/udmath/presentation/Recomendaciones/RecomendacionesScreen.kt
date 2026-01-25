@@ -2,6 +2,7 @@ package com.example.udmath.presentation.Recomendaciones
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,9 +39,13 @@ import com.example.udmath.presentation.components.TopBarStd
 import com.example.udmath.ui.theme.Black
 import com.example.udmath.ui.theme.white
 
-@Preview(showBackground = true)
+
 @Composable
-fun RecomendacionesScreen() {
+fun RecomendacionesScreen(
+    onAritmetica: () -> Unit,
+    onAlgebra: () -> Unit,
+    onFunciones: () -> Unit
+) {
     //Definimos el gradiente de colores
     val blueGradient = Brush.verticalGradient(
         colors = listOf(
@@ -74,12 +82,13 @@ fun RecomendacionesScreen() {
                     Row(
                         modifier = Modifier
                             .width(330.dp) // tamaño de la card
-                            .height(100.dp)
+                            .height(120.dp)
                             .clip(RoundedCornerShape(20.dp))
                             .paint(
                                 painter = painterResource(id = R.drawable.fondoaritmetica_1),
                                 contentScale = ContentScale.Crop
                             )
+                            .clickable { onAritmetica() }
                             .padding(16.dp), // padding interno
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -89,6 +98,14 @@ fun RecomendacionesScreen() {
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
+
+                        Spacer(modifier = Modifier.weight(1f)) // Empuja la flecha a la derecha
+
+                        Icon(
+                            imageVector = Icons.Filled.ChevronRight,
+                            contentDescription = "Ir",
+                            tint = Color.White
+                        )
                     }
                 }
 
@@ -101,13 +118,15 @@ fun RecomendacionesScreen() {
                     Row(
                         modifier = Modifier
                             .width(330.dp) // tamaño de la card
-                            .height(100.dp)
+                            .height(120.dp)
                             .clip(RoundedCornerShape(20.dp))
                             .paint(
                                 painter = painterResource(id = R.drawable.fondoalgebra),
                                 contentScale = ContentScale.Crop
                             )
+                            .clickable { onAlgebra() }
                             .padding(16.dp), // padding interno
+
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Text(
@@ -115,6 +134,14 @@ fun RecomendacionesScreen() {
                             fontSize = 25.sp,
                             fontWeight = FontWeight.Bold,
                             color = Color.White
+                        )
+
+                        Spacer(modifier = Modifier.weight(1f)) // Empuja la flecha a la derecha
+
+                        Icon(
+                            imageVector = Icons.Filled.ChevronRight,
+                            contentDescription = "Ir",
+                            tint = Color.White
                         )
                     }
                 }
@@ -129,12 +156,13 @@ fun RecomendacionesScreen() {
                     Row(
                         modifier = Modifier
                             .width(330.dp) // tamaño de la card
-                            .height(100.dp)
+                            .height(120.dp)
                             .clip(RoundedCornerShape(20.dp))
                             .paint(
-                                painter = painterResource(id = R.drawable.fondofunciones),
+                                painter = painterResource(id = R.drawable.fondofunciones_2),
                                 contentScale = ContentScale.Crop
                             )
+                            .clickable { onFunciones() }
                             .padding(16.dp), // padding interno
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -144,6 +172,16 @@ fun RecomendacionesScreen() {
                             fontWeight = FontWeight.Bold,
                             color = Color.White
                         )
+
+                        Spacer(modifier = Modifier.weight(1f)) // Empuja la flecha a la derecha
+
+                        Icon(
+                            imageVector = Icons.Filled.ChevronRight,
+                            contentDescription = "Ir",
+                            tint = Color.White
+                        )
+
+
                     }
                 }
 
