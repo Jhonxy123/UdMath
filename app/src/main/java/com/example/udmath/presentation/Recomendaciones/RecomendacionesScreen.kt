@@ -2,6 +2,7 @@ package com.example.udmath.presentation.Recomendaciones
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,25 +15,37 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ChevronRight
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.paint
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Color.Companion.White
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.udmath.R
 import com.example.udmath.presentation.components.TopBarStd
+import com.example.udmath.ui.theme.Black
 import com.example.udmath.ui.theme.white
 
+
 @Composable
-fun RecomendacionesScreen() {
+fun RecomendacionesScreen(
+    onAritmetica: () -> Unit,
+    onAlgebra: () -> Unit,
+    onFunciones: () -> Unit
+) {
     //Definimos el gradiente de colores
     val blueGradient = Brush.verticalGradient(
         colors = listOf(
@@ -49,127 +62,130 @@ fun RecomendacionesScreen() {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(blueGradient)   // ✅ pinta toda la pantalla
-                .padding(innerPadding)      // ✅ el contenido respeta topBar/bottomBar
+                .background(blueGradient)   // pinta toda la pantalla
+                .padding(innerPadding)
+
+        // el contenido respeta topBar/bottomBar
         ) {
+
             Column(
-                horizontalAlignment = Alignment.End,
                 verticalArrangement = Arrangement.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
+
                 Row(
                     modifier = Modifier
-                        .align(Alignment.End)              // ⬅️ asegura que se pegue a la derecha
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(white)
-                        .padding(10.dp)
-                        .height(100.dp)
-                        .width(400.dp)
-                    ,
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.End // la manda a la derecha
                 ) {
-                    Box(
-                        modifier = Modifier.size(120.dp),
-                        contentAlignment = Alignment.Center
+                    Row(
+                        modifier = Modifier
+                            .width(330.dp) // tamaño de la card
+                            .height(120.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .paint(
+                                painter = painterResource(id = R.drawable.fondoaritmetica_1),
+                                contentScale = ContentScale.Crop
+                            )
+                            .clickable { onAritmetica() }
+                            .padding(16.dp), // padding interno
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.fondo),
-                            contentDescription = "Fondo",
-                            modifier = Modifier.fillMaxSize(), // clave
-                            contentScale = ContentScale.Crop
+                        Text(
+                            text = "Aritmética",
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
                         )
-                        Image(
-                            painter = painterResource(id = R.drawable.aplicaciones),
-                            contentDescription = "Aplicaciones",
-                            modifier = Modifier.size(70.dp) //  más pequeño que el fondo
+
+                        Spacer(modifier = Modifier.weight(1f)) // Empuja la flecha a la derecha
+
+                        Icon(
+                            imageVector = Icons.Filled.ChevronRight,
+                            contentDescription = "Ir",
+                            tint = Color.White
                         )
                     }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Text(
-                        text = "Aplicaciones",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
                 }
 
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(white)
-                        .padding(10.dp).height(100.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.End // la manda a la derecha
                 ) {
-                    Box(
-                        modifier = Modifier.size(120.dp),
-                        contentAlignment = Alignment.Center
+                    Row(
+                        modifier = Modifier
+                            .width(330.dp) // tamaño de la card
+                            .height(120.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .paint(
+                                painter = painterResource(id = R.drawable.fondoalgebra),
+                                contentScale = ContentScale.Crop
+                            )
+                            .clickable { onAlgebra() }
+                            .padding(16.dp), // padding interno
+
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.fondo),
-                            contentDescription = "Fondo",
-                            modifier = Modifier.fillMaxSize(), // clave
-                            contentScale = ContentScale.Crop
+                        Text(
+                            text = "Algebra",
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
                         )
-                        Image(
-                            painter = painterResource(id = R.drawable.libros),
-                            contentDescription = "Libros",
-                            modifier = Modifier.size(55.dp) //  más pequeño que el fondo
+
+                        Spacer(modifier = Modifier.weight(1f)) // Empuja la flecha a la derecha
+
+                        Icon(
+                            imageVector = Icons.Filled.ChevronRight,
+                            contentDescription = "Ir",
+                            tint = Color.White
                         )
                     }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Text(
-                        text = "Libros",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
                 }
+
 
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .clip(RoundedCornerShape(20.dp))
-                        .background(white)
-                        .padding(10.dp).height(100.dp),
-                    verticalAlignment = Alignment.CenterVertically
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    horizontalArrangement = Arrangement.End // la manda a la derecha
                 ) {
-                    Box(
-                        modifier = Modifier.size(120.dp),
-                        contentAlignment = Alignment.Center
+                    Row(
+                        modifier = Modifier
+                            .width(330.dp) // tamaño de la card
+                            .height(120.dp)
+                            .clip(RoundedCornerShape(20.dp))
+                            .paint(
+                                painter = painterResource(id = R.drawable.fondofunciones_2),
+                                contentScale = ContentScale.Crop
+                            )
+                            .clickable { onFunciones() }
+                            .padding(16.dp), // padding interno
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Image(
-                            painter = painterResource(id = R.drawable.fondo),
-                            contentDescription = "Fondo",
-                            modifier = Modifier.fillMaxSize(), // clave
-                            contentScale = ContentScale.Crop
+                        Text(
+                            text = "Funciones",
+                            fontSize = 25.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Color.White
                         )
-                        Image(
-                            painter = painterResource(id = R.drawable.paginasapoyo),
-                            contentDescription = "Páginas apoyo",
-                            modifier = Modifier.size(70.dp) //  más pequeño que el fondo
+
+                        Spacer(modifier = Modifier.weight(1f)) // Empuja la flecha a la derecha
+
+                        Icon(
+                            imageVector = Icons.Filled.ChevronRight,
+                            contentDescription = "Ir",
+                            tint = Color.White
                         )
+
+
                     }
-
-                    Spacer(modifier = Modifier.width(12.dp))
-
-                    Text(
-                        text = "Página de Apoyo",
-                        fontSize = 25.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.Black
-                    )
                 }
-
 
             }
-        }
+            }
     }
 }

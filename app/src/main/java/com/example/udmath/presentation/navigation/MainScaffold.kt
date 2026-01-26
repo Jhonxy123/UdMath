@@ -1,5 +1,6 @@
 package com.example.udmath.presentation.navigation
 
+import MainBottomBar
 import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.udmath.presentation.Algebra.AlgebraScreen
+import com.example.udmath.presentation.Aritmetica.AritmeticaScreen
+import com.example.udmath.presentation.Funciones.FuncionesScreen
 import com.example.udmath.presentation.MaterialApoyo.MaterialApoyoScreen
 import com.example.udmath.presentation.MaterialInteresante.MaterialInteresanteScreen
 import com.example.udmath.presentation.Recomendaciones.RecomendacionesScreen
@@ -37,7 +41,7 @@ fun MainScaffold(
     // Lee el Activity aquí (zona @Composable)
     val activity = LocalContext.current as? Activity
 
-    val isOnHome = currentRoute?.contains("HomeTab") == true
+    val isOnHome = currentRoute == HomeTab::class.qualifiedName
 
     BackHandler(enabled = true) {
         if (!isOnHome) {
@@ -89,12 +93,35 @@ fun MainScaffold(
             }
 
             composable<RecomendacionesTab> {
-                RecomendacionesScreen()
+                RecomendacionesScreen(
+                    onAritmetica = { tabNavController.navigate(AritmeticaTab) },
+                    onAlgebra = { tabNavController.navigate(AlgebraTab) },
+                    onFunciones = { tabNavController.navigate(FuncionesTab) }
+                )
             }
 
             composable<RetosTab> {
                 RetosScreen()
             }
+
+            composable<AritmeticaTab> {
+                AritmeticaScreen(
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
+            composable<AlgebraTab> {
+                AlgebraScreen(
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
+            composable<FuncionesTab> {
+                FuncionesScreen(
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
 
         }
     }

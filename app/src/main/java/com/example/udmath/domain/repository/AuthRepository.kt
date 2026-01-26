@@ -27,4 +27,6 @@ interface AuthRepository{
 
     suspend fun logout() // funcion para cerrar sesión
 
+
+
 }
