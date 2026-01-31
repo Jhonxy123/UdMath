@@ -1,7 +1,9 @@
 package com.example.udmath.di
 
 import com.example.udmath.data.repository.AuthClientService
+import com.example.udmath.data.repository.RecursosClienteService
 import com.example.udmath.domain.repository.AuthRepository
+import com.example.udmath.domain.repository.RecursoRepository
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
@@ -34,4 +36,11 @@ object NetworkModule {
         firebaseAuth: FirebaseAuth,
         firestore: FirebaseFirestore
     ): AuthRepository = AuthClientService(firebaseAuth, firestore)
+
+    @Provides
+    @Singleton
+    fun provideRecursoRepository(
+        firestore: FirebaseFirestore
+    ): RecursoRepository = RecursosClienteService(firestore)
+
 }
