@@ -57,3 +57,7 @@ object FuncionesTab
 
 
 
+@Serializable
+object LibrosTab
+
+

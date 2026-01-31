@@ -47,10 +47,20 @@ fun MaterialApoyoScreenPreview() {
     MaterialApoyoScreen()
 }
 
+data class BubbleItem(
+    val image: Int,
+    val text: String,
+    val pos: Pair<Float, Float>,
+    val onClick: () -> Unit
+)
+
+
 
 @Composable
 //@Preview
-fun MaterialApoyoScreen() {
+fun MaterialApoyoScreen(
+    navigatelibros: () -> Unit = {},
+) {
     val blueGradient = Brush.verticalGradient(
         colors = listOf(Color(0xFF3980C2), Color(0xFF184998))
     )
@@ -98,23 +108,25 @@ fun MaterialApoyoScreen() {
             // --- Burbujas (posiciones RELATIVAS) ---
             // x e y son fracciones del ancho/alto disponible (0f..1f)
             val bubbles = listOf(
-                Triple(R.drawable.aplicaciones, "Aplicaciones", 0.60f to 0.09f),
-                Triple(R.drawable.libros, "Libros", 0.43f to 0.18f),
-                Triple(R.drawable.paginasapoyo, "Páginas\nde apoyo", 0.18f to 0.37f),
-                Triple(R.drawable.tutoriasud, "Tutorías UD", 0.14f to 0.62f),
-                Triple(R.drawable.videos, "Videos", 0.43f to 0.80f),
-                Triple(R.drawable.articulo, "Artículos", 0.70f to 0.89f),
+                BubbleItem(R.drawable.aplicaciones, "Aplicaciones", 0.60f to 0.09f) {  },
+                BubbleItem(R.drawable.libros, "Libros", 0.43f to 0.18f) { navigatelibros() },
+                BubbleItem(R.drawable.paginasapoyo, "Páginas\nde apoyo", 0.18f to 0.37f) { /* ... */ },
+                BubbleItem(R.drawable.tutoriasud, "Tutorías UD", 0.14f to 0.62f) { /* ... */ },
+                BubbleItem(R.drawable.videos, "Videos", 0.43f to 0.80f) { /* ... */ },
+                BubbleItem(R.drawable.articulo, "Artículos", 0.70f to 0.89f) { /* ... */ }
             )
 
-            bubbles.forEach { (img, txt, pos) ->
-                val (xf, yf) = pos
+
+            bubbles.forEach { item ->
+                val (xf, yf) = item.pos
                 Bubble(
-                    image = img,
-                    text = txt,
+                    image = item.image,
+                    text = item.text,
                     modifier = Modifier.absoluteOffset(
                         x = (w * xf) - (bubbleSize / 2),
                         y = (h * yf) - (bubbleSize / 2)
-                    )
+                    ),
+                    onClick = item.onClick
                 )
             }
         }
@@ -126,10 +138,12 @@ fun MaterialApoyoScreen() {
 fun Bubble(
     image: Int,
     text: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
 ) {
     Row(
-        modifier = modifier, // ✅ el offset se aplica a TODO (texto + imagen)
+        modifier = modifier
+            .clickable { onClick() },   // ✅ aquí
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
@@ -140,7 +154,7 @@ fun Bubble(
             color = Color.White,
             softWrap = true,
             maxLines = 2,
-            modifier = Modifier.widthIn(max = 120.dp) // ✅ evita que empuje la burbuja infinito
+            modifier = Modifier.widthIn(max = 120.dp)
         )
 
         Box(
@@ -159,5 +173,6 @@ fun Bubble(
         }
     }
 }
+
 
 
