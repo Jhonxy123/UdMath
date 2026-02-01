@@ -15,16 +15,19 @@ fun RecursosScreen(
     viewModel: RecursosViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
-
+    var titulo = ""
     LaunchedEffect(tipo) {
         viewModel.load(tipo)
     }
+
+    if(tipo == "libro") titulo = ("Libros")
+    if(tipo == "aplicacion") titulo = ("Aplicaciones")
 
     when {
         state.loading -> Text("Cargando...", color = Color.White)
         state.error != null -> Text("Error: ${state.error}", color = Color.White)
         else -> ListaRecursosScreen(
-            tituloTopBar = tipo,
+            tituloTopBar = titulo,
             recursos = state.recursos,
             navigateBack = navigateBack
         )

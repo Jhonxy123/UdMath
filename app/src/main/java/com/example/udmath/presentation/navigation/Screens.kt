@@ -60,4 +60,7 @@ object FuncionesTab
 @Serializable
 object LibrosTab
 
+@Serializable
+object AplicacionesTab
+
 

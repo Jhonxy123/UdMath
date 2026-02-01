@@ -1,5 +1,8 @@
 package com.example.udmath.presentation.MaterialApoyo
 
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import com.example.udmath.R
@@ -28,6 +31,7 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
@@ -60,10 +64,13 @@ data class BubbleItem(
 //@Preview
 fun MaterialApoyoScreen(
     navigatelibros: () -> Unit = {},
+    navigateaplicaciones: () -> Unit = {}
 ) {
     val blueGradient = Brush.verticalGradient(
         colors = listOf(Color(0xFF3980C2), Color(0xFF184998))
     )
+    val context = LocalContext.current
+
 
     Scaffold(
         topBar = { TopBarStd("Material de Apoyo") },
@@ -108,10 +115,10 @@ fun MaterialApoyoScreen(
             // --- Burbujas (posiciones RELATIVAS) ---
             // x e y son fracciones del ancho/alto disponible (0f..1f)
             val bubbles = listOf(
-                BubbleItem(R.drawable.aplicaciones, "Aplicaciones", 0.60f to 0.09f) {  },
+                BubbleItem(R.drawable.aplicaciones, "Aplicaciones", 0.60f to 0.09f) { navigateaplicaciones()  },
                 BubbleItem(R.drawable.libros, "Libros", 0.43f to 0.18f) { navigatelibros() },
                 BubbleItem(R.drawable.paginasapoyo, "Páginas\nde apoyo", 0.18f to 0.37f) { /* ... */ },
-                BubbleItem(R.drawable.tutoriasud, "Tutorías UD", 0.14f to 0.62f) { /* ... */ },
+                BubbleItem(R.drawable.tutoriasud, "Tutorías UD", 0.14f to 0.62f) { abrir_link(context,"https://bibliotecas.udistrital.edu.co/formulario/tutorias_matematicas" ) },
                 BubbleItem(R.drawable.videos, "Videos", 0.43f to 0.80f) { /* ... */ },
                 BubbleItem(R.drawable.articulo, "Artículos", 0.70f to 0.89f) { /* ... */ }
             )
@@ -132,6 +139,18 @@ fun MaterialApoyoScreen(
         }
     }
 }
+
+fun abrir_link(context: Context, link: String) {
+    val safeLink =
+        if (link.startsWith("http://") || link.startsWith("https://"))
+            link
+        else
+            "https://$link"
+
+    val intent = Intent(Intent.ACTION_VIEW, Uri.parse(safeLink))
+    context.startActivity(intent)
+}
+
 
 
 @Composable

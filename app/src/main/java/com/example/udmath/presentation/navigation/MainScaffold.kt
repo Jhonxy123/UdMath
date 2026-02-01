@@ -17,6 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.udmath.presentation.Algebra.AlgebraScreen
 import com.example.udmath.presentation.Aritmetica.AritmeticaScreen
 import com.example.udmath.presentation.Funciones.FuncionesScreen
+import com.example.udmath.presentation.MaterialApoyo.Aplicaciones.AplicacionesScreen
 import com.example.udmath.presentation.MaterialApoyo.Component.RecursosScreen
 import com.example.udmath.presentation.MaterialApoyo.Libros.LibrosScreen
 import com.example.udmath.presentation.MaterialApoyo.MaterialApoyoScreen
@@ -88,7 +89,8 @@ fun MainScaffold(
 
             composable<MaterialTab> {
                 MaterialApoyoScreen(
-                    navigatelibros = { tabNavController.navigate(LibrosTab) }
+                    navigatelibros = { tabNavController.navigate(LibrosTab) },
+                    navigateaplicaciones = { tabNavController.navigate(AplicacionesTab) },
                 )
             }
 
@@ -128,6 +130,12 @@ fun MainScaffold(
 
             composable<LibrosTab> {
                 LibrosScreen(
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
+            composable<AplicacionesTab> {
+                AplicacionesScreen(
                     navigateBack = { tabNavController.popBackStack() }
                 )
             }

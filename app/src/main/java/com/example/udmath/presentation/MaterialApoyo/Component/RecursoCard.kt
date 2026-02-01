@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExpandLess
@@ -27,15 +29,15 @@ import com.example.udmath.domain.model.Recurso
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
-
+import coil.compose.AsyncImage
 
 @Composable
 fun RecursoCard(
     recurso: Recurso,
     onClick: () -> Unit = {}
 ) {
-
     var expanded by rememberSaveable(recurso.titulo) { mutableStateOf(false) }
 
     Row(
@@ -43,25 +45,20 @@ fun RecursoCard(
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
             .background(Color.White)
-            .clickable {
-                expanded = !expanded   // aquí se despliega/contrae
-            }
-            .animateContentSize() // Anima el cambio de tamaño
+            .clickable { expanded = !expanded }
+            .animateContentSize()
             .padding(14.dp),
         verticalAlignment = Alignment.Top
     ) {
         Column(modifier = Modifier.weight(1f)) {
 
-            // Titulo
             Text(
                 text = recurso.titulo,
                 fontWeight = FontWeight.Bold,
                 color = Color(0xFF184998)
             )
 
-
             Spacer(modifier = Modifier.height(6.dp))
-
 
             Text(
                 text = recurso.descripcion,
@@ -71,6 +68,21 @@ fun RecursoCard(
             )
 
             if (expanded) {
+                if (recurso.imagen.isNotBlank()) {
+                    Spacer(modifier = Modifier.height(8.dp))
+                    AsyncImage(
+                        model = recurso.imagen,
+                        contentDescription = null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .heightIn(min = 140.dp, max = 240.dp)
+                            .clip(RoundedCornerShape(12.dp))
+                            .background(Color(0xFFF2F2F2)),
+                        contentScale = ContentScale.Fit
+                    )
+                }
+
+
                 val meta = buildList {
                     if (recurso.autor.isNotBlank()) add("Autor: ${recurso.autor}")
                     if (recurso.tipo.isNotBlank()) add("Tipo: ${recurso.tipo}")
@@ -82,27 +94,10 @@ fun RecursoCard(
                     Text(text = meta, color = Color.Gray)
                 }
 
-                Spacer(modifier = Modifier.height(8.dp))
 
-                // Si quieres un click extra para abrir URL/detalle:
-                // Text("Abrir", modifier = Modifier.clickable { onClick() }, color = Color(0xFF184998))
             }
-
-            val meta = buildList {
-                recurso.autor?.let { add("Autor: $it") }
-                recurso.tipo.takeIf { it.isNotBlank() }?.let { add("Tipo: $it") }
-            }.joinToString(" • ")
-
-            if (meta.isNotBlank()) {
-                Spacer(modifier = Modifier.height(8.dp))
-                Text(text = meta, color = Color.Gray)
-            }
-
-
-
         }
 
-        // El icono que muestra si esta desplegado o contraido
         Icon(
             imageVector = if (expanded) Icons.Filled.ExpandLess else Icons.Filled.ExpandMore,
             contentDescription = if (expanded) "Contraer" else "Expandir",
@@ -111,3 +106,4 @@ fun RecursoCard(
         )
     }
 }
+

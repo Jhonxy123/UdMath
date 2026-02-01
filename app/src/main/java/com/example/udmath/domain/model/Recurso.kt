@@ -9,7 +9,8 @@ data class Recurso(
     val modulo: String = "",        // opcional
     val fecha_agregado: Timestamp? = null,
     val descripcion: String = "",
-    val autor: String = ""
+    val autor: String = "",
+    val imagen: String = ""
 )
 
 
