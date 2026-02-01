@@ -10,7 +10,6 @@ plugins {
 
     alias(libs.plugins.hilt)
     id("kotlin-kapt")
-
 }
 
 android {
@@ -49,6 +48,7 @@ android {
 }
 
 dependencies {
+    // Core & Compose Base
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -57,10 +57,33 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-
-
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.foundation.layout)
+
+    // --- LÍNEA AÑADIDA PARA SOLUCIONAR EL ERROR ---
+    implementation(libs.androidx.compose.runtime.livedata)
+    // ----------------------------------------------
+
+    // Firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.crashlytics)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(libs.firebase.storage.ktx)
+
+    // Utilidades & Navegación
+    implementation(libs.kotlinx.coroutines.play.services)
+    implementation(libs.androidx.material.icons.extended)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.coil.compose)
+
+    // Hilt (Dependency Injection)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -68,27 +91,4 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
-
-
-    //Nuevas librerias
-    implementation(platform(libs.firebase.bom))
-    implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.firestore)
-    implementation(libs.firebase.auth)
-    implementation(libs.firebase.storage.ktx)
-
-    implementation(libs.kotlinx.coroutines.play.services)
-    implementation(libs.androidx.material.icons.extended)
-
-    implementation(libs.androidx.navigation.compose)
-    implementation(libs.kotlinx.serialization.json)
-
-    //hilt
-    implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
-
-    //hiltNavigation
-    implementation(libs.androidx.hilt.navigation.compose)
-    implementation(libs.coil.compose)
-
 }
