@@ -24,6 +24,8 @@ import com.example.udmath.presentation.MaterialApoyo.MaterialApoyoScreen
 import com.example.udmath.presentation.MaterialInteresante.MaterialInteresanteScreen
 import com.example.udmath.presentation.Recomendaciones.RecomendacionesScreen
 import com.example.udmath.presentation.Retos.RetosScreen
+import com.example.udmath.presentation.Retos._48.GameScreen
+import com.example.udmath.presentation.Retos.sudoku.SudokuScreen
 import com.example.udmath.presentation.auth.register.RegisterScreen
 import com.example.udmath.presentation.auth.register.RegisterViewModel
 import com.example.udmath.presentation.home.HomeScreen
@@ -107,7 +109,23 @@ fun MainScaffold(
             }
 
             composable<RetosTab> {
-                RetosScreen()
+                RetosScreen(
+                    onSudoku = {tabNavController.navigate(SudokuTab)},
+                    on2048 = {tabNavController.navigate(Game2048Tab)}
+                )
+
+            }
+
+            composable<SudokuTab> {
+                SudokuScreen(
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
+            composable<Game2048Tab> {
+                GameScreen(
+                    navigateBack = { tabNavController.popBackStack() }
+                )
             }
 
             composable<AritmeticaTab> {

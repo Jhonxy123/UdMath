@@ -157,7 +157,7 @@ fun RegisterScreen(
                     color = Color(0xFF184998)
                 )
             }
-            
+
             TextButton(
                 onClick = navigateBack,
                 modifier = Modifier.align(Alignment.CenterHorizontally)
