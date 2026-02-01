@@ -45,12 +45,6 @@ import kotlinx.coroutines.launch
 // import androidx.navigation.NavController // ← Descomenta esto si usas Navigation
 
 
-@Preview(showBackground = true)
-@Composable
-fun MaterialApoyoScreenPreview() {
-    MaterialApoyoScreen()
-}
-
 data class BubbleItem(
     val image: Int,
     val text: String,
