@@ -45,10 +45,13 @@ import androidx.compose.foundation.verticalScroll
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.udmath.domain.model.game.sudoku.Cell
 import com.example.udmath.domain.model.game.sudoku.SudokuBoard
+import com.example.udmath.presentation.components.TopBarback
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SudokuScreen() {
+fun SudokuScreen(
+    navigateBack: () -> Unit
+) {
     val sudokuViewModel: SudokuViewModel = hiltViewModel()
     val sudokuBoard by sudokuViewModel.sudokuBoard.collectAsState()
     val selectedCell by sudokuViewModel.selectedCell.collectAsState()
@@ -57,6 +60,7 @@ fun SudokuScreen() {
 
     Text("Estás en Sudoku")
     Scaffold(
+        topBar = { TopBarback("Sudoku", navigateBack = {navigateBack()}) },
         content = { paddingValues ->
             Column(
                 modifier = Modifier

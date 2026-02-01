@@ -17,15 +17,26 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
+import com.example.udmath.presentation.components.TopBarStd
+import com.example.udmath.presentation.components.TopBarback
+
 //import com.example.udmath.presentation.navigation.Sudoku
 
 // import androidx.navigation.NavController // ← Descomenta si usas navegación
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RetosScreen(/*navController: NavController*/) {
+fun RetosScreen(
+    onSudoku: () -> Unit,
+    on2048: () -> Unit,
+) {
 //fun RetosScreen() {
-    Scaffold { paddingValues ->
+    Scaffold(
+        topBar = {
+        TopBarStd("Retos")
+    }
+    ) {
+        paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -50,8 +61,8 @@ fun RetosScreen(/*navController: NavController*/) {
                     iconRes = icono,
                     onClick = {
                         when (ruta) {
-                            //"sudoku" -> navController.navigate("sudoku")
-                            //"juego_2048" -> navController.navigate("_48")
+                            "sudoku" -> onSudoku()
+                            "juego_2048" -> on2048()
                             //"cuestionario" -> navController.navigate(Screen.Cuestionario)
                         }
                     }

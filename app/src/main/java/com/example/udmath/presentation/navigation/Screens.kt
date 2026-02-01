@@ -45,6 +45,11 @@ object RecomendacionesTab
 @Serializable
 object RetosTab
 
+@Serializable
+object SudokuTab
+
+@Serializable
+object Game2048Tab
 
 @Serializable
 object AritmeticaTab

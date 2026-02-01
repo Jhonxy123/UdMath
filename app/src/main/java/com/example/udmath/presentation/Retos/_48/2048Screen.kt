@@ -22,7 +22,10 @@ import com.example.udmath.domain.model.game._48.Direction
 
 
 @Composable
-fun GameScreen(gameViewModel: GameViewModel = viewModel()) {
+fun GameScreen(
+    navigateBack: () -> Unit,
+    gameViewModel: GameViewModel = viewModel()
+) {
     val boardState by gameViewModel.board.observeAsState()
     val board = boardState?.board ?: Array(4) { Array(4) { 0 } }
 
