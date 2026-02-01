@@ -68,4 +68,7 @@ object LibrosTab
 @Serializable
 object AplicacionesTab
 
+@Serializable
+object VideosTab
+
 

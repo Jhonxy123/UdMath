@@ -58,7 +58,8 @@ data class BubbleItem(
 //@Preview
 fun MaterialApoyoScreen(
     navigatelibros: () -> Unit = {},
-    navigateaplicaciones: () -> Unit = {}
+    navigateaplicaciones: () -> Unit = {},
+    navigateVideos: () -> Unit = {}
 ) {
     val blueGradient = Brush.verticalGradient(
         colors = listOf(Color(0xFF3980C2), Color(0xFF184998))
@@ -113,7 +114,7 @@ fun MaterialApoyoScreen(
                 BubbleItem(R.drawable.libros, "Libros", 0.43f to 0.18f) { navigatelibros() },
                 BubbleItem(R.drawable.paginasapoyo, "Páginas\nde apoyo", 0.18f to 0.37f) { /* ... */ },
                 BubbleItem(R.drawable.tutoriasud, "Tutorías UD", 0.14f to 0.62f) { abrir_link(context,"https://bibliotecas.udistrital.edu.co/formulario/tutorias_matematicas" ) },
-                BubbleItem(R.drawable.videos, "Videos", 0.43f to 0.80f) { /* ... */ },
+                BubbleItem(R.drawable.videos, "Videos", 0.43f to 0.80f) { navigateVideos() },
                 BubbleItem(R.drawable.articulo, "Artículos", 0.70f to 0.89f) { /* ... */ }
             )
 

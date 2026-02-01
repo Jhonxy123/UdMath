@@ -21,6 +21,7 @@ import com.example.udmath.presentation.MaterialApoyo.Aplicaciones.AplicacionesSc
 import com.example.udmath.presentation.MaterialApoyo.Component.RecursosScreen
 import com.example.udmath.presentation.MaterialApoyo.Libros.LibrosScreen
 import com.example.udmath.presentation.MaterialApoyo.MaterialApoyoScreen
+import com.example.udmath.presentation.MaterialApoyo.Videos.VideosScreen
 import com.example.udmath.presentation.MaterialInteresante.MaterialInteresanteScreen
 import com.example.udmath.presentation.Recomendaciones.RecomendacionesScreen
 import com.example.udmath.presentation.Retos.RetosScreen
@@ -93,6 +94,7 @@ fun MainScaffold(
                 MaterialApoyoScreen(
                     navigatelibros = { tabNavController.navigate(LibrosTab) },
                     navigateaplicaciones = { tabNavController.navigate(AplicacionesTab) },
+                    navigateVideos = { tabNavController.navigate(VideosTab) },
                 )
             }
 
@@ -154,6 +156,12 @@ fun MainScaffold(
 
             composable<AplicacionesTab> {
                 AplicacionesScreen(
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
+            composable<VideosTab> {
+                VideosScreen(
                     navigateBack = { tabNavController.popBackStack() }
                 )
             }

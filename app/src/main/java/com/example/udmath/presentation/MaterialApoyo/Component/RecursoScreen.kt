@@ -22,6 +22,8 @@ fun RecursosScreen(
 
     if(tipo == "libro") titulo = ("Libros")
     if(tipo == "aplicacion") titulo = ("Aplicaciones")
+    if(tipo == "video") titulo = ("Videos")
+
 
     when {
         state.loading -> Text("Cargando...", color = Color.White)
