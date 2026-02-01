@@ -10,7 +10,8 @@ data class Recurso(
     val fecha_agregado: Timestamp? = null,
     val descripcion: String = "",
     val autor: String = "",
-    val imagen: String = ""
+    val imagen: String = "",
+    val url: String = "",
 )
 
 

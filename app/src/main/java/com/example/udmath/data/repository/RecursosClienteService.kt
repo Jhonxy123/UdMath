@@ -26,8 +26,8 @@ class RecursosClienteService @Inject constructor(
                 fecha_agregado = d.getTimestamp("fecha_agregado"),
                 descripcion = d.getString("descripcion").orEmpty(),
                 autor = d.getString("autor").orEmpty(),
-                imagen = d.getString("image").orEmpty()
-
+                imagen = d.getString("image").orEmpty(),
+                url = d.getString("url").orEmpty()
             )
         }
     }

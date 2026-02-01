@@ -1,5 +1,7 @@
 package com.example.udmath.presentation.MaterialApoyo.Component
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -30,8 +32,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import coil.compose.AsyncImage
+import androidx.core.net.toUri
 
 @Composable
 fun RecursoCard(
@@ -81,20 +86,35 @@ fun RecursoCard(
                         contentScale = ContentScale.Fit
                     )
                 }
+                if (recurso.url.isNotBlank()) {
+                    val context = LocalContext.current
 
-
-                val meta = buildList {
-                    if (recurso.autor.isNotBlank()) add("Autor: ${recurso.autor}")
-                    if (recurso.tipo.isNotBlank()) add("Tipo: ${recurso.tipo}")
-                    if (recurso.modulo.isNotBlank()) add("Módulo: ${recurso.modulo}")
-                }.joinToString(" • ")
-
-                if (meta.isNotBlank()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(text = meta, color = Color.Gray)
+                    Text(
+                        text = "Ver recurso",
+                        color = Color.Blue,
+                        textDecoration = TextDecoration.Underline,
+                        modifier = Modifier.clickable {
+                            val intent = Intent(
+                                Intent.ACTION_VIEW,
+                                recurso.url.toUri()
+                            )
+                            context.startActivity(intent)
+                        }
+                    )
                 }
+            }
 
 
+
+            val meta = buildList {
+                if (recurso.autor.isNotBlank()) add("Autor: ${recurso.autor}")
+                if (recurso.tipo.isNotBlank()) add("Tipo: ${recurso.tipo}")
+                if (recurso.modulo.isNotBlank()) add("Módulo: ${recurso.modulo}")
+            }.joinToString(" • ")
+
+            if (meta.isNotBlank()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(text = meta, color = Color.Gray)
             }
         }
 
