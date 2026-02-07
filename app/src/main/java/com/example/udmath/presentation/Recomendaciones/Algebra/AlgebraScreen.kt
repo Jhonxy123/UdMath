@@ -1,4 +1,4 @@
-package com.example.udmath.presentation.Algebra
+package com.example.udmath.presentation.Recomendaciones.Algebra
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -45,7 +45,8 @@ fun AlgebraScreen(
         Column(
             Modifier.padding(padding)
                 .fillMaxSize()
-                .padding(16.dp)) {
+                .padding(16.dp)
+        ) {
             Text("Contenido de Algebra")
         }
 

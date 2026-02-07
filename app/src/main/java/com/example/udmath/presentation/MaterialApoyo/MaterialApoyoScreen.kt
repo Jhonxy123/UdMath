@@ -75,7 +75,7 @@ fun MaterialApoyoScreen(
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxSize()
-                .background(blueGradient)   // ✅ primero
+                .background(blueGradient)   //  primero
                 .padding(innerPadding)
         ) {
             val bubbleSize = 70.dp
@@ -110,12 +110,11 @@ fun MaterialApoyoScreen(
             // --- Burbujas (posiciones RELATIVAS) ---
             // x e y son fracciones del ancho/alto disponible (0f..1f)
             val bubbles = listOf(
-                BubbleItem(R.drawable.aplicaciones, "Aplicaciones", 0.60f to 0.09f) { navigateaplicaciones()  },
-                BubbleItem(R.drawable.libros, "Libros", 0.43f to 0.18f) { navigatelibros() },
-                BubbleItem(R.drawable.paginasapoyo, "Páginas\nde apoyo", 0.18f to 0.37f) { /* ... */ },
-                BubbleItem(R.drawable.tutoriasud, "Tutorías UD", 0.14f to 0.62f) { abrir_link(context,"https://bibliotecas.udistrital.edu.co/formulario/tutorias_matematicas" ) },
-                BubbleItem(R.drawable.videos, "Videos", 0.43f to 0.80f) { navigateVideos() },
-                BubbleItem(R.drawable.articulo, "Artículos", 0.70f to 0.89f) { /* ... */ }
+                BubbleItem(R.drawable.aplicaciones, "Aplicaciones", 0.58f to 0.08f) { navigateaplicaciones()  },
+                BubbleItem(R.drawable.libros, "Libros", 0.34f to 0.20f) { navigatelibros() },
+                BubbleItem(R.drawable.paginasapoyo, "Páginas\nde apoyo", 0.11f to 0.45f) { /* ... */ },
+                BubbleItem(R.drawable.tutoriasud, "Tutorías UD", 0.20f to 0.72f) { abrir_link(context,"https://bibliotecas.udistrital.edu.co/formulario/tutorias_matematicas" ) },
+                BubbleItem(R.drawable.videos, "Videos", 0.68f to 0.89f) { navigateVideos() }
             )
 
 

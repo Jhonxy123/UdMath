@@ -14,11 +14,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.udmath.presentation.Algebra.AlgebraScreen
-import com.example.udmath.presentation.Aritmetica.AritmeticaScreen
-import com.example.udmath.presentation.Funciones.FuncionesScreen
+import com.example.udmath.presentation.Recomendaciones.Algebra.AlgebraScreen
+import com.example.udmath.presentation.Recomendaciones.Aritmetica.AritmeticaScreen
+import com.example.udmath.presentation.Recomendaciones.Funciones.FuncionesScreen
 import com.example.udmath.presentation.MaterialApoyo.Aplicaciones.AplicacionesScreen
-import com.example.udmath.presentation.MaterialApoyo.Component.RecursosScreen
 import com.example.udmath.presentation.MaterialApoyo.Libros.LibrosScreen
 import com.example.udmath.presentation.MaterialApoyo.MaterialApoyoScreen
 import com.example.udmath.presentation.MaterialApoyo.Videos.VideosScreen
@@ -27,8 +26,6 @@ import com.example.udmath.presentation.Recomendaciones.RecomendacionesScreen
 import com.example.udmath.presentation.Retos.RetosScreen
 import com.example.udmath.presentation.Retos._48.GameScreen
 import com.example.udmath.presentation.Retos.sudoku.SudokuScreen
-import com.example.udmath.presentation.auth.register.RegisterScreen
-import com.example.udmath.presentation.auth.register.RegisterViewModel
 import com.example.udmath.presentation.home.HomeScreen
 import com.example.udmath.presentation.home.HomeViewModel
 import com.example.udmath.presentation.profile.PerfilScreen

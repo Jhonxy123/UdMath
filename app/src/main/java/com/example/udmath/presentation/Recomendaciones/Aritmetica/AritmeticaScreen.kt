@@ -1,4 +1,4 @@
-package com.example.udmath.presentation.Aritmetica
+package com.example.udmath.presentation.Recomendaciones.Aritmetica
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
