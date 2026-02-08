@@ -31,6 +31,14 @@ fun RetosScreen(
     on2048: () -> Unit,
 ) {
 //fun RetosScreen() {
+
+    val blueGradient = Brush.verticalGradient(
+        colors = listOf(
+            Color(0xFF3980C2),
+            Color(0xFF184998)
+        )
+    )
+
     Scaffold(
         topBar = {
         TopBarStd("Retos")
@@ -41,9 +49,7 @@ fun RetosScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(
-                    Brush.verticalGradient(
-                        listOf(Color(0xFF004AAD), Color(0xFF1B6CBA))
-                    )
+                    blueGradient
                 )
                 .padding(paddingValues)
                 .padding(16.dp),

@@ -1,5 +1,6 @@
 package com.example.udmath.presentation.Recomendaciones.Components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -9,9 +10,12 @@ import androidx.compose.material.icons.filled.CheckCircle
 import androidx.compose.material.icons.filled.HelpOutline
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -19,6 +23,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 @Composable
 fun MateriasScreen(
     materia: String = "",
+    modifier: Modifier = Modifier,
     viewModel: MateriaViewModel = hiltViewModel()
 ) {
     val ui = viewModel.state.value
@@ -29,17 +34,28 @@ fun MateriasScreen(
 
     val scroll = rememberScrollState()
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scroll)
-            .padding(16.dp)
-    ) {
-        Text(
-            text = "Álgebra",
-            style = MaterialTheme.typography.headlineSmall,
-            fontWeight = FontWeight.SemiBold
+    val blueGradient = Brush.verticalGradient(
+        colors = listOf(
+            Color(0xFF3980C2),
+            Color(0xFF184998)
         )
+    )
+
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.saveCurrentProgreso()
+        }
+    }
+
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(blueGradient)
+            .verticalScroll(scroll)
+            .padding(16.dp),
+
+    ) {
         Spacer(Modifier.height(12.dp))
 
         // ---- Sección Niveles ----
@@ -141,6 +157,18 @@ fun MateriasScreen(
         )
         Spacer(Modifier.height(8.dp))
 
+        val respondidas = ui.respuestas.size
+        val total = ui.preguntas.size
+        val progress = if (total == 0) 0f else respondidas.toFloat() / total.toFloat()
+
+        Text("Puntaje: ${ui.puntaje}", fontWeight = FontWeight.SemiBold, color = Color.White)
+        LinearProgressIndicator(
+            progress = { progress },
+            modifier = Modifier.fillMaxWidth().height(10.dp)
+        )
+        Text("$respondidas / $total respondidas", color = Color.White)
+
+
         if (ui.selectedNivelId == null) {
             Text(
                 text = "Toca un nivel para ver sus preguntas.",
@@ -161,26 +189,22 @@ fun MateriasScreen(
         }
 
         ui.preguntas.forEachIndexed { index, p ->
-            Card(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 6.dp),
-                elevation = CardDefaults.cardElevation(defaultElevation = 1.dp)
-            ) {
-                Column(modifier = Modifier.padding(14.dp)) {
-                    Text(
-                        text = "Pregunta ${index + 1}",
-                        style = MaterialTheme.typography.labelLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Spacer(Modifier.height(6.dp))
-                    Text(
-                        text = p.texto,
-                        style = MaterialTheme.typography.bodyLarge
-                    )
+            PreguntaCard(
+                pregunta = p,
+                index = index,
+                // pásale qué opción está seleccionada (para pintar el radio)
+                selectedOption = ui.respuestas[p.id],
+                // pásale si es correcta/incorrecta (para feedback)
+                isCorrect = ui.correctas.contains(p.id),
+                isIncorrect = ui.incorrectas.contains(p.id),
+                onOpcionSeleccionada = { _, opcion ->
+                    viewModel.responderPregunta(p, opcion)
                 }
-            }
+            )
+            Spacer(Modifier.height(8.dp))
         }
+
+
 
         Spacer(Modifier.height(24.dp))
     }
