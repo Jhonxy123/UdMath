@@ -99,6 +99,10 @@ fun MainScaffold(
                 MaterialInteresanteScreen()
             }
 
+            composable<MaterialIntTab> {
+                MaterialInteresanteScreen()
+            }
+
             composable<RecomendacionesTab> {
                 RecomendacionesScreen(
                     onAritmetica = { tabNavController.navigate(AritmeticaTab) },

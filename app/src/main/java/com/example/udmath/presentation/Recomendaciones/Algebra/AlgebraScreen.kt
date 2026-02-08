@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.udmath.presentation.Recomendaciones.Components.MateriasScreen
 import com.example.udmath.presentation.components.TopBarStd
 import com.example.udmath.presentation.components.TopBarback
 import com.example.udmath.ui.theme.white
@@ -42,13 +43,9 @@ fun AlgebraScreen(
 
     ) { padding ->
 
-        Column(
-            Modifier.padding(padding)
-                .fillMaxSize()
-                .padding(16.dp)
-        ) {
-            Text("Contenido de Algebra")
-        }
+        MateriasScreen(
+            materia = "algebra"
+        )
 
     }
 
