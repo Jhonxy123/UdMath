@@ -31,7 +31,7 @@ class AuthClientService @Inject constructor(
 
     private suspend fun loadUserFromFirestore(uid: String): User? {
         return try {
-            val snap = firestore.collection("estudiantes")
+            val snap = firestore.collection("usuarios")
                 .document(uid)
                 .get()
                 .await()
@@ -65,7 +65,7 @@ class AuthClientService @Inject constructor(
             return
         }
 
-        val snap = firestore.collection("estudiantes").document(fb.uid).get().await()
+        val snap = firestore.collection("usuarios").document(fb.uid).get().await()
         val dbUser = snap.toObject(User::class.java)
 
         _currentUser.value = dbUser ?: User(
@@ -91,7 +91,7 @@ class AuthClientService @Inject constructor(
 
         return try {
 
-            firestore.collection("estudiantes")
+            firestore.collection("usuarios")
                 .document(user.id)   // 🔑 UID como ID del documento
                 .set(user)
                 .await()

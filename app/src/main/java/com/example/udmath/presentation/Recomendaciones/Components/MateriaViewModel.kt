@@ -34,7 +34,6 @@ class MateriaViewModel @Inject constructor(
 
     private val _state = mutableStateOf(MateriasUiState())
     val state: State<MateriasUiState> = _state
-
     private var currentMateriaId: String? = null
     private var currentUid: String? = null
 
@@ -44,7 +43,6 @@ class MateriaViewModel @Inject constructor(
 
 
     fun loadNiveles(materiaId: String) {
-
         saveCurrentProgreso()
         currentMateriaId = materiaId
         viewModelScope.launch {

@@ -168,7 +168,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(36.dp))
 
         /* =======================
-           🟦 TÍTULO
+           TÍTULO
            ======================= */
         Text(
             text = "Iniciar Sesión",
@@ -180,7 +180,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(28.dp))
 
         /* =======================
-           📧 EMAIL
+            EMAIL
            ======================= */
         EmailLoginText(state.email) {
             viewModel.onEmailChanged(it)
@@ -189,7 +189,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(18.dp))
 
         /* =======================
-           🔒 PASSWORD
+            PASSWORD
            ======================= */
         PasswordLoginText(state.password) {
             viewModel.onPasswordChanged(it)
@@ -214,7 +214,7 @@ fun LoginScreen(
         Spacer(modifier = Modifier.height(24.dp))
 
         /* =======================
-           ❌ ERROR
+            ERROR
            ======================= */
         state.errorMessage?.let {
             Text(
@@ -242,7 +242,7 @@ fun LoginScreen(
         }
 
         /* =======================
-       🔘 BOTÓN INGRESAR (Mockup)
+        BOTÓN INGRESAR (Mockup)
        ======================= */
         Button(
             onClick = {
@@ -326,7 +326,7 @@ fun EmailLoginText(
             },
             modifier = Modifier
                 .weight(1f)
-                .heightIn(min = 52.dp), // 👈 más alto
+                .heightIn(min = 52.dp), // más alto
             shape = RoundedCornerShape(18.dp),
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color(0xFFE9E9E9),

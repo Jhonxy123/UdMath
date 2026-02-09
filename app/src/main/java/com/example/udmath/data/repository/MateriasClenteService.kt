@@ -70,7 +70,6 @@ class MateriasClenteService @Inject constructor(
             "respuestas" to progreso.respuestas,
             "materiaId" to materiaId,
             "nivelId" to nivelId,
-            // si quieres seguir usando refs:
             "materiaRef" to firestore.collection("materias").document(materiaId),
             "nivelRef" to firestore.collection("materias").document(materiaId)
                 .collection("niveles").document(nivelId)
