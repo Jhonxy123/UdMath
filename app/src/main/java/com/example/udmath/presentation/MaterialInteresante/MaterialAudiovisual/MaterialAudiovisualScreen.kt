@@ -8,7 +8,7 @@ fun MaterialAudiovisualScreen(
     navigateBack: () -> Unit,
 ) {
     RecursosScreenInt(
-        tipo = "material_audiovisual",
+        tipo = "audiovisual",
         navigateBack = { navigateBack() }
     )
 }

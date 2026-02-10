@@ -104,7 +104,12 @@ fun MainScaffold(
             }
 
             composable<MaterialIntTab> {
-                MaterialInteresanteScreen()
+                MaterialInteresanteScreen(
+                    navigateArticulos = { tabNavController.navigate(ArticulosTab) },
+                    navigateDatosCuriosos = { tabNavController.navigate(DatosCuriososTab) },
+                    navigateMaterialAudiovisual = { tabNavController.navigate(MaterialAudiovisualTab) },
+                    navigateProgramacion = { tabNavController.navigate(ProgramacionTab) }
+                )
             }
 
             composable<RecomendacionesTab> {
