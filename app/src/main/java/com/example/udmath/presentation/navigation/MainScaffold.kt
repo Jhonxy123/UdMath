@@ -20,6 +20,7 @@ import com.example.udmath.presentation.Recomendaciones.Funciones.FuncionesScreen
 import com.example.udmath.presentation.MaterialApoyo.Aplicaciones.AplicacionesScreen
 import com.example.udmath.presentation.MaterialApoyo.Libros.LibrosScreen
 import com.example.udmath.presentation.MaterialApoyo.MaterialApoyoScreen
+import com.example.udmath.presentation.MaterialApoyo.PaginasApoyo.PaginasApoyoScreen
 import com.example.udmath.presentation.MaterialApoyo.Videos.VideosScreen
 import com.example.udmath.presentation.MaterialInteresante.Articulos.ArticulosScreen
 import com.example.udmath.presentation.MaterialInteresante.DatosCuriosos.DatosCuriososScreen
@@ -196,6 +197,12 @@ fun MainScaffold(
 
             composable<ProgramacionTab> {
                 ProgramacionScreen(
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
+            composable<PaginasApoyoTab> {
+                PaginasApoyoScreen(
                     navigateBack = { tabNavController.popBackStack() }
                 )
             }
