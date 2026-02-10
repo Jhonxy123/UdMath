@@ -71,5 +71,19 @@ object AplicacionesTab
 @Serializable
 object VideosTab
 
+@Serializable
+object ArticulosTab
+
+@Serializable
+object DatosCuriososTab
+
+@Serializable
+object MaterialAudiovisualTab
+
+@Serializable
+object ProgramacionTab
+
+
+
 
 
