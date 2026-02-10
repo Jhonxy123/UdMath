@@ -97,6 +97,7 @@ fun MainScaffold(
                     navigatelibros = { tabNavController.navigate(LibrosTab) },
                     navigateaplicaciones = { tabNavController.navigate(AplicacionesTab) },
                     navigateVideos = { tabNavController.navigate(VideosTab) },
+                    navigatePaginasApoyo = { tabNavController.navigate(PaginasApoyoTab) }
                 )
             }
 
