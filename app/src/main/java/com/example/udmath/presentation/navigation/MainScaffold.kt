@@ -21,7 +21,11 @@ import com.example.udmath.presentation.MaterialApoyo.Aplicaciones.AplicacionesSc
 import com.example.udmath.presentation.MaterialApoyo.Libros.LibrosScreen
 import com.example.udmath.presentation.MaterialApoyo.MaterialApoyoScreen
 import com.example.udmath.presentation.MaterialApoyo.Videos.VideosScreen
+import com.example.udmath.presentation.MaterialInteresante.Articulos.ArticulosScreen
+import com.example.udmath.presentation.MaterialInteresante.DatosCuriosos.DatosCuriososScreen
+import com.example.udmath.presentation.MaterialInteresante.MaterialAudiovisual.MaterialAudiovisualScreen
 import com.example.udmath.presentation.MaterialInteresante.MaterialInteresanteScreen
+import com.example.udmath.presentation.MaterialInteresante.Programacion.ProgramacionScreen
 import com.example.udmath.presentation.Recomendaciones.RecomendacionesScreen
 import com.example.udmath.presentation.Retos.RetosScreen
 import com.example.udmath.presentation.Retos._48.GameScreen
@@ -166,6 +170,31 @@ fun MainScaffold(
                     navigateBack = { tabNavController.popBackStack() }
                 )
             }
+
+            composable<ArticulosTab> {
+                ArticulosScreen(
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
+            composable<DatosCuriososTab> {
+                DatosCuriososScreen(
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
+            composable<MaterialAudiovisualTab> {
+                MaterialAudiovisualScreen(
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
+            composable<ProgramacionTab> {
+                ProgramacionScreen(
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
 
 
 
