@@ -60,7 +60,8 @@ object AlgebraTab
 @Serializable
 object FuncionesTab
 
-
+@Serializable
+object PaginasApoyoTab
 
 @Serializable
 object LibrosTab
@@ -82,6 +83,8 @@ object MaterialAudiovisualTab
 
 @Serializable
 object ProgramacionTab
+
+
 
 
 
