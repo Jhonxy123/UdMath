@@ -24,13 +24,15 @@ import androidx.hilt.navigation.compose.hiltViewModel
 fun MateriasScreen(
     materia: String = "",
     modifier: Modifier = Modifier,
+    onclickNivel: (nivelID: String) -> Unit,
     viewModel: MateriaViewModel = hiltViewModel()
 ) {
     val ui = viewModel.state.value
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(materia) {
         viewModel.loadNiveles(materia)
     }
+
 
     val scroll = rememberScrollState()
 
@@ -101,14 +103,11 @@ fun MateriasScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(vertical = 6.dp)
-                    .clickable { viewModel.loadPreguntas(nivel.id) },
-                elevation = CardDefaults.cardElevation(defaultElevation = if (selected) 6.dp else 1.dp),
-                colors = CardDefaults.cardColors(
-                    containerColor = if (selected)
-                        MaterialTheme.colorScheme.primaryContainer
-                    else
-                        MaterialTheme.colorScheme.surface
-                )
+                    .clickable { onclickNivel(nivel.id) },
+                    elevation = CardDefaults.cardElevation(defaultElevation = if (selected) 6.dp else 1.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+                    )
             ) {
                 Row(
                     modifier = Modifier
@@ -146,66 +145,5 @@ fun MateriasScreen(
                 }
             }
         }
-
-        Spacer(Modifier.height(18.dp))
-
-        // ---- Sección Preguntas ----
-        Text(
-            text = "Preguntas",
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.Medium
-        )
-        Spacer(Modifier.height(8.dp))
-
-        val respondidas = ui.respuestas.size
-        val total = ui.preguntas.size
-        val progress = if (total == 0) 0f else respondidas.toFloat() / total.toFloat()
-
-        Text("Puntaje: ${ui.puntaje}", fontWeight = FontWeight.SemiBold, color = Color.White)
-        LinearProgressIndicator(
-            progress = { progress },
-            modifier = Modifier.fillMaxWidth().height(10.dp)
-        )
-        Text("$respondidas / $total respondidas", color = Color.White)
-
-
-        if (ui.selectedNivelId == null) {
-            Text(
-                text = "Toca un nivel para ver sus preguntas.",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            return
-        }
-
-        if (ui.loadingPreguntas) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center
-            ) {
-                CircularProgressIndicator()
-            }
-            Spacer(Modifier.height(12.dp))
-        }
-
-        ui.preguntas.forEachIndexed { index, p ->
-            PreguntaCard(
-                pregunta = p,
-                index = index,
-                // pásale qué opción está seleccionada (para pintar el radio)
-                selectedOption = ui.respuestas[p.id],
-                // pásale si es correcta/incorrecta (para feedback)
-                isCorrect = ui.correctas.contains(p.id),
-                isIncorrect = ui.incorrectas.contains(p.id),
-                onOpcionSeleccionada = { _, opcion ->
-                    viewModel.responderPregunta(p, opcion)
-                }
-            )
-            Spacer(Modifier.height(8.dp))
-        }
-
-
-
-        Spacer(Modifier.height(24.dp))
     }
 }
