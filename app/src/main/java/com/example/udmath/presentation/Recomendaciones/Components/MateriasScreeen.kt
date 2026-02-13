@@ -43,11 +43,7 @@ fun MateriasScreen(
         )
     )
 
-    DisposableEffect(Unit) {
-        onDispose {
-            viewModel.saveCurrentProgreso()
-        }
-    }
+
 
 
     Column(
@@ -136,12 +132,6 @@ fun MateriasScreen(
                         )
                     }
 
-                    if (selected) {
-                        AssistChip(
-                            onClick = { },
-                            label = { Text("Seleccionado") }
-                        )
-                    }
                 }
             }
         }

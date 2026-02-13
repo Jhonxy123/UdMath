@@ -31,6 +31,12 @@ fun PreguntasScreen(
 ) {
     val ui = viewModel.state.value
 
+    DisposableEffect(Unit) {
+        onDispose {
+            viewModel.saveCurrentProgreso()
+        }
+    }
+
     LaunchedEffect(materiaId, nivelId) {
         viewModel.loadNiveles(materiaId)      // para setear currentMateriaId si lo necesitas
         viewModel.loadPreguntas(nivelId)      // cargar preguntas
