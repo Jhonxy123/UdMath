@@ -31,21 +31,21 @@ fun PreguntasScreen(
 ) {
     val ui = viewModel.state.value
 
-    DisposableEffect(Unit) {
-        onDispose {
-            viewModel.saveCurrentProgreso()
-        }
-    }
-
+    // Carga las preguntas cuando el usuario entra a la pantalla
+    // El composaable se puede recomponer mil veces, pero no vuelve a cargar las preguntas si no hay cambios en materiaId o nivelId
     LaunchedEffect(materiaId, nivelId) {
-        viewModel.loadNiveles(materiaId)      // para setear currentMateriaId si lo necesitas
+        viewModel.loadNiveles(materiaId)      // para setear currentMateriaId
         viewModel.loadPreguntas(nivelId)      // cargar preguntas
     }
 
+    // Cuando el usuario salga de esta pantalla, guarda el progreso
+    // Mientras este en la pantalla no pasará nada
     DisposableEffect(Unit) {
         onDispose { viewModel.saveCurrentProgreso() }
     }
 
+
+    // Construimos la vista
     Scaffold(
         topBar = { TopBarback("Preguntas", navigateBack = { navigateBack() }) }
     ) { innerPadding ->
@@ -55,23 +55,33 @@ fun PreguntasScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
+
+            // calculamos el progreso del usuario
             val respondidas = ui.respuestas.size
             val total = ui.preguntas.size
             val progress = if (total == 0) 0f else respondidas.toFloat() / total.toFloat()
 
+            // mostramos su puntaje
             Text("Puntaje: ${ui.puntaje}", fontWeight = FontWeight.SemiBold)
+
+            // utilizamos un LinearProgressIndicator para mostrar el progreso
             LinearProgressIndicator(
                 progress = { progress },
                 modifier = Modifier.fillMaxWidth().height(10.dp)
             )
+
             Text("$respondidas / $total respondidas")
 
             Spacer(Modifier.height(12.dp))
 
+            // Dibuja la pantalla de carga si el estado es true
             if (ui.loadingPreguntas) {
+
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
                     CircularProgressIndicator()
                 }
+                // @Column Quiere decir que no siga dibujando lo que está debajo de este column (hasta aquí llega la UI por ahora)
+                // Sin esto se dibujaría el loader, pero también las preguntas y se vería todo mezclado
                 return@Column
             }
 
