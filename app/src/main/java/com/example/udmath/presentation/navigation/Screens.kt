@@ -85,6 +85,11 @@ object MaterialAudiovisualTab
 object ProgramacionTab
 
 
+@Serializable
+data class PreguntasRoute(
+    val materiaId: String,
+    val nivelId: String
+)
 
 
 

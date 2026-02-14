@@ -9,16 +9,21 @@ import com.example.udmath.presentation.components.TopBarback
 
 @Composable
 fun AlgebraScreen(
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    navigateToPreguntas: (materiaId: String, nivelId: String) -> Unit
 ) {
     Scaffold(
         topBar = { TopBarback("Algebra", navigateBack = { navigateBack() }) }
-    ) { innerPadding ->
+    ) { padding ->
         MateriasScreen(
             materia = "algebra",
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(padding),
+            onclickNivel = { nivelId ->
+                navigateToPreguntas("algebra", nivelId)
+            }
         )
     }
 }
+
 
 

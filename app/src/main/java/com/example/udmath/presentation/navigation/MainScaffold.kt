@@ -27,6 +27,7 @@ import com.example.udmath.presentation.MaterialInteresante.DatosCuriosos.DatosCu
 import com.example.udmath.presentation.MaterialInteresante.MaterialAudiovisual.MaterialAudiovisualScreen
 import com.example.udmath.presentation.MaterialInteresante.MaterialInteresanteScreen
 import com.example.udmath.presentation.MaterialInteresante.Programacion.ProgramacionScreen
+import com.example.udmath.presentation.Recomendaciones.Components.PreguntasScreen
 import com.example.udmath.presentation.Recomendaciones.RecomendacionesScreen
 import com.example.udmath.presentation.Retos.RetosScreen
 import com.example.udmath.presentation.Retos._48.GameScreen
@@ -144,15 +145,22 @@ fun MainScaffold(
 
             composable<AritmeticaTab> {
                 AritmeticaScreen(
-                    navigateBack = { tabNavController.popBackStack() }
+                    navigateBack = { tabNavController.popBackStack() },
+                    navigateToPreguntas = { materiaId, nivelId ->
+                        tabNavController.navigate(PreguntasRoute(materiaId, nivelId))
+                    }
                 )
             }
 
             composable<AlgebraTab> {
                 AlgebraScreen(
-                    navigateBack = { tabNavController.popBackStack() }
+                    navigateBack = { tabNavController.popBackStack() },
+                    navigateToPreguntas = { materiaId, nivelId ->
+                        tabNavController.navigate(PreguntasRoute(materiaId, nivelId))
+                    }
                 )
             }
+
 
             composable<FuncionesTab> {
                 FuncionesScreen(
@@ -207,6 +215,19 @@ fun MainScaffold(
                     navigateBack = { tabNavController.popBackStack() }
                 )
             }
+
+
+            composable<PreguntasRoute> { backStackEntry ->
+                val materiaId = backStackEntry.arguments?.getString("materiaId") ?: ""
+                val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
+
+                PreguntasScreen(
+                    materiaId = materiaId,
+                    nivelId = nivelId,
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
 
 
 
