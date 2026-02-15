@@ -91,18 +91,34 @@ class LoginViewModel @Inject constructor(
             _state.value = _state.value.copy(errorMessage = "Por favor llena todos los campos")
             return
         }
-
         if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _state.value = _state.value.copy(errorMessage = "Correo electrónico inválido")
             return
         }
 
-        _state.value = _state.value.copy(isLoading = true, errorMessage = null)
+        _state.value = _state.value.copy(isLoading = true, errorMessage = null, loginDestination = null)
 
         viewModelScope.launch {
             try {
-                authRepository.loginWithEmail(email, password)
-                _state.value = _state.value.copy(isLoading = false, isSuccess = true)
+                // 1) login
+                val authResult = authRepository.loginWithEmail(email, password)
+
+                // 2) uid actual
+                val uid = authResult.user?.uid
+                    ?: throw IllegalStateException("UID inválido")
+
+                // 3) leer role de Firestore
+                val role = authRepository.getUserRole(uid) ?: "normal"
+
+                // 4) destino
+                val destination =
+                    if (role.equals("admin", ignoreCase = true)) LoginDestination.ADMIN
+                    else LoginDestination.MAIN
+
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    loginDestination = destination
+                )
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
                     isLoading = false,
@@ -111,4 +127,9 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    fun consumeDestination() {
+        _state.value = _state.value.copy(loginDestination = null)
+    }
+
 }

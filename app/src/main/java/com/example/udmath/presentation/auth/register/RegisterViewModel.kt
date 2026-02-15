@@ -118,7 +118,8 @@ class RegisterViewModel @Inject constructor(
                     code = state.code,
                     name = state.name,
                     email = state.email,
-                    photoUrl = null
+                    photoUrl = null,
+                    role = "normal"
                 )
 
                 // 3️⃣ Guardar en Firestore

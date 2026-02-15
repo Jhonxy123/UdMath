@@ -159,6 +159,11 @@ class AuthClientService @Inject constructor(
         _currentUser.value = null
     }
 
+    override suspend fun getUserRole(uid: String): String? {
+        val doc = firestore.collection("usuarios").document(uid).get().await()
+        return doc.getString("role")
+    }
+
 
 }
 

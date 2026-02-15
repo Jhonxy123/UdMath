@@ -27,6 +27,9 @@ object Perfil
 object Main
 
 @Serializable
+object Admin
+
+@Serializable
 object HomeTab
 
 @Serializable

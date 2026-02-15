@@ -9,6 +9,8 @@ data class LoginViewState(
     val isSuccess: Boolean = false,
     val errorMessage: String? = null,
 
+    val loginDestination: LoginDestination? = null,
+
     // 🔁 Reset password
     val showResetDialog: Boolean = false,
     val resetEmail: String = "",

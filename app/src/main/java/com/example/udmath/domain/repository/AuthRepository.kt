@@ -27,6 +27,8 @@ interface AuthRepository{
 
     suspend fun logout() // funcion para cerrar sesión
 
+    suspend fun getUserRole(uid: String): String?
+
 
 
 }

@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.udmath.presentation.auth.login.LoginScreen
+import com.example.udmath.presentation.auth.admin.AdminScreen
 import com.example.udmath.presentation.auth.login.LoginViewModel
 import com.example.udmath.presentation.auth.menu.MenuScreen
 import com.example.udmath.presentation.auth.menu.MenuViewModel
@@ -49,12 +50,16 @@ fun Navigation(
 
             LoginScreen(
                 viewModel = viewModel,
-                //auth = auth,
-                //navigateToRegister = { navController.navigate(Register) },
                 navigateToMenu = {
-                    navController.navigate(Main){
-                    popUpTo(Login) { inclusive = true }
-                }},
+                    navController.navigate(Main) {
+                        popUpTo(Login) { inclusive = true }
+                    }
+                },
+                navigateToAdmin = {
+                    navController.navigate(Admin) {
+                        popUpTo(Login) { inclusive = true }
+                    }
+                },
                 navigateBack = { navController.popBackStack() }
             )
         }
@@ -84,6 +89,10 @@ fun Navigation(
                 }
             )
 
+        }
+
+        composable<Admin> {
+            AdminScreen()
         }
 
 
