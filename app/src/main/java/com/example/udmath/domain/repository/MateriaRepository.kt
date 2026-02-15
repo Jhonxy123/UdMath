@@ -17,4 +17,4 @@ interface MateriaRepository {
 
     suspend fun getProgreso(uid: String, materiaId: String, nivelId: String): Progreso?
 
-}
+} 
