@@ -91,6 +91,7 @@ fun HomeScreen(
     ) {
         Box(
             modifier = Modifier
+                //CAMBIAR EL COLOR DEL FONDO
                 .background(blueGradient)
                 .fillMaxSize()
         ) {
