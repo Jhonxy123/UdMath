@@ -82,6 +82,8 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.androidx.foundation.layout)
     implementation(libs.androidx.compose.ui)
+    implementation(libs.foundation.layout)
+    implementation(libs.ui)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 

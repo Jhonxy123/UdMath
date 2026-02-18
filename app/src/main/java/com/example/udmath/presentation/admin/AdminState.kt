@@ -1,4 +1,4 @@
-package com.example.udmath.presentation.auth.admin
+package com.example.udmath.presentation.admin
 
 data class AdminState(
     val isLoading: Boolean = false,

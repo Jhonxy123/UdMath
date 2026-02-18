@@ -1,4 +1,4 @@
-package com.example.udmath.presentation.auth.admin
+package com.example.udmath.presentation.admin
 
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.udmath.ui.theme.white
-import kotlinx.coroutines.launch
 
 @Composable
 fun AdminScreen(

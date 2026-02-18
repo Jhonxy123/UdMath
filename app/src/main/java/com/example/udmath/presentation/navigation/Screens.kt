@@ -94,7 +94,11 @@ data class PreguntasRoute(
     val nivelId: String
 )
 
+//-----------------------------------------------------------------------------------------------------------
+//                                                   Tabs de admin
+//----------------------------------------------------------------------------------------------------------
 
-
-
-
+@Serializable object HomeAdminTab
+@Serializable object BaseDatosTab
+@Serializable object EditContenidoTab
+@Serializable object GraficasTab
