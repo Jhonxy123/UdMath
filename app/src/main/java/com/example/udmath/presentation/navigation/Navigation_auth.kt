@@ -5,16 +5,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+//import com.example.udmath.presentation.Admin.Home.HomeAdminScreen
 import com.example.udmath.presentation.auth.login.LoginScreen
+import com.example.udmath.presentation.admin.AdminScreen
 import com.example.udmath.presentation.auth.login.LoginViewModel
-import com.example.udmath.presentation.auth.menu.MenuScreen
-import com.example.udmath.presentation.auth.menu.MenuViewModel
 import com.example.udmath.presentation.auth.register.RegisterScreen
 import com.example.udmath.presentation.auth.register.RegisterViewModel
-import com.example.udmath.presentation.home.HomeScreen
-import com.example.udmath.presentation.home.HomeViewModel
-import com.example.udmath.presentation.profile.PerfilScreen
-import com.example.udmath.presentation.profile.PerfilViewModel
 import com.example.udmath.presentation.welcome.WelcomeScreen
 import com.example.udmath.presentation.welcome.WelcomeViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -49,12 +45,16 @@ fun Navigation(
 
             LoginScreen(
                 viewModel = viewModel,
-                //auth = auth,
-                //navigateToRegister = { navController.navigate(Register) },
                 navigateToMenu = {
-                    navController.navigate(Main){
-                    popUpTo(Login) { inclusive = true }
-                }},
+                    navController.navigate(Main) {
+                        popUpTo(Login) { inclusive = true }
+                    }
+                },
+                navigateToAdmin = {
+                    navController.navigate(Admin) {
+                        popUpTo(Login) { inclusive = true }
+                    }
+                },
                 navigateBack = { navController.popBackStack() }
             )
         }
@@ -84,6 +84,18 @@ fun Navigation(
                 }
             )
 
+        }
+
+        composable<Admin> {
+            AdminScaffold(
+                auth = auth,
+                onLogout = {
+                    navController.navigate(Welcome) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
+            )
+            //AdminScreen()
         }
 
 

@@ -24,6 +24,9 @@ foundationLayout = "1.10.0"
 compose-runtime-livedata = "1.7.0"
 foundationLayoutVersion = "1.10.2"
 ui = "1.10.2"
+androidxFoundationLayout = "1.10.3"
+uiVersion = "1.10.3"
+runtime = "1.10.3"
 
 
 
@@ -72,6 +75,9 @@ firebase-storage-ktx = { module = "com.google.firebase:firebase-storage"}
 androidx-compose-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayout" }
 androidx-foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "foundationLayoutVersion" }
 androidx-compose-ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
+foundation-layout = { group = "androidx.compose.foundation", name = "foundation-layout", version.ref = "androidxFoundationLayout" }
+ui = { group = "androidx.compose.ui", name = "ui", version.ref = "uiVersion" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "runtime" }
 
 
 

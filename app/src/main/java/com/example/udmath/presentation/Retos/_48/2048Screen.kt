@@ -19,6 +19,8 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlin.math.abs
 import com.example.udmath.domain.model.game._48.Direction
+import com.example.udmath.presentation.components.TopBarback
+
 
 
 @Composable
@@ -41,13 +43,15 @@ fun GameScreen(
             .padding(top = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
-            text = "2048",
-            fontSize = 40.sp,
-            fontWeight = FontWeight.Bold,
-            color = Color(0xFF776E65),
-            modifier = Modifier.padding(bottom = 24.dp)
-        )
+        TopBarback("2048", navigateBack = {navigateBack()})
+        Spacer(modifier = Modifier.height(18.dp))
+//        Text(
+//            text = "2048",
+//            fontSize = 40.sp,
+//            fontWeight = FontWeight.Bold,
+//            color = Color(0xFF776E65),
+//            modifier = Modifier.padding(bottom = 24.dp)
+//        )
 
         Box(
             modifier = Modifier

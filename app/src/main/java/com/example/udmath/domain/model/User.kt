@@ -9,5 +9,7 @@ data class User(
     val name: String ="",
     val code: String ="",
     val email: String = "",
-    val photoUrl: String? = null
+    val photoUrl: String? = null,
+    // 👇 nuevo campo
+    val role: String = "normal"  // "normal" o "admin"
 )

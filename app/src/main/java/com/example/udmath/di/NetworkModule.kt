@@ -1,8 +1,10 @@
 package com.example.udmath.di
 
+import com.example.udmath.data.repository.AdminClientService
 import com.example.udmath.data.repository.AuthClientService
 import com.example.udmath.data.repository.MateriasClenteService
 import com.example.udmath.data.repository.RecursosClienteService
+import com.example.udmath.domain.repository.AdminRepository
 import com.example.udmath.domain.repository.AuthRepository
 import com.example.udmath.domain.repository.MateriaRepository
 import com.example.udmath.domain.repository.RecursoRepository
@@ -50,5 +52,11 @@ object NetworkModule {
     fun provideMateriaRepository(
         firestore: FirebaseFirestore
     ): MateriaRepository = MateriasClenteService(firestore)
+
+    @Provides
+    @Singleton
+    fun provideAdminRepository(
+        firestore: FirebaseFirestore
+    ): AdminRepository = AdminClientService(firestore)
 
 }

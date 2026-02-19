@@ -66,13 +66,22 @@ fun LoginScreen(
     viewModel: LoginViewModel = viewModel(),
     //navigateToRegister: () -> Unit,
     navigateToMenu: () -> Unit,
+    navigateToAdmin: () -> Unit,
     navigateBack: () -> Unit
 ) {
 
     val state by viewModel.state.collectAsStateWithLifecycle()
-    LaunchedEffect(state.isSuccess) {
-        if (state.isSuccess) {
-            navigateToMenu()
+    LaunchedEffect(state.loginDestination) {
+        when (state.loginDestination) {
+            LoginDestination.MAIN -> {
+                navigateToMenu()
+                viewModel.consumeDestination()
+            }
+            LoginDestination.ADMIN -> {
+                navigateToAdmin()
+                viewModel.consumeDestination()
+            }
+            null -> Unit
         }
     }
     //val interactionSource = remember { MutableInteractionSource() }
