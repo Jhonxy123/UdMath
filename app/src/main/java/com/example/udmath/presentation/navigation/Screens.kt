@@ -100,5 +100,10 @@ data class PreguntasRoute(
 
 @Serializable object HomeAdminTab
 @Serializable object BaseDatosTab
+
+@Serializable
+data class EditUserRoute(val userId: String)
 @Serializable object EditContenidoTab
 @Serializable object GraficasTab
+
+
