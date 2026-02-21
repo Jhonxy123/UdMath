@@ -1,6 +1,6 @@
 package com.example.udmath.domain.model
 
-data class Pregunta(
+data class  Pregunta(
     val id: String = "",
     val texto: String = "",
     val opciones: List<String> = emptyList(),
