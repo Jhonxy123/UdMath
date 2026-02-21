@@ -27,6 +27,9 @@ object Perfil
 object Main
 
 @Serializable
+object Admin
+
+@Serializable
 object HomeTab
 
 @Serializable
@@ -91,7 +94,16 @@ data class PreguntasRoute(
     val nivelId: String
 )
 
+//-----------------------------------------------------------------------------------------------------------
+//                                                   Tabs de admin
+//----------------------------------------------------------------------------------------------------------
 
+@Serializable object HomeAdminTab
+@Serializable object BaseDatosTab
 
+@Serializable
+data class EditUserRoute(val userId: String)
+@Serializable object EditContenidoTab
+@Serializable object GraficasTab
 
 
