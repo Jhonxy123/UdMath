@@ -59,4 +59,13 @@ object NetworkModule {
         firestore: FirebaseFirestore
     ): AdminRepository = AdminClientService(firestore)
 
+    // di/NetworkModule.kt (agrega esto)
+    @Provides
+    @Singleton
+    fun provideStatsRepository(
+        firestore: FirebaseFirestore
+    ): com.example.udmath.domain.repository.StatsRepository =
+        com.example.udmath.data.repository.StatsClientService(firestore)
+
+
 }
