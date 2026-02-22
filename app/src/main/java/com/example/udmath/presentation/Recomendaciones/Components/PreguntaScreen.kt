@@ -1,5 +1,6 @@
 package com.example.udmath.presentation.Recomendaciones.Components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -8,14 +9,20 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -87,36 +94,57 @@ fun PreguntasScreen(
 
             ui.preguntas.forEachIndexed { index, p ->
 
-                when (p.tipo.lowercase()) {
+                val isCorrect = ui.correctas.contains(p.id)
+                val isIncorrect = ui.incorrectas.contains(p.id)
+                val selectedOption = ui.respuestas[p.id]
 
-                    "multiple" -> {
-                        PreguntaCard(
-                            pregunta = p,
-                            index = index,
-                            selectedOption = ui.respuestas[p.id],
-                            isCorrect = ui.correctas.contains(p.id),
-                            isIncorrect = ui.incorrectas.contains(p.id),
-                            onOpcionSeleccionada = { _, opcion ->
-                                viewModel.responderPregunta(p, opcion)
-                            }
-                        )
+                PreguntaExpandableCard(
+                    preguntaId = p.id,
+                    index = index,
+                    texto = p.texto,
+                    headerExtra = {
+                        if (isCorrect) {
+                            Text("Correcto ✅", color = Color(0xFF1B5E20), fontWeight = FontWeight.Bold)
+                        } else if (isIncorrect) {
+                            Text("Incorrecto ❌", color = Color(0xFFB71C1C), fontWeight = FontWeight.Bold)
+                        }
                     }
+                ) {
+                    when (p.tipo.trim().lowercase()) {
 
-                    "drag" -> {
-                        //  reutilizas tu DragFillBlankQuestion
-                        DragFillBlankQuestion(
-                            statement = p.texto,              // ejemplo "2 + 3 = ____"
-                            options = p.opciones,
-                            correctAnswer = p.respuestaCorrecta,
-                            onAnswered = { selected, isCorrect ->
-                                // si quieres guardar respuesta igual que multiple:
-                                viewModel.responderPregunta(p, selected)
+                        "multiple" -> {
+                            // contenido de multiple dentro del card
+                            p.opciones.forEach { opcion ->
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clip(RoundedCornerShape(10.dp))
+                                        .clickable { viewModel.responderPregunta(p, opcion) }
+                                        .padding(vertical = 6.dp),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    RadioButton(
+                                        selected = selectedOption == opcion,
+                                        onClick = { viewModel.responderPregunta(p, opcion) }
+                                    )
+                                    Spacer(Modifier.width(8.dp))
+                                    Text(text = opcion, color = Color.Black)
+                                }
                             }
-                        )
-                    }
+                        }
 
-                    else -> {
-                        Text("Tipo no soportado: ${p.tipo}")
+                        "drag" -> {
+                            DragFillBlankQuestion(
+                                statement = p.texto, // ejemplo "2 + 2 = ____"
+                                options = p.opciones,
+                                correctAnswer = p.respuestaCorrecta,
+                                onAnswered = { selected, _ ->
+                                    viewModel.responderPregunta(p, selected)
+                                }
+                            )
+                        }
+
+                        else -> Text("Tipo no soportado: ${p.tipo}")
                     }
                 }
 

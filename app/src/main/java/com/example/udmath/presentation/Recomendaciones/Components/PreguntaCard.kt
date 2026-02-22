@@ -23,16 +23,15 @@ import androidx.compose.ui.unit.dp
 import com.example.udmath.domain.model.Pregunta
 
 @Composable
-fun PreguntaCard(
-    pregunta: Pregunta,
+fun PreguntaExpandableCard(
+    preguntaId: String,
     index: Int,
-    selectedOption: String?,
-    isCorrect: Boolean,
-    isIncorrect: Boolean,
-    onOpcionSeleccionada: (preguntaId: String, opcion: String) -> Unit
+    texto: String,
+    expandedInitially: Boolean = false,
+    headerExtra: @Composable (() -> Unit)? = null,
+    content: @Composable () -> Unit
 ) {
-    var expanded by rememberSaveable(pregunta.id) { mutableStateOf(false) }
-
+    var expanded by rememberSaveable(preguntaId) { mutableStateOf(expandedInitially) }
 
     Row(
         modifier = Modifier
@@ -55,54 +54,21 @@ fun PreguntaCard(
             Spacer(modifier = Modifier.height(6.dp))
 
             Text(
-                text = pregunta.texto,
+                text = texto,
                 color = Color.DarkGray,
                 maxLines = if (expanded) Int.MAX_VALUE else 2,
                 overflow = TextOverflow.Ellipsis
             )
 
+            // (Opcional) cosas extra debajo del texto (ej: Correcto/Incorrecto)
+            if (expanded && headerExtra != null) {
+                Spacer(modifier = Modifier.height(8.dp))
+                headerExtra()
+            }
+
             if (expanded) {
-
-                if (isCorrect) {
-                    Text("Correcto ✅", color = Color(0xFF1B5E20), fontWeight = FontWeight.Bold)
-                } else if (isIncorrect) {
-                    Text("Incorrecto ❌", color = Color(0xFFB71C1C), fontWeight = FontWeight.Bold)
-                }
-
-
                 Spacer(modifier = Modifier.height(10.dp))
-
-                // Opciones de respuesta (Radio)
-                pregunta.opciones.forEach { opcion ->
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clip(RoundedCornerShape(10.dp))
-                            .clickable {
-                                onOpcionSeleccionada(pregunta.id, opcion)
-                            }
-                            .padding(vertical = 6.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = selectedOption == opcion,
-                            onClick = { onOpcionSeleccionada(pregunta.id, opcion) }
-                        )
-
-                        Spacer(Modifier.width(8.dp))
-                        Text(
-                            text = opcion,
-                            color = Color.Black
-                        )
-                    }
-                }
-
-                if (pregunta.opciones.isEmpty()) {
-                    Text(
-                        text = "No hay opciones para esta pregunta.",
-                        color = Color.Gray
-                    )
-                }
+                content()
             }
         }
 
