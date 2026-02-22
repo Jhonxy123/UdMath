@@ -8,13 +8,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.example.udmath.presentation.components.TopBarback
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EncuestaScreen(
     materias: List<Pair<String, String>>, // (materiaId, nombreVisible)
+    isLoading: Boolean,
     onGuardar: (semestre: String, materiaId: String, aprobo: Boolean) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navigateBack: () -> Unit
 ) {
     // Semestres válidos (ejemplo)
     val semestres = remember {
@@ -37,10 +40,9 @@ fun EncuestaScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp)
     ) {
-        Text(
-            text = "Encuesta de Resultado",
-            style = MaterialTheme.typography.headlineSmall
-        )
+
+
+
 
         Text(
             text = "Selecciona el semestre y la materia, luego indica si aprobaste o perdiste.",
@@ -133,10 +135,19 @@ fun EncuestaScreen(
         // -------- BOTÓN GUARDAR --------
         Button(
             onClick = { onGuardar(semestre, materiaId, aprobo) },
-            enabled = canSave,
+            enabled = canSave && !isLoading,
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Guardar resultado")
+            if (isLoading) {
+                CircularProgressIndicator(
+                    strokeWidth = 2.dp,
+                    modifier = Modifier.size(18.dp)
+                )
+                Spacer(Modifier.width(8.dp))
+                Text("Guardando...")
+            } else {
+                Text("Guardar resultado")
+            }
         }
 
         // Nota
