@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.udmath.presentation.FormularioAp.EncuestaRoute
 import com.example.udmath.presentation.Recomendaciones.Algebra.AlgebraScreen
 import com.example.udmath.presentation.Recomendaciones.Aritmetica.AritmeticaScreen
 import com.example.udmath.presentation.Recomendaciones.Funciones.FuncionesScreen
@@ -126,7 +127,8 @@ fun MainScaffold(
             composable<RetosTab> {
                 RetosScreen(
                     onSudoku = {tabNavController.navigate(SudokuTab)},
-                    on2048 = {tabNavController.navigate(Game2048Tab)}
+                    on2048 = {tabNavController.navigate(Game2048Tab)},
+                    onCuestionario = {tabNavController.navigate(encuestaTab)}
                 )
 
             }
@@ -164,7 +166,10 @@ fun MainScaffold(
 
             composable<FuncionesTab> {
                 FuncionesScreen(
-                    navigateBack = { tabNavController.popBackStack() }
+                    navigateBack = { tabNavController.popBackStack() },
+                    navigateToPreguntas = { materiaId, nivelId ->
+                        tabNavController.navigate(PreguntasRoute(materiaId, nivelId))
+                    }
                 )
             }
 
@@ -227,6 +232,13 @@ fun MainScaffold(
                     navigateBack = { tabNavController.popBackStack() }
                 )
             }
+
+            composable<encuestaTab> {
+                EncuestaRoute(
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
 
 
 

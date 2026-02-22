@@ -29,6 +29,7 @@ import com.example.udmath.presentation.components.TopBarback
 fun RetosScreen(
     onSudoku: () -> Unit,
     on2048: () -> Unit,
+    onCuestionario: () -> Unit,
 ) {
 //fun RetosScreen() {
 
@@ -69,7 +70,7 @@ fun RetosScreen(
                         when (ruta) {
                             "sudoku" -> onSudoku()
                             "juego_2048" -> on2048()
-                            //"cuestionario" -> navController.navigate(Screen.Cuestionario)
+                            "cuestionario" -> onCuestionario()
                         }
                     }
                 )
