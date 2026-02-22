@@ -19,6 +19,9 @@
       <SelectionState runConfigName="DragFillBlankQuestion_Preview_Empty">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="DragFillBlankQuestionPreview">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>

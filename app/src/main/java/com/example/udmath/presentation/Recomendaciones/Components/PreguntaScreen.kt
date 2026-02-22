@@ -86,16 +86,40 @@ fun PreguntasScreen(
             }
 
             ui.preguntas.forEachIndexed { index, p ->
-                PreguntaCard(
-                    pregunta = p,
-                    index = index,
-                    selectedOption = ui.respuestas[p.id],
-                    isCorrect = ui.correctas.contains(p.id),
-                    isIncorrect = ui.incorrectas.contains(p.id),
-                    onOpcionSeleccionada = { _, opcion ->
-                        viewModel.responderPregunta(p, opcion)
+
+                when (p.tipo.lowercase()) {
+
+                    "multiple" -> {
+                        PreguntaCard(
+                            pregunta = p,
+                            index = index,
+                            selectedOption = ui.respuestas[p.id],
+                            isCorrect = ui.correctas.contains(p.id),
+                            isIncorrect = ui.incorrectas.contains(p.id),
+                            onOpcionSeleccionada = { _, opcion ->
+                                viewModel.responderPregunta(p, opcion)
+                            }
+                        )
                     }
-                )
+
+                    "drag" -> {
+                        //  reutilizas tu DragFillBlankQuestion
+                        DragFillBlankQuestion(
+                            statement = p.texto,              // ejemplo "2 + 3 = ____"
+                            options = p.opciones,
+                            correctAnswer = p.respuestaCorrecta,
+                            onAnswered = { selected, isCorrect ->
+                                // si quieres guardar respuesta igual que multiple:
+                                viewModel.responderPregunta(p, selected)
+                            }
+                        )
+                    }
+
+                    else -> {
+                        Text("Tipo no soportado: ${p.tipo}")
+                    }
+                }
+
                 Spacer(Modifier.height(8.dp))
             }
         }
