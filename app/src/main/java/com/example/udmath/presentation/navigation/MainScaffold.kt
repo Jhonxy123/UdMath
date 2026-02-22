@@ -166,7 +166,10 @@ fun MainScaffold(
 
             composable<FuncionesTab> {
                 FuncionesScreen(
-                    navigateBack = { tabNavController.popBackStack() }
+                    navigateBack = { tabNavController.popBackStack() },
+                    navigateToPreguntas = { materiaId, nivelId ->
+                        tabNavController.navigate(PreguntasRoute(materiaId, nivelId))
+                    }
                 )
             }
 
