@@ -5,5 +5,6 @@ data class  Pregunta(
     val texto: String = "",
     val opciones: List<String> = emptyList(),
     val respuestaCorrecta: String = "",
-    val puntos: Int = 0
+    val puntos: Int = 0,
+    val tipo: String = ""
 )

@@ -153,7 +153,7 @@ private fun DraggableChip(
     var isDragging = false
 
     AssistChip(
-        onClick = { /* opcional */ },
+        onClick = {},
         enabled = enabled,
         label = { Text(text) },
         modifier = Modifier
