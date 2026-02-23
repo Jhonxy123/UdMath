@@ -1,6 +1,7 @@
 package com.example.udmath.presentation.admin.BaseDatos
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,6 +15,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -226,36 +228,44 @@ private fun UserRow(
         )
 
         Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(6.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            IconButton(
-                onClick = onDelete,
-                modifier = Modifier
-                    .size(28.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFFE53935))
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "Eliminar",
-                    tint = Color.White
-                )
-            }
 
-            IconButton(
-                onClick = onEdit,
-                modifier = Modifier
-                    .size(28.dp)
-                    .clip(CircleShape)
-                    .background(Color(0xFF2E7D32))
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "Editar",
-                    tint = Color.White
-                )
-            }
+            CircleActionButton(
+                color = Color(0xFFE53935),
+                icon = Icons.Default.Delete,
+                onClick = onDelete
+            )
+
+            CircleActionButton(
+                color = Color(0xFF2E7D32),
+                icon = Icons.Default.Edit,
+                onClick = onEdit
+            )
         }
+    }
+}
+
+@Composable
+fun CircleActionButton(
+    color: Color,
+    icon: ImageVector,
+    onClick: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .size(22.dp) // ⬅️ tamaño REAL del círculo
+            .clip(CircleShape)
+            .background(color)
+            .clickable(onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.size(12.dp) // ⬅️ icono proporcional
+        )
     }
 }
