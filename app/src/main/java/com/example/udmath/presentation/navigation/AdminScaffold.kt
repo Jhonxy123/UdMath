@@ -107,8 +107,9 @@ fun AdminScaffold(
             // 📊 GRÁFICAS
             composable<GraficasTab> {
                 GraficasScreen(
+                    semestres = listOf("2023-3", "2024-1", "2024-3", "2025-1", "2026-1"),
                     onDownloadPdf = {
-                        // TODO: aquí llamas tu lógica para generar PDF
+                        // TODO
                     }
                 )
             }
