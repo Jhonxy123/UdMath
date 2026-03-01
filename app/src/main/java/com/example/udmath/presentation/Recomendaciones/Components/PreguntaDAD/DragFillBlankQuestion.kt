@@ -21,38 +21,42 @@ import kotlin.math.roundToInt
 
 @Composable
 fun DragFillBlankQuestion(
+    // solo para mostrar la parte del blank; el texto completo va en el Card
     statement: String,
     options: List<String>,
     correctAnswer: String,
-
-    // Estado viene del VM:
     ui: DragBlankUiState,
-
-    // Eventos hacia el VM:
     onDropRectChanged: (Rect) -> Unit,
     onAnswerDropped: (selected: String, correctAnswer: String) -> Unit,
     onClear: () -> Unit,
-
     modifier: Modifier = Modifier
 ) {
+    val marker = "____"
+    val hasMarker = statement.contains(marker)
+
+    // si el texto no trae ____ igual mostramos un " = ____" visualmente
+    val leftLabel = if (hasMarker) {
+        // nos quedamos con lo que está antes del blank, pero NO lo mostramos para no duplicar
+        "="
+    } else {
+        "="
+    }
+
     Column(
         modifier = modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Text(
-            text = "Arrastra la respuesta al espacio en blanco",
-            style = MaterialTheme.typography.titleMedium,
-            fontWeight = FontWeight.SemiBold
-        )
 
+        // ✅ fila compacta: " = [DropZone]"
         Row(
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             Text(
-                text = statement.replace("____", ""),
-                style = MaterialTheme.typography.bodyLarge
+                text = leftLabel,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold
             )
 
             DropZone(
@@ -60,7 +64,8 @@ fun DragFillBlankQuestion(
                 feedback = ui.feedback,
                 enabled = !ui.locked,
                 onRectReady = onDropRectChanged,
-                onClear = onClear
+                onClear = onClear,
+                modifier = Modifier.weight(1f, fill = false) // 👈 evita que se “pierda”
             )
         }
 
@@ -74,16 +79,22 @@ fun DragFillBlankQuestion(
                     text = opt,
                     enabled = !ui.locked && ui.placedAnswer != opt,
                     dropRect = ui.dropRect,
-                    onDroppedInside = {
-                        onAnswerDropped(opt, correctAnswer)
-                    }
+                    onDroppedInside = { onAnswerDropped(opt, correctAnswer) }
                 )
             }
         }
 
         when (ui.feedback) {
-            true -> Text("✅ Correcto", color = MaterialTheme.colorScheme.primary, fontWeight = FontWeight.SemiBold)
-            false -> Text("❌ Incorrecto, intenta de nuevo", color = MaterialTheme.colorScheme.error, fontWeight = FontWeight.SemiBold)
+            true -> Text(
+                "✅ Correcto",
+                color = MaterialTheme.colorScheme.primary,
+                fontWeight = FontWeight.SemiBold
+            )
+            false -> Text(
+                "❌ Incorrecto, intenta de nuevo",
+                color = MaterialTheme.colorScheme.error,
+                fontWeight = FontWeight.SemiBold
+            )
             null -> {}
         }
     }
@@ -95,7 +106,8 @@ private fun DropZone(
     feedback: Boolean?,
     enabled: Boolean,
     onRectReady: (Rect) -> Unit,
-    onClear: () -> Unit
+    onClear: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     val shape = RoundedCornerShape(12.dp)
     val borderColor = when (feedback) {
@@ -105,7 +117,7 @@ private fun DropZone(
     }
 
     Box(
-        modifier = Modifier
+        modifier = modifier
             .height(44.dp)
             .widthIn(min = 110.dp)
             .border(2.dp, borderColor, shape)
