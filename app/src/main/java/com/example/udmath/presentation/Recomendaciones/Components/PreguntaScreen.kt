@@ -144,6 +144,20 @@ fun PreguntasScreen(
                             )
                         }
 
+                        "tf" -> {
+                            val selectedOption = ui.respuestas[p.id]
+                            val locked = ui.correctas.contains(p.id) || ui.incorrectas.contains(p.id)
+
+                            TrueFalseQuestion(
+                                texto = p.texto,
+                                selectedOption = selectedOption,
+                                enabled = !locked,
+                                onSelect = { opt ->
+                                    viewModel.responderPregunta(p, opt)
+                                }
+                            )
+                        }
+
                         else -> Text("Tipo no soportado: ${p.tipo}")
                     }
                 }
