@@ -2,12 +2,14 @@ package com.example.udmath.presentation.Recomendaciones.Components
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.geometry.Rect
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.udmath.domain.model.Materia
 import com.example.udmath.domain.model.Pregunta
 import com.example.udmath.domain.model.Progreso
 import com.example.udmath.domain.repository.MateriaRepository
+import com.example.udmath.presentation.Recomendaciones.Components.PreguntaDAD.DragBlankUiState
 import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -23,7 +25,8 @@ data class MateriasUiState(
     val correctas: Set<String> = emptySet(),            // ids correctas
     val incorrectas: Set<String> = emptySet(),          // ids incorrectas
     val puntaje: Int = 0,
-    val error: String? = null
+    val error: String? = null,
+    val dragStates: Map<String, DragBlankUiState> = emptyMap()
 )
 
 
@@ -145,6 +148,35 @@ class MateriaViewModel @Inject constructor(
         viewModelScope.launch {
             repo.saveProgreso(uid, materiaId, nivelId, progreso)
         }
+    }
+
+    fun onDragDropRectChanged(preguntaId: String, rect: Rect) {
+        val current = _state.value.dragStates.toMutableMap()
+        val prev = current[preguntaId] ?: DragBlankUiState()
+        current[preguntaId] = prev.copy(dropRect = rect)
+        _state.value = _state.value.copy(dragStates = current)
+    }
+
+    fun onDragClear(preguntaId: String) {
+        val current = _state.value.dragStates.toMutableMap()
+        val prev = current[preguntaId] ?: DragBlankUiState()
+        if (prev.locked) return
+        current[preguntaId] = prev.copy(placedAnswer = null, feedback = null, locked = false)
+        _state.value = _state.value.copy(dragStates = current)
+    }
+
+    fun onDragAnswerDropped(preguntaId: String, selected: String, correctAnswer: String) {
+        val current = _state.value.dragStates.toMutableMap()
+        val prev = current[preguntaId] ?: DragBlankUiState()
+        if (prev.locked) return
+
+        val isCorrect = selected == correctAnswer
+        current[preguntaId] = prev.copy(
+            placedAnswer = selected,
+            feedback = isCorrect,
+            locked = isCorrect
+        )
+        _state.value = _state.value.copy(dragStates = current)
     }
 
 

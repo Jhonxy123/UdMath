@@ -1,7 +1,10 @@
 package com.example.udmath.data.repository
 import com.example.udmath.domain.model.EncuestaResultado
+import com.example.udmath.domain.model.MateriaDashboard
+import com.example.udmath.domain.model.MateriaStats
 import com.example.udmath.domain.model.ResultadoMateria
 import com.example.udmath.domain.repository.StatsRepository
+import com.example.udmath.presentation.admin.Graficas.BarPoint
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
@@ -106,6 +109,51 @@ class StatsClientService @Inject constructor(
             null
         }.await()
     }
+
+    override suspend fun getDashboardBySemestres(
+        semestres: List<String>
+    ): List<MateriaDashboard> {
+
+        val validSemestres = semestres
+            .map { it.trim() }
+            .filter { Regex("""^\d{4}-(1|3)$""").matches(it) }
+            .sorted()
+
+        // materiaId -> (semestre -> BarPoint)
+        val map = linkedMapOf<String, MutableMap<String, BarPoint>>()
+
+        for (sem in validSemestres) {
+            val snap = firestore.collection("estadisticas")
+                .document(sem)
+                .collection("materias")
+                .get()
+                .await()
+
+            for (doc in snap.documents) {
+                val materiaId = doc.id
+                val aprobados = doc.getLong("aprobados")?.toInt() ?: 0
+                val perdidos = doc.getLong("perdidos")?.toInt() ?: 0
+
+                val point = BarPoint(
+                    label = sem,
+                    aprobado = aprobados,
+                    desaprobado = perdidos
+                )
+
+                val perMateria = map.getOrPut(materiaId) { linkedMapOf() }
+                perMateria[sem] = point
+            }
+        }
+
+        // Rellena semestres faltantes con 0 para cada materia (para que el eje X sea consistente)
+        return map.map { (materiaId, perSem) ->
+            val points = validSemestres.map { sem ->
+                perSem[sem] ?: BarPoint(label = sem, aprobado = 0, desaprobado = 0)
+            }
+            MateriaDashboard(materiaId = materiaId, puntos = points)
+        }.sortedBy { it.materiaId }
+    }
+
 
     private fun validateSemestre(semestre: String) {
         // Acepta solo YYYY-1 o YYYY-3

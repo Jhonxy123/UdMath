@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -19,6 +20,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.udmath.presentation.admin.GraficasScreen.GraficasViewModel
 
 data class BarPoint(
     val label: String,
@@ -28,65 +31,59 @@ data class BarPoint(
 
 @Composable
 fun GraficasScreen(
-    onDownloadPdf: () -> Unit = {}
+    semestres: List<String>,
+    onDownloadPdf: () -> Unit = {},
+    vm: GraficasViewModel = hiltViewModel()
 ) {
-    val bg = Color(0xFFF3F3F3)
-    val blue = Color(0xFF184998)
-    val red = Color(0xFFE53935)
+    val ui = vm.state.value
 
-    // 🔧 Datos de ejemplo (como la imagen). Cambia esto por state del ViewModel luego.
-    val points = listOf(
-        BarPoint("2023-3", aprobado = 85, desaprobado = 55),
-        BarPoint("2024-2", aprobado = 55, desaprobado = 85),
-        BarPoint("2024-3", aprobado = 60, desaprobado = 40),
-        BarPoint("2025-1", aprobado = 85, desaprobado = 88)
-    )
+    LaunchedEffect(semestres) {
+        vm.loadDashboard(semestres)
+    }
 
     Scaffold { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(bg)
+                .background(Color(0xFFF3F3F3))
                 .padding(innerPadding)
                 .padding(horizontal = 18.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(18.dp))
-
-            Text(
-                text = "Gráficas",
-                fontWeight = FontWeight.SemiBold,
-                color = blue,
-                fontSize = 18.sp
-            )
-
-            Spacer(Modifier.height(12.dp))
-
-            InfoCard(
-                text = "Desde de aquí podrás ver los reportes que\n" +
-                        "generan los usuarios con respecto a la\n" +
-                        "aprobación de sus espacios académicos.",
-                textColor = blue
-            )
-
+            Text("Gráficas", fontWeight = FontWeight.SemiBold, color = Color(0xFF184998))
             Spacer(Modifier.height(18.dp))
 
-            ChartCard(
-                title = "Cálculo Integral",
-                borderColor = blue,
-                aprobadoColor = blue,
-                desaprobadoColor = red,
-                points = points
-            )
+            when {
+                ui.loading -> CircularProgressIndicator()
+                ui.error != null -> Text("Error: ${ui.error}")
+                ui.dashboards.isEmpty() -> Text("No hay datos de estadísticas todavía.")
+                else -> {
+                    androidx.compose.foundation.lazy.LazyColumn(
+                        verticalArrangement = Arrangement.spacedBy(14.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        items(ui.dashboards.size) { i ->
+                            val d = ui.dashboards[i]
+                            ChartCard(
+                                title = d.materiaId, // si quieres el título real, te digo cómo traerlo
+                                borderColor = Color(0xFF184998),
+                                aprobadoColor = Color(0xFF184998),
+                                desaprobadoColor = Color(0xFFE53935),
+                                points = d.puntos
+                            )
+                        }
 
-            Spacer(Modifier.height(26.dp))
+                        item { Spacer(Modifier.height(22.dp)) }
+                    }
+                }
+            }
 
             ShadowButton(
                 text = "Descargar en PDF",
                 onClick = onDownloadPdf,
-                textColor = blue
+                textColor = Color(0xFF184998)
             )
-
             Spacer(Modifier.height(10.dp))
         }
     }
@@ -205,8 +202,10 @@ private fun BarChart(
     modifier: Modifier = Modifier
 ) {
     // Escala 0..100 como en la imagen
-    val maxY = 100f
-    val ySteps = listOf(0, 20, 40, 60, 80, 100)
+    val maxY = (points.maxOfOrNull { maxOf(it.aprobado, it.desaprobado) } ?: 0)
+        .coerceAtLeast(10)
+        .toFloat()
+    val ySteps = listOf(0f, 0.25f, 0.5f, 0.75f, 1f).map { (it * maxY).toInt() }
 
     Canvas(modifier = modifier) {
         val w = size.width
