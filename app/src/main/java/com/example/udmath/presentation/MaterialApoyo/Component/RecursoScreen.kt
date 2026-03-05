@@ -23,6 +23,7 @@ fun RecursosScreen(
     if(tipo == "libro") titulo = ("Libros")
     if(tipo == "aplicacion") titulo = ("Aplicaciones")
     if(tipo == "video") titulo = ("Videos")
+    if(tipo == "apoyo") titulo = ("Paginas de apoyo")
 
 
     when {

@@ -29,6 +29,7 @@ import com.example.udmath.presentation.MaterialInteresante.MaterialAudiovisual.M
 import com.example.udmath.presentation.MaterialInteresante.MaterialInteresanteScreen
 import com.example.udmath.presentation.MaterialInteresante.Programacion.ProgramacionScreen
 import com.example.udmath.presentation.Recomendaciones.Components.PreguntasScreen
+import com.example.udmath.presentation.Recomendaciones.Components.Tablas.TablaNaturalesScreen
 import com.example.udmath.presentation.Recomendaciones.RecomendacionesScreen
 import com.example.udmath.presentation.Retos.RetosScreen
 import com.example.udmath.presentation.Retos._48.GameScreen
@@ -222,6 +223,28 @@ fun MainScaffold(
             }
 
 
+//            composable<PreguntasRoute> { backStackEntry ->
+//                val materiaId = backStackEntry.arguments?.getString("materiaId") ?: ""
+//                val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
+//
+//                PreguntasScreen(
+//                    materiaId = materiaId,
+//                    nivelId = nivelId,
+//                    navigateBack = { tabNavController.popBackStack() },
+//                    onNavigateTipoBoton = { tipo, preguntaId ->
+//                        when (tipo) {
+//                            "tabla_seleccion" -> {
+//                                // TODO: reemplaza por tu ruta real
+//                                tabNavController.navigate("tabla_seleccion/$preguntaId")
+//                            }
+//                            else -> {
+//                                // Si agregas más tipos-botón en el futuro, los manejas aquí
+//                            }
+//                        }
+//                    }
+//                )
+//            }
+
             composable<PreguntasRoute> { backStackEntry ->
                 val materiaId = backStackEntry.arguments?.getString("materiaId") ?: ""
                 val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
@@ -229,6 +252,28 @@ fun MainScaffold(
                 PreguntasScreen(
                     materiaId = materiaId,
                     nivelId = nivelId,
+                    navigateBack = { tabNavController.popBackStack() },
+                    onNavigateTipoBoton = { tipo, preguntaId ->
+
+                        when (tipo) {
+
+                            "tabla_seleccion" -> {
+                                tabNavController.navigate("tabla_naturales/$preguntaId")
+                            }
+
+                            else -> {
+                                tabNavController.navigate("tabla_naturales/$preguntaId")
+                            }
+                        }
+                    }
+                )
+            }
+
+            composable("tabla_naturales/{preguntaId}") { backStackEntry ->
+                val preguntaId = backStackEntry.arguments?.getString("preguntaId") ?: ""
+
+                TablaNaturalesScreen(
+                    preguntaId = preguntaId,
                     navigateBack = { tabNavController.popBackStack() }
                 )
             }

@@ -13,11 +13,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -32,31 +36,35 @@ import com.example.udmath.presentation.Recomendaciones.Components.PreguntaDAD.Dr
 import com.example.udmath.presentation.Recomendaciones.Components.PreguntaDAD.DragFillBlankQuestion
 import com.example.udmath.presentation.components.TopBarback
 
+// ✅ Tipos que deben renderizarse como BOTÓN (no desplegable)
+// Agrega más tipos aquí cuando quieras.
+private val TIPOS_COMO_BOTON = setOf(
+    "tabla_seleccion"
+)
+
 @Composable
 fun PreguntasScreen(
     materiaId: String,
     nivelId: String,
     navigateBack: () -> Unit,
+    // ✅ Callback para redirigir cuando el tipo es botón (tabla_seleccion u otros del set)
+    onNavigateTipoBoton: (tipo: String, preguntaId: String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: MateriaViewModel = hiltViewModel()
 ) {
     val ui = viewModel.state.value
 
     // Carga las preguntas cuando el usuario entra a la pantalla
-    // El composaable se puede recomponer mil veces, pero no vuelve a cargar las preguntas si no hay cambios en materiaId o nivelId
     LaunchedEffect(materiaId, nivelId) {
-        viewModel.loadNiveles(materiaId)      // para setear currentMateriaId
-        viewModel.loadPreguntas(nivelId)      // cargar preguntas
+        viewModel.loadNiveles(materiaId) // para setear currentMateriaId
+        viewModel.loadPreguntas(nivelId) // cargar preguntas
     }
 
     // Cuando el usuario salga de esta pantalla, guarda el progreso
-    // Mientras este en la pantalla no pasará nada
     DisposableEffect(Unit) {
         onDispose { viewModel.saveCurrentProgreso() }
     }
 
-
-    // Construimos la vista
     Scaffold(
         topBar = { TopBarback("Preguntas", navigateBack = { navigateBack() }) }
     ) { innerPadding ->
@@ -66,24 +74,20 @@ fun PreguntasScreen(
                 .fillMaxSize()
                 .padding(16.dp)
         ) {
-
-            // calculamos el progreso del usuario
             val respondidas = ui.respuestas.size
             val total = ui.preguntas.size
             val progress = if (total == 0) 0f else respondidas.toFloat() / total.toFloat()
 
-            // mostramos su puntaje
             Text("Puntaje: ${ui.puntaje}", fontWeight = FontWeight.SemiBold)
 
-            // utilizamos un LinearProgressIndicator para mostrar el progreso
             LinearProgressIndicator(
                 progress = { progress },
-                modifier = Modifier.fillMaxWidth().height(10.dp)
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(10.dp)
             )
 
             Text("$respondidas / $total respondidas")
-
-
             Spacer(Modifier.height(12.dp))
 
             if (ui.loadingPreguntas) {
@@ -93,102 +97,163 @@ fun PreguntasScreen(
                 return@Column
             }
 
-// Lista scrolleable
+            // Lista scrolleable
             LazyColumn(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .weight(1f),              // clave: permite scroll dentro del espacio disponible
+                    .weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 itemsIndexed(
                     items = ui.preguntas,
-                    key = { _, p -> p.id }    // importante para estados (expanded) por pregunta
+                    key = { _, p -> p.id }
                 ) { index, p ->
 
+                    val tipo = p.tipo.trim().lowercase()
                     val isCorrect = ui.correctas.contains(p.id)
                     val isIncorrect = ui.incorrectas.contains(p.id)
                     val selectedOption = ui.respuestas[p.id]
 
                     val headerText =
-                        if (p.tipo.trim().lowercase() == "drag" && !p.texto.contains("____"))
+                        if (tipo == "drag" && !p.texto.contains("____"))
                             "${p.texto} = ____"
                         else
                             p.texto
 
-                    PreguntaExpandableCard(
-                        preguntaId = p.id,
-                        index = index,
-                        texto = headerText,
-                        headerExtra = {
-                            if (isCorrect) {
+                    val esTipoBoton = tipo in TIPOS_COMO_BOTON
+
+                    if (esTipoBoton) {
+
+                        val numeroPregunta = index + 1
+
+                        Card(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .clickable { onNavigateTipoBoton(tipo, p.id) },
+                            shape = RoundedCornerShape(16.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = Color.White // ✅ SIEMPRE blanco
+                            ),
+                            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+                        ) {
+
+                            Column(
+                                modifier = Modifier.padding(16.dp)
+                            ) {
+
+                                Row(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+
+                                    Text(
+                                        text = "Pregunta $numeroPregunta",
+                                        fontWeight = FontWeight.Bold,
+                                        color = Color(0xFF184998) // azul igual al del card desplegable
+                                    )
+
+                                    Spacer(modifier = Modifier.weight(1f))
+
+                                    if (isCorrect) {
+                                        Text(
+                                            "Correcto ✅",
+                                            color = Color(0xFF1B5E20),
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    } else if (isIncorrect) {
+                                        Text(
+                                            "Incorrecto ❌",
+                                            color = Color(0xFFB71C1C),
+                                            fontWeight = FontWeight.Bold
+                                        )
+                                    }
+                                }
+
+                                Spacer(Modifier.height(8.dp))
+
                                 Text(
-                                    "Correcto ✅",
-                                    color = Color(0xFF1B5E20),
-                                    fontWeight = FontWeight.Bold
-                                )
-                            } else if (isIncorrect) {
-                                Text(
-                                    "Incorrecto ❌",
-                                    color = Color(0xFFB71C1C),
-                                    fontWeight = FontWeight.Bold
+                                    text = headerText,
+                                    color = Color.DarkGray
                                 )
                             }
                         }
-                    ) {
-                        when (p.tipo.trim().lowercase()) {
 
-                            "multiple" -> {
-                                p.opciones.forEach { opcion ->
-                                    Row(
-                                        modifier = Modifier
-                                            .fillMaxWidth()
-                                            .clip(RoundedCornerShape(10.dp))
-                                            .clickable { viewModel.responderPregunta(p, opcion) }
-                                            .padding(vertical = 6.dp),
-                                        verticalAlignment = Alignment.CenterVertically
-                                    ) {
-                                        RadioButton(
-                                            selected = selectedOption == opcion,
-                                            onClick = { viewModel.responderPregunta(p, opcion) }
-                                        )
-                                        Spacer(Modifier.width(8.dp))
-                                        Text(text = opcion, color = Color.Black)
-                                    }
+                    } else {
+                        // ✅ Render normal como desplegable
+                        PreguntaExpandableCard(
+                            preguntaId = p.id,
+                            index = index,
+                            texto = headerText,
+                            headerExtra = {
+                                if (isCorrect) {
+                                    Text(
+                                        "Correcto ✅",
+                                        color = Color(0xFF1B5E20),
+                                        fontWeight = FontWeight.Bold
+                                    )
+                                } else if (isIncorrect) {
+                                    Text(
+                                        "Incorrecto ❌",
+                                        color = Color(0xFFB71C1C),
+                                        fontWeight = FontWeight.Bold
+                                    )
                                 }
                             }
-
-                            "drag" -> {
-                                val dragUi = ui.dragStates[p.id] ?: DragBlankUiState()
-
-                                DragFillBlankQuestion(
-                                    statement = p.texto,
-                                    options = p.opciones,
-                                    correctAnswer = p.respuestaCorrecta,
-                                    ui = dragUi,
-                                    onDropRectChanged = { rect ->
-                                        viewModel.onDragDropRectChanged(p.id, rect)
-                                    },
-                                    onAnswerDropped = { selected, correct ->
-                                        viewModel.onDragAnswerDropped(p.id, selected, correct)
-                                        viewModel.responderPregunta(p, selected)
-                                    },
-                                    onClear = {
-                                        viewModel.onDragClear(p.id)
+                        ) {
+                            when (tipo) {
+                                "multiple" -> {
+                                    p.opciones.forEach { opcion ->
+                                        Row(
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .clip(RoundedCornerShape(10.dp))
+                                                .clickable { viewModel.responderPregunta(p, opcion) }
+                                                .padding(vertical = 6.dp),
+                                            verticalAlignment = Alignment.CenterVertically
+                                        ) {
+                                            RadioButton(
+                                                selected = selectedOption == opcion,
+                                                onClick = { viewModel.responderPregunta(p, opcion) }
+                                            )
+                                            Spacer(Modifier.width(8.dp))
+                                            Text(text = opcion, color = Color.Black)
+                                        }
                                     }
-                                )
-                            }
+                                }
 
-                            "tf" -> {
-                                val locked = isCorrect || isIncorrect
-                                TrueFalseQuestion(
-                                    texto = p.texto,
-                                    selectedOption = selectedOption,
-                                    enabled = !locked,
-                                    onSelect = { opt -> viewModel.responderPregunta(p, opt) }
-                                )
-                            }
+                                "drag" -> {
+                                    val dragUi = ui.dragStates[p.id] ?: DragBlankUiState()
 
-                            else -> Text("Tipo no soportado: ${p.tipo}")
+                                    DragFillBlankQuestion(
+                                        statement = p.texto,
+                                        options = p.opciones,
+                                        correctAnswer = p.respuestaCorrecta,
+                                        ui = dragUi,
+                                        onDropRectChanged = { rect ->
+                                            viewModel.onDragDropRectChanged(p.id, rect)
+                                        },
+                                        onAnswerDropped = { selected, correct ->
+                                            viewModel.onDragAnswerDropped(p.id, selected, correct)
+                                            viewModel.responderPregunta(p, selected)
+                                        },
+                                        onClear = {
+                                            viewModel.onDragClear(p.id)
+                                        }
+                                    )
+                                }
+
+                                "tf" -> {
+                                    val locked = isCorrect || isIncorrect
+                                    TrueFalseQuestion(
+                                        texto = p.texto,
+                                        selectedOption = selectedOption,
+                                        enabled = !locked,
+                                        onSelect = { opt -> viewModel.responderPregunta(p, opt) }
+                                    )
+                                }
+
+                                else -> Text("Tipo no soportado: ${p.tipo}")
+                            }
                         }
                     }
                 }

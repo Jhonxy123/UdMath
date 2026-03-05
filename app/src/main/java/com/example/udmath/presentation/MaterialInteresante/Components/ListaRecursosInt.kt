@@ -45,17 +45,21 @@ fun ListaRecursosScreenInt(
     )
 
     val (imageRes, descripcion) = when (tituloTopBar) {
-        "Libros" -> Pair(
-            R.drawable.libros, // tu drawable
-            "En esta sección encontrarás material bibliográfico que te puede ayudar a estudiar matemática"
+        "Articulos" -> Pair(
+            R.drawable.articulo, // tu drawable
+            "En esta sección encontraras artículos que alimentaran tu curiosidad."
         )
-        "Aplicaciones" -> Pair(
-            R.drawable.aplicaciones, // tu drawable
-            "En esta sección encontrarás aplicaciones que te puede ayudar a estudiar matemática"
+        "Programación" -> Pair(
+            R.drawable.programacion, // tu drawable
+            "En esta sección encontraras repositorios que alimentaran tu curiosidad."
         )
-        "Videos" -> Pair(
-            R.drawable.videos, // tu drawable
-            "En esta sección encontrarás videos que te pueden ayudar a estudiar matemática"
+        "Datos curiosos" -> Pair(
+            R.drawable.curiosos, // tu drawable
+            "En esta sección encontraras datos curiosos que alimentaran tu curiosidad."
+        )
+        "Audiovisual" -> Pair(
+            R.drawable.audiovisual, // tu drawable
+            "En esta sección encontraras datos curiosos que alimentaran tu curiosidad."
         )
         else -> Pair(null, "")
     }
