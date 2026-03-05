@@ -13,6 +13,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.udmath.presentation.admin.EditarContenido.AgregarContenido.AdminCrearRecursoScreen
+import com.example.udmath.presentation.admin.EditarContenido.AgregarContenido.AdminCrearRecursoViewModel
 import com.example.udmath.presentation.admin.BaseDatos.BdScreen
 import com.example.udmath.presentation.admin.Home.HomeAdminScreen
 import com.example.udmath.presentation.admin.AdminViewModel
@@ -93,13 +95,13 @@ fun AdminScaffold(
             composable<EditContenidoTab> {
                 EditarContenidoScreen(
                     onRecomendaciones = {
-                        // tabNavController.navigate(RutaRecomendaciones)  // si tienes otra pantalla
+                        // otra pantalla si existe
                     },
                     onMaterialApoyo = {
-                        // tabNavController.navigate(RutaMaterialApoyo)
+                        tabNavController.navigate(MaterialApoyoAdminRoute)
                     },
                     onMaterialInteresante = {
-                        // tabNavController.navigate(RutaMaterialInteresante)
+                        // otra pantalla
                     }
                 )
             }
@@ -111,6 +113,18 @@ fun AdminScaffold(
                     onDownloadPdf = {
                         // TODO
                     }
+                )
+            }
+
+            composable<MaterialApoyoAdminRoute> {
+
+                val vm: AdminCrearRecursoViewModel = hiltViewModel()
+
+                AdminCrearRecursoScreen(
+                    vm = vm,
+                    autorId = FirebaseAuth.getInstance().currentUser?.uid ?: "",
+                    autorNombre = FirebaseAuth.getInstance().currentUser?.displayName ?: "",
+                    navigateBack = { tabNavController.popBackStack() }
                 )
             }
 
