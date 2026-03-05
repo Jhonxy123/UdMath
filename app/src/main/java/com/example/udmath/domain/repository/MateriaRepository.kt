@@ -17,4 +17,12 @@ interface MateriaRepository {
 
     suspend fun getProgreso(uid: String, materiaId: String, nivelId: String): Progreso?
 
+    suspend fun saveProgresoSiGano(
+        uid: String,
+        materiaId: String,
+        nivelId: String,
+        progreso: Progreso,
+        gano: Boolean
+    )
+
 } 

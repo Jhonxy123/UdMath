@@ -39,7 +39,8 @@ import com.example.udmath.presentation.components.TopBarback
 // ✅ Tipos que deben renderizarse como BOTÓN (no desplegable)
 // Agrega más tipos aquí cuando quieras.
 private val TIPOS_COMO_BOTON = setOf(
-    "tabla_seleccion"
+    "tabla_seleccion",
+    "crucigrama_naturales"
 )
 
 @Composable

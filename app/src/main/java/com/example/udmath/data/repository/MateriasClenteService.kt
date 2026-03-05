@@ -84,6 +84,17 @@ class MateriasClenteService @Inject constructor(
             .await()
     }
 
+    override suspend fun saveProgresoSiGano(
+        uid: String,
+        materiaId: String,
+        nivelId: String,
+        progreso: Progreso,
+        gano: Boolean
+    ) {
+        if (!gano) return
+        saveProgreso(uid, materiaId, nivelId, progreso)
+    }
+
     override suspend fun getProgreso(
         uid: String,
         materiaId: String,
