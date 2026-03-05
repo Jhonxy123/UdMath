@@ -61,6 +61,10 @@ fun ListaRecursosScreen(
             R.drawable.videos, // tu drawable
             "En esta sección encontrarás videos que te pueden ayudar a estudiar matemática"
         )
+        "Paginas de apoyo" -> Pair(
+            R.drawable.paginasapoyo, // tu drawable
+            "En esta sección encontrarás paginas que te ayudaran a estudiar matemáticas."
+        )
         else -> Pair(null, "")
     }
 

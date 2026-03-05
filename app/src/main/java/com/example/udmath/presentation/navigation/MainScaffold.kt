@@ -28,7 +28,11 @@ import com.example.udmath.presentation.MaterialInteresante.DatosCuriosos.DatosCu
 import com.example.udmath.presentation.MaterialInteresante.MaterialAudiovisual.MaterialAudiovisualScreen
 import com.example.udmath.presentation.MaterialInteresante.MaterialInteresanteScreen
 import com.example.udmath.presentation.MaterialInteresante.Programacion.ProgramacionScreen
+import com.example.udmath.presentation.Recomendaciones.Components.MateriaViewModel
 import com.example.udmath.presentation.Recomendaciones.Components.PreguntasScreen
+import com.example.udmath.presentation.Recomendaciones.Components.Tablas.CrucigramaMcmMcdScreen
+import com.example.udmath.presentation.Recomendaciones.Components.Tablas.OnJuegoTerminadoViewModel
+import com.example.udmath.presentation.Recomendaciones.Components.Tablas.TablaNaturalesScreen
 import com.example.udmath.presentation.Recomendaciones.RecomendacionesScreen
 import com.example.udmath.presentation.Retos.RetosScreen
 import com.example.udmath.presentation.Retos._48.GameScreen
@@ -229,7 +233,65 @@ fun MainScaffold(
                 PreguntasScreen(
                     materiaId = materiaId,
                     nivelId = nivelId,
-                    navigateBack = { tabNavController.popBackStack() }
+                    navigateBack = { tabNavController.popBackStack() },
+                    onNavigateTipoBoton = { tipo, preguntaId ->
+                        when (tipo) {
+                            "tabla_seleccion" -> {
+                                tabNavController.navigate("tabla_naturales/$materiaId/$nivelId/$preguntaId")
+                            }
+                            "crucigrama_naturales" -> {
+                                tabNavController.navigate("crucigrama_naturales/$materiaId/$nivelId/$preguntaId")
+                            }
+                            else -> {
+                                tabNavController.navigate("tabla_naturales/$materiaId/$nivelId/$preguntaId")
+                            }
+                        }
+                    }
+                )
+            }
+
+//            composable("tabla_naturales/{preguntaId}") { backStackEntry ->
+//                val preguntaId = backStackEntry.arguments?.getString("preguntaId") ?: ""
+//
+//                TablaNaturalesScreen(
+//                    preguntaId = preguntaId,
+//                    navigateBack = { tabNavController.popBackStack() }
+//                )
+//            }
+
+            composable("tabla_naturales/{materiaId}/{nivelId}/{preguntaId}") { backStackEntry ->
+                val materiaId = backStackEntry.arguments?.getString("materiaId") ?: ""
+                val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
+                val preguntaId = backStackEntry.arguments?.getString("preguntaId") ?: ""
+
+                val vm: MateriaViewModel = hiltViewModel()
+                vm.setContext(materiaId, nivelId)
+
+                TablaNaturalesScreen(
+                    preguntaId = preguntaId,
+                    navigateBack = { tabNavController.popBackStack() },
+                    onGameResult = { gano ->
+                        vm.registrarMinijuegoResultadoConFetch(materiaId, nivelId, preguntaId, gano)
+                        if (gano) tabNavController.popBackStack()
+                    }
+                )
+            }
+
+            composable("crucigrama_naturales/{materiaId}/{nivelId}/{preguntaId}") { backStackEntry ->
+                val materiaId = backStackEntry.arguments?.getString("materiaId") ?: ""
+                val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
+                val preguntaId = backStackEntry.arguments?.getString("preguntaId") ?: ""
+
+                val vm: MateriaViewModel = hiltViewModel()
+                vm.setContext(materiaId, nivelId)
+
+                CrucigramaMcmMcdScreen(
+                    preguntaId = preguntaId,
+                    navigateBack = { tabNavController.popBackStack() },
+                    onGameResult = { gano ->
+                        vm.registrarMinijuegoResultadoConFetch(materiaId, nivelId, preguntaId, gano)
+                        if (gano) tabNavController.popBackStack()
+                    }
                 )
             }
 
@@ -246,4 +308,9 @@ fun MainScaffold(
 
         }
     }
+}
+
+@Composable
+fun CrucigramaScreen(preguntaId: String, navigateBack: () -> Boolean) {
+    TODO("Not yet implemented")
 }

@@ -20,9 +20,11 @@ fun RecursosScreenInt(
         viewModel.load(tipo)
     }
 
-    if(tipo == "libro") titulo = ("Libros")
-    if(tipo == "aplicacion") titulo = ("Aplicaciones")
-    if(tipo == "video") titulo = ("Videos")
+    if(tipo == "articulo") titulo = ("Articulos")
+    if(tipo == "programacion") titulo = ("Programación")
+    if(tipo == "datos_curiosos") titulo = ("Datos curiosos")
+    if(tipo == "audiovisual") titulo = ("Audiovisual")
+
 
 
     when {
