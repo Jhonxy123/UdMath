@@ -5,13 +5,14 @@ import com.google.firebase.firestore.DocumentReference
 
 data class Recurso(
     val titulo: String = "",
-    val tipo: String = "",          // pdf, video, link, etc.
-    val modulo: String = "",        // opcional
+    val tipo: String = "",
+    val modulo: String = "",
     val fecha_agregado: Timestamp? = null,
     val descripcion: String = "",
-    val autor: String = "",
+    val autor: String = "",       // nombre visible
+    val autorId: String = "",     // ✅ nuevo
     val imagen: String = "",
-    val url: String = "",
+    val url: String = ""
 )
 
 

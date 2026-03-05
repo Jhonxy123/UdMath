@@ -31,4 +31,24 @@ class RecursosClienteService @Inject constructor(
             )
         }
     }
+
+
+    override suspend fun crearRecurso(recurso: Recurso) {
+        val data = hashMapOf(
+            "titulo" to recurso.titulo,
+            "tipo" to recurso.tipo,
+            "modulo" to recurso.modulo,
+            "descripcion" to recurso.descripcion,
+            "url" to recurso.url,
+            "image" to recurso.imagen,
+            "autorId" to recurso.autorId,
+            "autorNombre" to recurso.autor,
+            "fecha_agregado" to com.google.firebase.Timestamp.now()
+        )
+        firestore.collection("recursos")
+            .add(data) // id automático está bien para recursos
+            .await()
+    }
+
+
 }
