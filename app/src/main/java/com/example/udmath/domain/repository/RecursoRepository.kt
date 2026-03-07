@@ -14,4 +14,6 @@ interface RecursoRepository {
 
     suspend fun editarRecurso(recurso: Recurso)
 
+    suspend fun getRecursoById(id: String): Recurso?
+
 }

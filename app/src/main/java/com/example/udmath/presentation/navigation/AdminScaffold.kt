@@ -22,6 +22,7 @@ import com.example.udmath.presentation.admin.AdminViewModel
 import com.example.udmath.presentation.admin.BaseDatos.BdViewModel
 import com.example.udmath.presentation.admin.BaseDatos.EditUserScreen
 import com.example.udmath.presentation.admin.BaseDatos.EditUserViewModel
+import com.example.udmath.presentation.admin.Contenido.AdminEditarRecursoScreen
 import com.example.udmath.presentation.admin.Contenido.EditarContenidoScreen
 import com.example.udmath.presentation.admin.Graficas.GraficasScreen
 import com.google.firebase.auth.FirebaseAuth
@@ -158,7 +159,10 @@ fun AdminScaffold(
             composable<EditarRecursoAdminRoute> { backStackEntry ->
                 val recursoId = backStackEntry.arguments?.getString("recursoId") ?: ""
 
-                Text("Editar recurso: $recursoId")
+                AdminEditarRecursoScreen(
+                    recursoId = recursoId,
+                    navigateBack = { tabNavController.popBackStack() }
+                )
             }
 
         }

@@ -96,4 +96,26 @@ class RecursosClienteService @Inject constructor(
             .update(data as Map<String, Any>)
             .await()
     }
+
+    override suspend fun getRecursoById(id: String): Recurso? {
+        val d = firestore.collection("recursos")
+            .document(id)
+            .get()
+            .await()
+
+        if (!d.exists()) return null
+
+        return Recurso(
+            id = d.id,
+            titulo = d.getString("titulo").orEmpty(),
+            tipo = d.getString("tipo").orEmpty(),
+            modulo = d.getString("modulo").orEmpty(),
+            fecha_agregado = d.getTimestamp("fecha_agregado"),
+            descripcion = d.getString("descripcion").orEmpty(),
+            autor = d.getString("autor").orEmpty(),
+            imagen = d.getString("image").orEmpty(),
+            url = d.getString("url").orEmpty(),
+            autorId = d.getString("autorId").orEmpty()
+        )
+    }
 }
