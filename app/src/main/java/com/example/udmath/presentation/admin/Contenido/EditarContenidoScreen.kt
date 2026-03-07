@@ -40,15 +40,6 @@ fun EditarContenidoScreen(
                 .padding(horizontal = 18.dp),
             verticalArrangement = Arrangement.Center
         ) {
-            ContentBigButton(
-                title = "Recomendaciones",
-                icon = Icons.Default.CheckCircle,
-                borderColor = blue,
-                textColor = blue,
-                onClick = onRecomendaciones
-            )
-
-            Spacer(Modifier.height(26.dp))
 
             ContentBigButton(
                 title = "Material de Apoyo",
