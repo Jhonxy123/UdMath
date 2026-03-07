@@ -151,7 +151,7 @@ fun AdminScaffold(
                 AdminCrearRecursoScreen(
                     vm = vm,
                     autorId = FirebaseAuth.getInstance().currentUser?.uid ?: "",
-                    autorNombre = FirebaseAuth.getInstance().currentUser?.displayName ?: "",
+                    moduloInicial = modulo,
                     navigateBack = { tabNavController.popBackStack() }
                 )
             }
