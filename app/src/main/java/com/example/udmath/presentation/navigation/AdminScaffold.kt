@@ -4,6 +4,7 @@ import android.app.Activity
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -13,15 +14,16 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.udmath.presentation.admin.EditarContenido.AgregarContenido.AdminCrearRecursoScreen
-import com.example.udmath.presentation.admin.EditarContenido.AgregarContenido.AdminCrearRecursoViewModel
+import com.example.udmath.presentation.admin.Contenido.AgregarContenido.AdminCrearRecursoScreen
+import com.example.udmath.presentation.admin.Contenido.AgregarContenido.AdminCrearRecursoViewModel
 import com.example.udmath.presentation.admin.BaseDatos.BdScreen
 import com.example.udmath.presentation.admin.Home.HomeAdminScreen
 import com.example.udmath.presentation.admin.AdminViewModel
 import com.example.udmath.presentation.admin.BaseDatos.BdViewModel
 import com.example.udmath.presentation.admin.BaseDatos.EditUserScreen
 import com.example.udmath.presentation.admin.BaseDatos.EditUserViewModel
-import com.example.udmath.presentation.admin.EditarContenido.EditarContenidoScreen
+import com.example.udmath.presentation.admin.Contenido.AdminEditarRecursoScreen
+import com.example.udmath.presentation.admin.Contenido.EditarContenidoScreen
 import com.example.udmath.presentation.admin.Graficas.GraficasScreen
 import com.google.firebase.auth.FirebaseAuth
 
@@ -91,6 +93,31 @@ fun AdminScaffold(
                 )
             }
 
+            composable<MaterialApoyoAdminListRoute> {
+                com.example.udmath.presentation.admin.Contenido.AdminRecursosScreen(
+                    modulo = "Material de apoyo",
+                    navigateBack = { tabNavController.popBackStack() },
+                    onEditarClick = { recurso ->
+                        tabNavController.navigate(EditarRecursoAdminRoute(recurso.id))
+                    },
+                    onAgregarClick = {
+                        tabNavController.navigate(CrearRecursoAdminRoute("Material de apoyo"))
+                    }
+                )
+            }
+
+            composable<MaterialInteresanteAdminListRoute> {
+                com.example.udmath.presentation.admin.Contenido.AdminRecursosScreen(
+                    modulo = "Material interesante",
+                    navigateBack = { tabNavController.popBackStack() },
+                    onEditarClick = { recurso ->
+                        tabNavController.navigate(EditarRecursoAdminRoute(recurso.id))
+                    },
+                    onAgregarClick = {
+                        tabNavController.navigate(CrearRecursoAdminRoute("Material interesante"))
+                    }
+                )
+            }
             // ✏️ EDITAR CONTENIDO
             composable<EditContenidoTab> {
                 EditarContenidoScreen(
@@ -98,10 +125,10 @@ fun AdminScaffold(
                         // otra pantalla si existe
                     },
                     onMaterialApoyo = {
-                        tabNavController.navigate(MaterialApoyoAdminRoute)
+                        tabNavController.navigate(MaterialApoyoAdminListRoute)
                     },
                     onMaterialInteresante = {
-                        // otra pantalla
+                        tabNavController.navigate(MaterialInteresanteAdminListRoute)
                     }
                 )
             }
@@ -116,7 +143,8 @@ fun AdminScaffold(
                 )
             }
 
-            composable<MaterialApoyoAdminRoute> {
+            composable<CrearRecursoAdminRoute> { backStackEntry ->
+                val modulo = backStackEntry.arguments?.getString("modulo") ?: ""
 
                 val vm: AdminCrearRecursoViewModel = hiltViewModel()
 
@@ -124,6 +152,15 @@ fun AdminScaffold(
                     vm = vm,
                     autorId = FirebaseAuth.getInstance().currentUser?.uid ?: "",
                     autorNombre = FirebaseAuth.getInstance().currentUser?.displayName ?: "",
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
+
+            composable<EditarRecursoAdminRoute> { backStackEntry ->
+                val recursoId = backStackEntry.arguments?.getString("recursoId") ?: ""
+
+                AdminEditarRecursoScreen(
+                    recursoId = recursoId,
                     navigateBack = { tabNavController.popBackStack() }
                 )
             }

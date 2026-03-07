@@ -110,5 +110,15 @@ data class EditUserRoute(val userId: String)
 @Serializable object EditContenidoTab
 @Serializable object GraficasTab
 
-@Serializable object MaterialApoyoAdminRoute
 
+@Serializable
+object MaterialApoyoAdminListRoute
+
+@Serializable
+object MaterialInteresanteAdminListRoute
+
+@Serializable
+data class CrearRecursoAdminRoute(val modulo: String)
+
+@Serializable
+data class EditarRecursoAdminRoute(val recursoId: String)

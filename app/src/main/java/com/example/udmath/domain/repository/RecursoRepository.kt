@@ -8,5 +8,12 @@ interface RecursoRepository {
 
     suspend fun crearRecurso(recurso: Recurso)
 
+    suspend fun getRecursosPorModulo(modulo: String): List<Recurso>
+
+    suspend fun eliminarRecurso(id: String)
+
+    suspend fun editarRecurso(recurso: Recurso)
+
+    suspend fun getRecursoById(id: String): Recurso?
 
 }
