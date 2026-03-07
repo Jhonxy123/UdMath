@@ -1,4 +1,4 @@
-package com.example.udmath.presentation.admin.EditarContenido
+package com.example.udmath.presentation.admin.Contenido
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

@@ -1,4 +1,4 @@
-package com.example.udmath.presentation.admin.EditarContenido.AgregarContenido
+package com.example.udmath.presentation.admin.Contenido.AgregarContenido
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

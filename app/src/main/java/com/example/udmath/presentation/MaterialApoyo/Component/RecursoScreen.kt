@@ -10,21 +10,21 @@ import com.example.udmath.domain.model.Recurso
 
 @Composable
 fun RecursosScreen(
-    tipo: String,               // "Libro", "App", "Artículo", "Video"
+    tipo: String,
     navigateBack: () -> Unit,
     viewModel: RecursosViewModel = hiltViewModel()
 ) {
     val state = viewModel.state.value
     var titulo = ""
+
     LaunchedEffect(tipo) {
         viewModel.load(tipo)
     }
 
-    if(tipo == "libro") titulo = ("Libros")
-    if(tipo == "aplicacion") titulo = ("Aplicaciones")
-    if(tipo == "video") titulo = ("Videos")
-    if(tipo == "apoyo") titulo = ("Paginas de apoyo")
-
+    if (tipo == "libro") titulo = "Libros"
+    if (tipo == "aplicacion") titulo = "Aplicaciones"
+    if (tipo == "video") titulo = "Videos"
+    if (tipo == "apoyo") titulo = "Paginas de apoyo"
 
     when {
         state.loading -> Text("Cargando...", color = Color.White)
@@ -33,7 +33,11 @@ fun RecursosScreen(
             tituloTopBar = titulo,
             recursos = state.recursos,
             navigateBack = navigateBack
-        )
+        ) { item ->
+            RecursoCard(
+                recurso = item
+            )
+        }
     }
 }
 
