@@ -50,7 +50,8 @@ class MateriasClenteService @Inject constructor(
                 opciones = doc.get("opciones_respuesta") as? List<String> ?: emptyList(),
                 respuestaCorrecta = doc.getString("respuesta_correcta").orEmpty(),
                 puntos = doc.getLong("puntos")?.toInt() ?: 0,
-                tipo = doc.getString("tipo").orEmpty()
+                tipo = doc.getString("tipo").orEmpty(),
+                image = doc.getString("image").orEmpty()   // ✅ AQUÍ
             )
         }
     }

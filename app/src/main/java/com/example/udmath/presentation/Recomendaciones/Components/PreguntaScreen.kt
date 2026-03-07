@@ -29,9 +29,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
 import com.example.udmath.presentation.Recomendaciones.Components.PreguntaDAD.DragBlankUiState
 import com.example.udmath.presentation.Recomendaciones.Components.PreguntaDAD.DragFillBlankQuestion
 import com.example.udmath.presentation.components.TopBarback
@@ -203,21 +205,46 @@ fun PreguntasScreen(
                         ) {
                             when (tipo) {
                                 "multiple" -> {
-                                    p.opciones.forEach { opcion ->
-                                        Row(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .clip(RoundedCornerShape(10.dp))
-                                                .clickable { viewModel.responderPregunta(p, opcion) }
-                                                .padding(vertical = 6.dp),
-                                            verticalAlignment = Alignment.CenterVertically
-                                        ) {
-                                            RadioButton(
-                                                selected = selectedOption == opcion,
-                                                onClick = { viewModel.responderPregunta(p, opcion) }
+
+                                    Column {
+
+                                        if (p.image.isNotEmpty()) {
+                                            Spacer(Modifier.height(8.dp))
+
+                                            AsyncImage(
+                                                model = p.image,
+                                                contentDescription = null,
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(260.dp)   // más espacio
+                                                    .clip(RoundedCornerShape(10.dp)),
+                                                contentScale = ContentScale.Fit
                                             )
-                                            Spacer(Modifier.width(8.dp))
-                                            Text(text = opcion, color = Color.Black)
+
+                                            Spacer(Modifier.height(8.dp))
+                                        }
+
+                                        p.opciones.forEach { opcion ->
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .clip(RoundedCornerShape(10.dp))
+                                                    .clickable { viewModel.responderPregunta(p, opcion) }
+                                                    .padding(vertical = 6.dp),
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                RadioButton(
+                                                    selected = selectedOption == opcion,
+                                                    onClick = { viewModel.responderPregunta(p, opcion) }
+                                                )
+
+                                                Spacer(Modifier.width(8.dp))
+
+                                                Text(
+                                                    text = opcion,
+                                                    color = Color.Black
+                                                )
+                                            }
                                         }
                                     }
                                 }
