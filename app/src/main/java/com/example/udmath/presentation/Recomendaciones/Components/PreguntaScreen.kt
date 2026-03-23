@@ -135,7 +135,10 @@ fun PreguntasScreen(
                                 .clickable { onNavigateTipoBoton(tipo, p.id) },
                             shape = RoundedCornerShape(16.dp),
                             colors = CardDefaults.cardColors(
-                                containerColor = Color.White // ✅ SIEMPRE blanco
+                                containerColor = when {
+                                    isCorrect -> Color(0xFFE8F5E9)
+                                    else -> Color.White
+                                }
                             ),
                             elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
                         ) {
@@ -152,7 +155,7 @@ fun PreguntasScreen(
                                     Text(
                                         text = "Pregunta $numeroPregunta",
                                         fontWeight = FontWeight.Bold,
-                                        color = Color(0xFF184998) // azul igual al del card desplegable
+                                        color = if (isCorrect) Color(0xFF1B5E20) else Color(0xFF184998)
                                     )
 
                                     Spacer(modifier = Modifier.weight(1f))
