@@ -13,6 +13,8 @@ interface AuthRepository{
 
     val currentUser: StateFlow<User?>
 
+
+
     suspend fun refreshCurrentUser()
 
     suspend fun registerUser(email: String, password: String): AuthResult?
@@ -25,10 +27,11 @@ interface AuthRepository{
 
     suspend fun registerUserInFirestore(User: User): Boolean
 
-    suspend fun logout() // funcion para cerrar sesión
+    fun logout() // funcion para cerrar sesión
 
     suspend fun getUserRole(uid: String): String?
 
+    fun getCurrentFirebaseUser(): FirebaseUser?
 
 
 }

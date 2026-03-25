@@ -63,24 +63,31 @@ import com.example.udmath.R
 
 @Composable
 fun LoginScreen(
-    viewModel: LoginViewModel = viewModel(),
-    //navigateToRegister: () -> Unit,
+    viewModel: LoginViewModel,
     navigateToMenu: () -> Unit,
     navigateToAdmin: () -> Unit,
+    navigateToVerifyEmail: (String) -> Unit,
     navigateBack: () -> Unit
-) {
+){
 
     val state by viewModel.state.collectAsStateWithLifecycle()
     LaunchedEffect(state.loginDestination) {
-        when (state.loginDestination) {
+        when (val destination = state.loginDestination) {
             LoginDestination.MAIN -> {
                 navigateToMenu()
                 viewModel.consumeDestination()
             }
+
             LoginDestination.ADMIN -> {
                 navigateToAdmin()
                 viewModel.consumeDestination()
             }
+
+            is LoginDestination.VERIFY_EMAIL -> {
+                navigateToVerifyEmail(destination.email)
+                viewModel.consumeDestination()
+            }
+
             null -> Unit
         }
     }
