@@ -249,6 +249,56 @@ fun PreguntasScreen(
                                     }
                                 }
 
+                                "multiple_image" -> {
+
+                                    Column {
+
+                                        if (p.image.isNotEmpty()) {
+                                            Spacer(Modifier.height(8.dp))
+
+                                            AsyncImage(
+                                                model = p.image,
+                                                contentDescription = null,
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(260.dp)
+                                                    .clip(RoundedCornerShape(10.dp)),
+                                                contentScale = ContentScale.Fit
+                                            )
+
+                                            Spacer(Modifier.height(8.dp))
+                                        }
+
+                                        p.opciones.forEach { opcion ->
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .clip(RoundedCornerShape(10.dp))
+                                                    .clickable { viewModel.responderPregunta(p, opcion) }
+                                                    .padding(vertical = 6.dp),
+                                                verticalAlignment = Alignment.Top
+                                            ) {
+                                                RadioButton(
+                                                    selected = selectedOption == opcion,
+                                                    onClick = { viewModel.responderPregunta(p, opcion) }
+                                                )
+
+                                                Spacer(Modifier.width(8.dp))
+
+                                                AsyncImage(
+                                                    model = opcion,
+                                                    contentDescription = null,
+                                                    modifier = Modifier
+                                                        .fillMaxWidth()
+                                                        .height(180.dp)
+                                                        .clip(RoundedCornerShape(10.dp)),
+                                                    contentScale = ContentScale.Fit
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+
                                 "drag" -> {
                                     val dragUi = ui.dragStates[p.id] ?: DragBlankUiState()
 
@@ -274,6 +324,7 @@ fun PreguntasScreen(
                                     val locked = isCorrect || isIncorrect
                                     TrueFalseQuestion(
                                         texto = p.texto,
+                                        image = p.image,
                                         selectedOption = selectedOption,
                                         enabled = !locked,
                                         onSelect = { opt -> viewModel.responderPregunta(p, opt) }
