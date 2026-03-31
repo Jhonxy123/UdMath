@@ -90,13 +90,13 @@ fun NavigationDrawer(
 
         NavigationDrawerButton("Editar Perfil", Icons.Default.Edit, onclick = { onProfileClicked() })
 
-        Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
+        //Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
 
-        NavigationDrawerButton("Ajustes", Icons.Default.Settings, onclick = {})
+        //NavigationDrawerButton("Ajustes", Icons.Default.Settings, onclick = {})
 
-        Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
+        //Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
 
-        NavigationDrawerButton("Progreso", Icons.Default.DateRange, onclick = {})
+        //NavigationDrawerButton("Progreso", Icons.Default.DateRange, onclick = {})
 
         // 🔹 Este Spacer empuja el siguiente contenido hacia abajo 👇
         Spacer(modifier = Modifier.weight(1f))
