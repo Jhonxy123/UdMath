@@ -88,6 +88,11 @@ object MaterialAudiovisualTab
 object ProgramacionTab
 
 
+
+@Serializable
+data class VerifyEmail(val email: String)
+
+
 @Serializable
 data class PreguntasRoute(
     val materiaId: String,

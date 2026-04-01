@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -28,12 +29,17 @@ fun WelcomeScreen(
     navigateToHome: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
+    val activity = LocalContext.current as? Activity
+
+    LaunchedEffect(Unit) {
+        viewModel.checkActiveSession(
+            onNavigateToHome = navigateToHome
+        )
+    }
 
     val backgroundBrush = Brush.verticalGradient(
         colors = listOf(Color(0xFF3980C2), Color(0xFF184998))
     )
-
-    val activity = LocalContext.current as? Activity
 
     Box(
         modifier = Modifier
@@ -71,9 +77,17 @@ fun WelcomeScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                WelcomeButton(text = "Registrarse", onClick = navigateToRegister)
+                WelcomeButton(
+                    text = "Registrarse",
+                    onClick = navigateToRegister,
+                    enabled = !state.isLoading
+                )
 
-                WelcomeButton(text = "Iniciar Sesión", onClick = navigationToLogin)
+                WelcomeButton(
+                    text = "Iniciar Sesión",
+                    onClick = navigationToLogin,
+                    enabled = !state.isLoading
+                )
 
                 WelcomeButton(
                     text = "Microsoft",
@@ -83,7 +97,7 @@ fun WelcomeScreen(
                                 navigateToHome()
                             }
                         } else {
-                            viewModel.setError("No se pudo obtener Activity (¿estás en Preview?)")
+                            viewModel.setError("No se pudo obtener Activity")
                         }
                     },
                     enabled = !state.isLoading,

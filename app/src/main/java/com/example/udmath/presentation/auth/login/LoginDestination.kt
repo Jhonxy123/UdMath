@@ -1,3 +1,6 @@
 package com.example.udmath.presentation.auth.login
-
-enum class LoginDestination { MAIN, ADMIN }
+sealed class LoginDestination {
+    object MAIN : LoginDestination()
+    object ADMIN : LoginDestination()
+    data class VERIFY_EMAIL(val email: String) : LoginDestination()
+}

@@ -1,18 +1,13 @@
 package com.example.udmath.presentation.auth.login
 
-import android.app.Activity
-import android.util.Log
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.udmath.domain.repository.AuthRepository
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.auth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
 
 @HiltViewModel
@@ -56,19 +51,28 @@ class LoginViewModel @Inject constructor(
         val email = _state.value.resetEmail.trim()
 
         if (email.isBlank()) {
-            _state.value = _state.value.copy(errorMessage = "Ingresa tu correo para restablecer la contraseña")
-            return
-        }
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _state.value = _state.value.copy(errorMessage = "Correo electrónico inválido")
+            _state.value = _state.value.copy(
+                errorMessage = "Ingresa tu correo para restablecer la contraseña"
+            )
             return
         }
 
-        _state.value = _state.value.copy(resetLoading = true, errorMessage = null)
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _state.value = _state.value.copy(
+                errorMessage = "Correo electrónico inválido"
+            )
+            return
+        }
+
+        _state.value = _state.value.copy(
+            resetLoading = true,
+            errorMessage = null
+        )
 
         viewModelScope.launch {
             try {
                 authRepository.sendPasswordReset(email)
+
                 _state.value = _state.value.copy(
                     resetLoading = false,
                     showResetDialog = false,
@@ -77,7 +81,8 @@ class LoginViewModel @Inject constructor(
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
                     resetLoading = false,
-                    errorMessage = e.localizedMessage ?: "No se pudo enviar el correo de restablecimiento"
+                    errorMessage = e.localizedMessage
+                        ?: "No se pudo enviar el correo de restablecimiento"
                 )
             }
         }
@@ -88,37 +93,59 @@ class LoginViewModel @Inject constructor(
         val password = _state.value.password
 
         if (email.isBlank() || password.isBlank()) {
-            _state.value = _state.value.copy(errorMessage = "Por favor llena todos los campos")
-            return
-        }
-        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            _state.value = _state.value.copy(errorMessage = "Correo electrónico inválido")
+            _state.value = _state.value.copy(
+                errorMessage = "Por favor llena todos los campos"
+            )
             return
         }
 
-        _state.value = _state.value.copy(isLoading = true, errorMessage = null, loginDestination = null)
+        if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            _state.value = _state.value.copy(
+                errorMessage = "Correo electrónico inválido"
+            )
+            return
+        }
+
+        _state.value = _state.value.copy(
+            isLoading = true,
+            errorMessage = null,
+            loginDestination = null
+        )
 
         viewModelScope.launch {
             try {
-                // 1) login
                 val authResult = authRepository.loginWithEmail(email, password)
 
-                // 2) uid actual
-                val uid = authResult.user?.uid
-                    ?: throw IllegalStateException("UID inválido")
+                val firebaseUser = authResult.user
+                    ?: throw IllegalStateException("Usuario inválido")
 
-                // 3) leer role de Firestore
+                firebaseUser.reload().await()
+
+                if (!firebaseUser.isEmailVerified) {
+                    _state.value = _state.value.copy(
+                        isLoading = false,
+                        loginDestination = LoginDestination.VERIFY_EMAIL(
+                            firebaseUser.email ?: email
+                        )
+                    )
+                    return@launch
+                }
+
+                val uid = firebaseUser.uid
                 val role = authRepository.getUserRole(uid) ?: "normal"
 
-                // 4) destino
                 val destination =
-                    if (role.equals("admin", ignoreCase = true)) LoginDestination.ADMIN
-                    else LoginDestination.MAIN
+                    if (role.equals("admin", ignoreCase = true)) {
+                        LoginDestination.ADMIN
+                    } else {
+                        LoginDestination.MAIN
+                    }
 
                 _state.value = _state.value.copy(
                     isLoading = false,
                     loginDestination = destination
                 )
+
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
                     isLoading = false,
@@ -131,5 +158,4 @@ class LoginViewModel @Inject constructor(
     fun consumeDestination() {
         _state.value = _state.value.copy(loginDestination = null)
     }
-
 }

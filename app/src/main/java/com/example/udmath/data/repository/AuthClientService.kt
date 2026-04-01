@@ -153,17 +153,19 @@ class AuthClientService @Inject constructor(
     }
 
 
-
-    override suspend fun logout() {
-        firebaseAuth.signOut()
-        _currentUser.value = null
-    }
-
     override suspend fun getUserRole(uid: String): String? {
         val doc = firestore.collection("usuarios").document(uid).get().await()
         return doc.getString("role")
     }
 
+    override fun logout() {
+        firebaseAuth.signOut()
+        _currentUser.value = null
+    }
+
+    override fun getCurrentFirebaseUser(): FirebaseUser? {
+        return firebaseAuth.currentUser
+    }
 
 }
 

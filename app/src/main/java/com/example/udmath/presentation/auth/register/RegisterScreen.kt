@@ -1,5 +1,6 @@
 package com.example.udmath.presentation.auth.register
 
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -21,12 +22,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -47,14 +50,27 @@ fun RegisterScreen(
     onRegisterSuccess: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
+    val context = LocalContext.current
 
-    Box(modifier = Modifier
-        .fillMaxSize()
-        .background(blueGradient)
+    LaunchedEffect(state.isSuccess) {
+        if (state.isSuccess) {
+            Toast.makeText(
+                context,
+                "Te enviamos un correo de verificación. Revisa tu bandeja y spam.",
+                Toast.LENGTH_LONG
+            ).show()
+
+            viewModel.resetSuccess()
+            onRegisterSuccess()
+        }
+    }
+
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(blueGradient)
     ) {
-
         Column(
-
             modifier = Modifier
                 .align(Alignment.TopCenter)
                 .fillMaxWidth()
@@ -91,7 +107,6 @@ fun RegisterScreen(
                 .verticalScroll(scrollState),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             state.errorMessage?.let {
                 Text(text = it, color = Color.Red)
             }
@@ -127,11 +142,8 @@ fun RegisterScreen(
 
             Spacer(modifier = Modifier.height(18.dp))
 
-            /* =======================
-       🔘 BOTÓN INGRESAR (Mockup)
-       ======================= */
             Button(
-                onClick = { viewModel.register(onRegisterSuccess) },
+                onClick = { viewModel.register() },
                 enabled = !state.isLoading,
                 modifier = Modifier
                     .fillMaxWidth(0.75f)
@@ -147,7 +159,7 @@ fun RegisterScreen(
                 ),
                 elevation = ButtonDefaults.buttonElevation(
                     defaultElevation = 10.dp,
-                    pressedElevation = 2.dp,     // 👈 se “hunde” al presionar
+                    pressedElevation = 2.dp,
                     disabledElevation = 0.dp
                 )
             ) {
@@ -164,14 +176,10 @@ fun RegisterScreen(
             ) {
                 Text(
                     text = "Volver",
-                    color = Blue,      // 👈 mismo azul
+                    color = Blue,
                     fontSize = 14.sp
                 )
             }
-
-
         }
-
-
     }
 }

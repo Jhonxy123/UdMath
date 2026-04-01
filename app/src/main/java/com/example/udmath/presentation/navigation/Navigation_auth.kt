@@ -5,16 +5,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-//import com.example.udmath.presentation.Admin.Home.HomeAdminScreen
+import androidx.navigation.toRoute
+import com.example.udmath.presentation.auth.login.LoginDestination
 import com.example.udmath.presentation.auth.login.LoginScreen
-import com.example.udmath.presentation.admin.AdminScreen
 import com.example.udmath.presentation.auth.login.LoginViewModel
 import com.example.udmath.presentation.auth.register.RegisterScreen
 import com.example.udmath.presentation.auth.register.RegisterViewModel
+import com.example.udmath.presentation.auth.verify_email.VerifyEmailScreen
+import com.example.udmath.presentation.auth.verify_email.VerifyEmailViewModel
 import com.example.udmath.presentation.welcome.WelcomeScreen
 import com.example.udmath.presentation.welcome.WelcomeViewModel
 import com.google.firebase.auth.FirebaseAuth
-
 
 @Composable
 fun Navigation(
@@ -24,7 +25,7 @@ fun Navigation(
 
     NavHost(
         navController = navController,
-        startDestination = Welcome//Login
+        startDestination = Welcome
     ) {
 
         composable<Welcome> {
@@ -34,9 +35,11 @@ fun Navigation(
                 viewModel = vm,
                 navigateToRegister = { navController.navigate(Register) },
                 navigationToLogin = { navController.navigate(Login) },
-                navigateToHome = { navController.navigate(Main){
-                    popUpTo(Welcome) { inclusive = true }
-                } }
+                navigateToHome = {
+                    navController.navigate(Main) {
+                        popUpTo(Welcome) { inclusive = true }
+                    }
+                }
             )
         }
 
@@ -55,25 +58,49 @@ fun Navigation(
                         popUpTo(Login) { inclusive = true }
                     }
                 },
+                navigateToVerifyEmail = { email ->
+                    navController.navigate(VerifyEmail(email)) {
+                        popUpTo(Login) { inclusive = false }
+                    }
+                },
                 navigateBack = { navController.popBackStack() }
             )
         }
 
         composable<Register> {
             val viewModel: RegisterViewModel = hiltViewModel()
+
             RegisterScreen(
                 viewModel = viewModel,
                 navigateBack = { navController.popBackStack() },
                 onRegisterSuccess = {
-                    navController.navigate(Main) {
-                        popUpTo(Login) { inclusive = true }
+                    navController.navigate(Login) {
+                        popUpTo(Register) { inclusive = true }
                     }
                 }
             )
         }
 
+        composable<VerifyEmail> { backStackEntry ->
+            val route = backStackEntry.toRoute<VerifyEmail>()
+            val viewModel: VerifyEmailViewModel = hiltViewModel()
 
-        //Pantalla que contendra el BottomBar
+            VerifyEmailScreen(
+                email = route.email,
+                viewModel = viewModel,
+                onVerified = {
+                    navController.navigate(Main) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
+                onBackToLogin = {
+                    navController.navigate(Login) {
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
+            )
+        }
+
         composable<Main> {
             MainScaffold(
                 auth = auth,
@@ -83,7 +110,6 @@ fun Navigation(
                     }
                 }
             )
-
         }
 
         composable<Admin> {
@@ -95,9 +121,6 @@ fun Navigation(
                     }
                 }
             )
-            //AdminScreen()
         }
-
-
     }
 }

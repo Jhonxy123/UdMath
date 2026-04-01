@@ -70,6 +70,8 @@ dependencies {
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.storage.ktx)
+    implementation(libs.firebase.analytics)
+
 
     // Utilidades & Navegación
     implementation(libs.kotlinx.coroutines.play.services)
