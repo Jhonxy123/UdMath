@@ -10,7 +10,8 @@ import com.example.udmath.presentation.components.TopBarback
 @Composable
 fun AritmeticaScreen(
     navigateBack: () -> Unit,
-    navigateToPreguntas: (materiaId: String, nivelId: String) -> Unit
+    navigateToPreguntas: (materiaId: String, nivelId: String) -> Unit,
+    navigateToCuestionario: (nivelId: String) -> Unit
 ) {
     Scaffold(
         topBar = { TopBarback("Aritmetica", navigateBack = { navigateBack() }) }
@@ -20,7 +21,8 @@ fun AritmeticaScreen(
             modifier = Modifier.padding(padding),
             onclickNivel = { nivelId ->
                 navigateToPreguntas("aritmetica", nivelId)
-            }
+            },
+            onAbrirFormulario = { }
         )
     }
 }

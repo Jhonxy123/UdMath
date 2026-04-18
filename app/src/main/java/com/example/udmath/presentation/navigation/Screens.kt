@@ -127,3 +127,9 @@ data class CrearRecursoAdminRoute(val modulo: String)
 
 @Serializable
 data class EditarRecursoAdminRoute(val recursoId: String)
+
+
+@Serializable
+data class CuestionarioAritmeticaRoute(
+    val nivelId: String
+)

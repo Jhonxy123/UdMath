@@ -14,6 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.udmath.presentation.FormularioAp.CuestionarioAritmeticaRouteScreen
 import com.example.udmath.presentation.FormularioAp.EncuestaRoute
 import com.example.udmath.presentation.Recomendaciones.Algebra.AlgebraScreen
 import com.example.udmath.presentation.Recomendaciones.Aritmetica.AritmeticaScreen
@@ -154,6 +155,9 @@ fun MainScaffold(
                     navigateBack = { tabNavController.popBackStack() },
                     navigateToPreguntas = { materiaId, nivelId ->
                         tabNavController.navigate(PreguntasRoute(materiaId, nivelId))
+                    },
+                    navigateToCuestionario = { nivelId ->
+                        tabNavController.navigate(CuestionarioAritmeticaRoute(nivelId))
                     }
                 )
             }
@@ -301,7 +305,14 @@ fun MainScaffold(
                 )
             }
 
+            composable<CuestionarioAritmeticaRoute> { backStackEntry ->
+                val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
 
+                CuestionarioAritmeticaRouteScreen(
+                    nivelId = nivelId,
+                    navigateBack = { tabNavController.popBackStack() }
+                )
+            }
 
 
 

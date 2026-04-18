@@ -25,7 +25,8 @@ fun FuncionesScreen(
             modifier = Modifier.padding(padding),
             onclickNivel = { nivelId ->
                 navigateToPreguntas("funciones", nivelId)
-            }
+            },
+            onAbrirFormulario = { }
         )
     }
 }
