@@ -41,9 +41,9 @@ fun MainBottomBar(navController: NavHostController) {
     // es decir, aquí se definen todos los tabs de la barra y foreach solo los meustra
     val items = listOf(
         BottomBarItem(HomeTab, "Inicio", Icons.Filled.Home),
-        BottomBarItem(RecomendacionesTab, "Rec", Icons.Filled.Star),
-        BottomBarItem(MaterialTab, "Material", Icons.Filled.MenuBook),
-        BottomBarItem(MaterialIntTab, "Mat-Int", Icons.Filled.Lightbulb),
+        BottomBarItem(RecomendacionesTab, "Materias", Icons.Filled.Star),
+        BottomBarItem(MaterialTab, "Apoyo", Icons.Filled.MenuBook),
+        BottomBarItem(MaterialIntTab, "Interesante", Icons.Filled.Lightbulb),
         BottomBarItem(RetosTab, "Retos", Icons.Filled.EmojiEvents)
     )
 
