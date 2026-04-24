@@ -86,6 +86,7 @@ fun MainScaffold(
                 val vm: HomeViewModel = hiltViewModel()
                 HomeScreen(
                     viewModel = vm,
+                    navController = tabNavController,
                     onLoggedOut = onLogout,
                     navigateToProfile = { tabNavController.navigate(PerfilTab) }
                 )
@@ -108,9 +109,9 @@ fun MainScaffold(
                 )
             }
 
-            composable<MaterialIntTab> {
-                MaterialInteresanteScreen()
-            }
+            //composable<MaterialIntTab> {
+            //    MaterialInteresanteScreen()
+            //}
 
             composable<MaterialIntTab> {
                 MaterialInteresanteScreen(
