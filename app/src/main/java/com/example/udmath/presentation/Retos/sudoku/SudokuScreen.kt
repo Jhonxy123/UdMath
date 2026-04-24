@@ -28,6 +28,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -58,9 +63,36 @@ fun SudokuScreen(
     val currentInputMode by sudokuViewModel.currentInputMode.collectAsState()
     val gameStatus by sudokuViewModel.gameStatus.collectAsState()
 
-    Text("Estás en Sudoku")
+    var showIntro by remember { mutableStateOf(true) }
+
+    if (showIntro) {
+        AlertDialog(
+            onDismissRequest = { showIntro = false },
+            title = {
+                Text(
+                    text = "¿Cómo jugar Sudoku?",
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text(
+                    text = "En Sudoku debes completar el tablero con números del 1 al 9. " +
+                            "Cada fila, cada columna y cada cuadro de 3x3 debe contener todos los números sin repetir. " +
+                            "Selecciona una celda vacía y elige el número correcto para resolver el tablero."
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { showIntro = false }) {
+                    Text("Comenzar")
+                }
+            }
+        )
+    }
+
     Scaffold(
-        topBar = { TopBarback("Sudoku", navigateBack = {navigateBack()}) },
+        topBar = {
+            TopBarback("Sudoku", navigateBack = { navigateBack() })
+        },
         content = { paddingValues ->
             Column(
                 modifier = Modifier
@@ -69,7 +101,7 @@ fun SudokuScreen(
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Top // <<-- CAMBIO CLAVE AQUÍ: De SpaceAround a Top
+                verticalArrangement = Arrangement.Top
             ) {
                 if (gameStatus == GameStatus.SOLVED) {
                     Text(
@@ -84,16 +116,26 @@ fun SudokuScreen(
                 SudokuBoardUI(
                     board = sudokuBoard,
                     selectedCell = selectedCell,
-                    onCellSelected = { row, col -> sudokuViewModel.onCellSelected(row, col) }
+                    onCellSelected = { row, col ->
+                        sudokuViewModel.onCellSelected(row, col)
+                    }
                 )
 
-                Spacer(Modifier.height(90.dp)) // <<-- ESPACIO REDUCIDO AÚN MÁS (antes 4.dp)
+                Spacer(Modifier.height(90.dp))
 
                 NumberInputControls(
-                    onNumberInput = { number -> sudokuViewModel.onNumberInput(number) },
-                    onToggleMode = { sudokuViewModel.toggleInputMode() },
-                    onClearCell = { sudokuViewModel.onNumberInput(0) },
-                    onNewGame = { sudokuViewModel.generateNewGame() },
+                    onNumberInput = { number ->
+                        sudokuViewModel.onNumberInput(number)
+                    },
+                    onToggleMode = {
+                        sudokuViewModel.toggleInputMode()
+                    },
+                    onClearCell = {
+                        sudokuViewModel.onNumberInput(0)
+                    },
+                    onNewGame = {
+                        sudokuViewModel.generateNewGame()
+                    },
                     currentInputMode = currentInputMode
                 )
             }

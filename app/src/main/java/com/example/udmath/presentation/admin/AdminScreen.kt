@@ -4,6 +4,8 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
@@ -44,13 +46,12 @@ fun AdminScreen(
     Scaffold(
         topBar = {
             AdminTopBar(
-                onDrawerClicked = { /* abrir drawer luego */ },
+                onDrawerClicked = { },
                 text = "Inicio",
-                modifier = Modifier.statusBarsPadding() // ✅ respeta hora/notificaciones
+                modifier = Modifier.statusBarsPadding()
             )
         },
         bottomBar = {
-            // ✅ respeta botones del sistema abajo
             Box(modifier = Modifier.navigationBarsPadding()) {
                 FloatingAnimatedBottomBar(
                     selectedIndex = selectedTab,
@@ -64,8 +65,8 @@ fun AdminScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color(0xFFF3F3F3))
-                .padding(innerPadding)  // ✅ solo una vez
-                .imePadding()           // ✅ teclado
+                .padding(innerPadding)
+                .imePadding()
         ) {
             Spacer(Modifier.height(14.dp))
 
@@ -81,7 +82,8 @@ fun AdminScreen(
                 modifier = Modifier
                     .padding(horizontal = 18.dp)
                     .fillMaxWidth()
-                    .weight(1f),
+                    .weight(1f)
+                    .padding(bottom = 8.dp),
                 contentAlignment = Alignment.TopCenter
             ) {
                 UsersTableCard(
@@ -132,7 +134,6 @@ fun AdminTopBar(
     }
 }
 
-
 @Composable
 private fun SearchBox(
     value: String,
@@ -178,49 +179,80 @@ private fun UsersTableCard(
                 .padding(16.dp)
         ) {
 
-            // Header tabla
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(bottom = 10.dp),
-                horizontalArrangement = Arrangement.SpaceBetween
+                verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Usuario", fontWeight = FontWeight.Bold, color = Color(0xFF184998))
-                Text("Correo", fontWeight = FontWeight.Bold, color = Color(0xFF184998))
-                Spacer(Modifier.width(56.dp)) // espacio iconos (borrar/editar)
+                Text(
+                    text = "Usuario",
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF184998),
+                    modifier = Modifier.weight(1f)
+                )
+
+                Text(
+                    text = "Correo",
+                    fontWeight = FontWeight.Bold,
+                    color = Color(0xFF184998),
+                    modifier = Modifier.weight(1f)
+                )
+
+                Spacer(Modifier.width(70.dp))
             }
 
             Divider(color = Color(0xFF184998), thickness = 1.dp)
 
             Spacer(Modifier.height(10.dp))
 
-            when {
-                isLoading -> {
-                    Box(Modifier.fillMaxWidth().padding(top = 30.dp), contentAlignment = Alignment.Center) {
-                        CircularProgressIndicator()
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f)
+            ) {
+                when {
+                    isLoading -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator()
+                        }
                     }
-                }
-                error != null -> {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally, modifier = Modifier.fillMaxWidth()) {
-                        Text(error, color = Color.Red, fontSize = 13.sp)
-                        Spacer(Modifier.height(8.dp))
-                        Button(onClick = onRefresh) { Text("Reintentar") }
+
+                    error != null -> {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(error, color = Color.Red, fontSize = 13.sp)
+                            Spacer(Modifier.height(8.dp))
+                            Button(onClick = onRefresh) {
+                                Text("Reintentar")
+                            }
+                        }
                     }
-                }
-                users.isEmpty() -> {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text("Tabla vacía (sin usuarios)", color = Color.Gray)
+
+                    users.isEmpty() -> {
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Text("Tabla vacía (sin usuarios)", color = Color.Gray)
+                        }
                     }
-                }
-                else -> {
-                    // Lista
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.spacedBy(10.dp)
-                    ) {
-                        users.forEach { u ->
-                            UserRow(u)
-                            Divider(color = Color(0xFFE6E6E6))
+
+                    else -> {
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize(),
+                            verticalArrangement = Arrangement.spacedBy(10.dp),
+                            contentPadding = PaddingValues(bottom = 24.dp)
+                        ) {
+                            items(users) { user ->
+                                UserRow(user)
+                                Divider(color = Color(0xFFE6E6E6))
+                            }
                         }
                     }
                 }
@@ -238,17 +270,20 @@ private fun UserRow(user: AdminUserRow) {
         Text(
             text = user.name.ifBlank { "(sin nombre)" },
             modifier = Modifier.weight(1f),
-            color = Color(0xFF184998)
+            color = Color(0xFF184998),
+            fontSize = 16.sp
         )
+
         Text(
             text = user.email.ifBlank { "(sin correo)" },
             modifier = Modifier.weight(1f),
-            color = Color(0xFF184998)
+            color = Color(0xFF184998),
+            fontSize = 16.sp
         )
 
-        // Botones (por ahora sin lógica)
         Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            modifier = Modifier.width(70.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
@@ -260,8 +295,8 @@ private fun UserRow(user: AdminUserRow) {
                     .clip(CircleShape)
                     .background(Color(0xFFE53935))
                     .padding(6.dp)
-                    .padding(6.dp)
             )
+
             Icon(
                 imageVector = Icons.Default.Edit,
                 contentDescription = "Editar",
@@ -287,7 +322,6 @@ private fun FloatingAnimatedBottomBar(
         Icons.Default.Edit
     )
 
-    // Ajusta según tu diseño
     val barHeight = 66.dp
     val paddingH = 22.dp
     val indicatorSize = 44.dp
@@ -307,13 +341,6 @@ private fun FloatingAnimatedBottomBar(
                 .clip(RoundedCornerShape(30.dp))
                 .background(Color.White)
         ) {
-
-            // Calculamos la posición del indicador según el index
-            val slotWidth = (1f / items.size.toFloat())
-            val targetOffsetFraction = slotWidth * selectedIndex + slotWidth / 2f
-
-            // Como no tenemos el ancho real aquí, hacemos una aproximación visual:
-            // Usamos un Row y un Box por slot y movemos un indicador con Dp fijo.
             Row(
                 modifier = Modifier.fillMaxSize(),
                 horizontalArrangement = Arrangement.SpaceEvenly,
@@ -334,16 +361,6 @@ private fun FloatingAnimatedBottomBar(
                 }
             }
 
-            // Indicador animado (se mueve por slots con animateDpAsState)
-            // Para un movimiento más exacto, se puede medir ancho con onSizeChanged, pero así ya queda “bonito” y fluido.
-            val offsets = listOf(0.dp, 1.dp, 2.dp) // 3 tabs
-            val x: Dp = when (selectedIndex) {
-                0 -> 0.dp
-                1 -> 0.dp
-                else -> 0.dp
-            }
-
-            // Versión simple (centrado por slot con BoxWithConstraints para hacerlo exacto):
             BoxWithConstraints(Modifier.fillMaxSize()) {
                 val totalW = maxWidth
                 val slot = totalW / items.size

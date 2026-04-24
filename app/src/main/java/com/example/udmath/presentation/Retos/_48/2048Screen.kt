@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
@@ -31,10 +33,36 @@ fun GameScreen(
     val boardState by gameViewModel.board.observeAsState()
     val board = boardState?.board ?: Array(4) { Array(4) { 0 } }
 
+    var showIntro by remember { mutableStateOf(true) }
+
     var dragStartX by remember { mutableStateOf(0f) }
     var dragStartY by remember { mutableStateOf(0f) }
     var dragOffsetX by remember { mutableStateOf(0f) }
     var dragOffsetY by remember { mutableStateOf(0f) }
+
+    if (showIntro) {
+        AlertDialog(
+            onDismissRequest = { showIntro = false },
+            title = {
+                Text(
+                    text = "¿Cómo jugar 2048?",
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text(
+                    text = "En 2048 debes deslizar las fichas hacia arriba, abajo, izquierda o derecha. " +
+                            "Cuando dos fichas con el mismo número se juntan, se combinan y forman una ficha mayor. " +
+                            "El objetivo es llegar a la ficha 2048 usando estrategia y evitando llenar el tablero."
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { showIntro = false }) {
+                    Text("Comenzar")
+                }
+            }
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -43,15 +71,9 @@ fun GameScreen(
             .padding(top = 48.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        TopBarback("2048", navigateBack = {navigateBack()})
+        TopBarback("2048", navigateBack = { navigateBack() })
+
         Spacer(modifier = Modifier.height(18.dp))
-//        Text(
-//            text = "2048",
-//            fontSize = 40.sp,
-//            fontWeight = FontWeight.Bold,
-//            color = Color(0xFF776E65),
-//            modifier = Modifier.padding(bottom = 24.dp)
-//        )
 
         Box(
             modifier = Modifier
@@ -77,9 +99,11 @@ fun GameScreen(
                                 abs(diffX) > abs(diffY) && abs(diffX) > 10 -> {
                                     if (diffX > 0) Direction.RIGHT else Direction.LEFT
                                 }
+
                                 abs(diffY) > abs(diffX) && abs(diffY) > 10 -> {
                                     if (diffY > 0) Direction.DOWN else Direction.UP
                                 }
+
                                 else -> null
                             }
 
