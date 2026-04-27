@@ -3,10 +3,16 @@ package com.example.udmath.presentation.navigation
 import MainBottomBar
 import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -14,6 +20,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.udmath.data.repository.DataStoreManager
 import com.example.udmath.presentation.FormularioAp.CuestionarioAritmeticaRouteScreen
 import com.example.udmath.presentation.FormularioAp.EncuestaRoute
 import com.example.udmath.presentation.Recomendaciones.Algebra.AlgebraScreen
@@ -38,11 +45,15 @@ import com.example.udmath.presentation.Recomendaciones.RecomendacionesScreen
 import com.example.udmath.presentation.Retos.RetosScreen
 import com.example.udmath.presentation.Retos._48.GameScreen
 import com.example.udmath.presentation.Retos.sudoku.SudokuScreen
+import com.example.udmath.presentation.components.CoachMark
 import com.example.udmath.presentation.home.HomeScreen
 import com.example.udmath.presentation.home.HomeViewModel
 import com.example.udmath.presentation.profile.PerfilScreen
 import com.example.udmath.presentation.profile.PerfilViewModel
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.launch
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 
 @Composable
 fun MainScaffold(
@@ -52,208 +63,220 @@ fun MainScaffold(
     val tabNavController = rememberNavController()
     val backStackEntry by tabNavController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
-
-    // Lee el Activity aquí (zona @Composable)
     val activity = LocalContext.current as? Activity
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+
+    // ✅ Tour sube a este nivel para sobrevivir navegación entre tabs
+    val dataStore = remember { DataStoreManager(context) }
+    val showTour by dataStore.showTour.collectAsState(initial = null)
+    var step by remember { mutableStateOf(0) }
+
+    LaunchedEffect(showTour) {
+        if (showTour == true) step = 0
+    }
 
     val isOnHome = currentRoute == HomeTab::class.qualifiedName
 
     BackHandler(enabled = true) {
         if (!isOnHome) {
             tabNavController.navigate(HomeTab) {
-                popUpTo(tabNavController.graph.startDestinationId) {
-                    saveState = true
-                }
+                popUpTo(tabNavController.graph.startDestinationId) { saveState = true }
                 launchSingleTop = true
                 restoreState = true
             }
         } else {
-            //  salir de la app
             activity?.finish()
         }
     }
 
-    Scaffold(
-        bottomBar = { MainBottomBar(tabNavController) }
-    ) { padding ->
+    Box {
+        Scaffold(
+            bottomBar = { MainBottomBar(tabNavController) }
+        ) { padding ->
+            NavHost(
+                navController = tabNavController,
+                startDestination = HomeTab,
+                modifier = Modifier.padding(padding)
+            ) {
+                composable<HomeTab> {
+                    val vm: HomeViewModel = hiltViewModel()
+                    HomeScreen(
+                        viewModel = vm,
+                        navController = tabNavController,
+                        onLoggedOut = onLogout,
+                        navigateToProfile = { tabNavController.navigate(PerfilTab) }
+                    )
+                }
 
-        NavHost(
-            navController = tabNavController,
-            startDestination = HomeTab,
-            modifier = Modifier.padding(padding)
-        ) {
-            composable<HomeTab> {
-                val vm: HomeViewModel = hiltViewModel()
-                HomeScreen(
-                    viewModel = vm,
-                    navController = tabNavController,
-                    onLoggedOut = onLogout,
-                    navigateToProfile = { tabNavController.navigate(PerfilTab) }
-                )
-            }
+                composable<PerfilTab> {
+                    val vm: PerfilViewModel = hiltViewModel()
+                    PerfilScreen(
+                        viewModel = vm,
+                        navigateBack = { tabNavController.popBackStack() }
+                    )
+                }
 
-            composable<PerfilTab> {
-                val vm: PerfilViewModel = hiltViewModel()
-                PerfilScreen(
-                    viewModel = vm,
-                    navigateBack = { tabNavController.popBackStack() }
-                )
-            }
+                composable<MaterialTab> {
+                    MaterialApoyoScreen(
+                        navigatelibros = { tabNavController.navigate(LibrosTab) },
+                        navigateaplicaciones = { tabNavController.navigate(AplicacionesTab) },
+                        navigateVideos = { tabNavController.navigate(VideosTab) },
+                        navigatePaginasApoyo = { tabNavController.navigate(PaginasApoyoTab) }
+                    )
+                }
 
-            composable<MaterialTab> {
-                MaterialApoyoScreen(
-                    navigatelibros = { tabNavController.navigate(LibrosTab) },
-                    navigateaplicaciones = { tabNavController.navigate(AplicacionesTab) },
-                    navigateVideos = { tabNavController.navigate(VideosTab) },
-                    navigatePaginasApoyo = { tabNavController.navigate(PaginasApoyoTab) }
-                )
-            }
+                //composable<MaterialIntTab> {
+                //    MaterialInteresanteScreen()
+                //}
 
-            //composable<MaterialIntTab> {
-            //    MaterialInteresanteScreen()
-            //}
+                composable<MaterialIntTab> {
+                    MaterialInteresanteScreen(
+                        navigateArticulos = { tabNavController.navigate(ArticulosTab) },
+                        navigateDatosCuriosos = { tabNavController.navigate(DatosCuriososTab) },
+                        navigateMaterialAudiovisual = {
+                            tabNavController.navigate(
+                                MaterialAudiovisualTab
+                            )
+                        },
+                        navigateProgramacion = { tabNavController.navigate(ProgramacionTab) }
+                    )
+                }
 
-            composable<MaterialIntTab> {
-                MaterialInteresanteScreen(
-                    navigateArticulos = { tabNavController.navigate(ArticulosTab) },
-                    navigateDatosCuriosos = { tabNavController.navigate(DatosCuriososTab) },
-                    navigateMaterialAudiovisual = { tabNavController.navigate(MaterialAudiovisualTab) },
-                    navigateProgramacion = { tabNavController.navigate(ProgramacionTab) }
-                )
-            }
+                composable<RecomendacionesTab> {
+                    RecomendacionesScreen(
+                        onAritmetica = { tabNavController.navigate(AritmeticaTab) },
+                        onAlgebra = { tabNavController.navigate(AlgebraTab) },
+                        onFunciones = { tabNavController.navigate(FuncionesTab) }
+                    )
+                }
 
-            composable<RecomendacionesTab> {
-                RecomendacionesScreen(
-                    onAritmetica = { tabNavController.navigate(AritmeticaTab) },
-                    onAlgebra = { tabNavController.navigate(AlgebraTab) },
-                    onFunciones = { tabNavController.navigate(FuncionesTab) }
-                )
-            }
+                composable<RetosTab> {
+                    RetosScreen(
+                        onSudoku = { tabNavController.navigate(SudokuTab) },
+                        on2048 = { tabNavController.navigate(Game2048Tab) },
+                        onCuestionario = { tabNavController.navigate(encuestaTab) }
+                    )
 
-            composable<RetosTab> {
-                RetosScreen(
-                    onSudoku = {tabNavController.navigate(SudokuTab)},
-                    on2048 = {tabNavController.navigate(Game2048Tab)},
-                    onCuestionario = {tabNavController.navigate(encuestaTab)}
-                )
+                }
 
-            }
+                composable<SudokuTab> {
+                    SudokuScreen(
+                        navigateBack = { tabNavController.popBackStack() }
+                    )
+                }
 
-            composable<SudokuTab> {
-                SudokuScreen(
-                    navigateBack = { tabNavController.popBackStack() }
-                )
-            }
+                composable<Game2048Tab> {
+                    GameScreen(
+                        navigateBack = { tabNavController.popBackStack() }
+                    )
+                }
 
-            composable<Game2048Tab> {
-                GameScreen(
-                    navigateBack = { tabNavController.popBackStack() }
-                )
-            }
+                composable<AritmeticaTab> {
+                    AritmeticaScreen(
+                        navigateBack = { tabNavController.popBackStack() },
+                        navigateToPreguntas = { materiaId, nivelId ->
+                            tabNavController.navigate(PreguntasRoute(materiaId, nivelId))
+                        },
+                        navigateToCuestionario = { nivelId ->
+                            tabNavController.navigate(CuestionarioAritmeticaRoute(nivelId))
+                        }
+                    )
+                }
 
-            composable<AritmeticaTab> {
-                AritmeticaScreen(
-                    navigateBack = { tabNavController.popBackStack() },
-                    navigateToPreguntas = { materiaId, nivelId ->
-                        tabNavController.navigate(PreguntasRoute(materiaId, nivelId))
-                    },
-                    navigateToCuestionario = { nivelId ->
-                        tabNavController.navigate(CuestionarioAritmeticaRoute(nivelId))
-                    }
-                )
-            }
-
-            composable<AlgebraTab> {
-                AlgebraScreen(
-                    navigateBack = { tabNavController.popBackStack() },
-                    navigateToPreguntas = { materiaId, nivelId ->
-                        tabNavController.navigate(PreguntasRoute(materiaId, nivelId))
-                    }
-                )
-            }
-
-
-            composable<FuncionesTab> {
-                FuncionesScreen(
-                    navigateBack = { tabNavController.popBackStack() },
-                    navigateToPreguntas = { materiaId, nivelId ->
-                        tabNavController.navigate(PreguntasRoute(materiaId, nivelId))
-                    }
-                )
-            }
-
-            composable<LibrosTab> {
-                LibrosScreen(
-                    navigateBack = { tabNavController.popBackStack() }
-                )
-            }
-
-            composable<AplicacionesTab> {
-                AplicacionesScreen(
-                    navigateBack = { tabNavController.popBackStack() }
-                )
-            }
-
-            composable<VideosTab> {
-                VideosScreen(
-                    navigateBack = { tabNavController.popBackStack() }
-                )
-            }
-
-            composable<ArticulosTab> {
-                ArticulosScreen(
-                    navigateBack = { tabNavController.popBackStack() }
-                )
-            }
-
-            composable<DatosCuriososTab> {
-                DatosCuriososScreen(
-                    navigateBack = { tabNavController.popBackStack() }
-                )
-            }
-
-            composable<MaterialAudiovisualTab> {
-                MaterialAudiovisualScreen(
-                    navigateBack = { tabNavController.popBackStack() }
-                )
-            }
-
-            composable<ProgramacionTab> {
-                ProgramacionScreen(
-                    navigateBack = { tabNavController.popBackStack() }
-                )
-            }
-
-            composable<PaginasApoyoTab> {
-                PaginasApoyoScreen(
-                    navigateBack = { tabNavController.popBackStack() }
-                )
-            }
+                composable<AlgebraTab> {
+                    AlgebraScreen(
+                        navigateBack = { tabNavController.popBackStack() },
+                        navigateToPreguntas = { materiaId, nivelId ->
+                            tabNavController.navigate(PreguntasRoute(materiaId, nivelId))
+                        }
+                    )
+                }
 
 
-            composable<PreguntasRoute> { backStackEntry ->
-                val materiaId = backStackEntry.arguments?.getString("materiaId") ?: ""
-                val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
+                composable<FuncionesTab> {
+                    FuncionesScreen(
+                        navigateBack = { tabNavController.popBackStack() },
+                        navigateToPreguntas = { materiaId, nivelId ->
+                            tabNavController.navigate(PreguntasRoute(materiaId, nivelId))
+                        }
+                    )
+                }
 
-                PreguntasScreen(
-                    materiaId = materiaId,
-                    nivelId = nivelId,
-                    navigateBack = { tabNavController.popBackStack() },
-                    onNavigateTipoBoton = { tipo, preguntaId ->
-                        when (tipo) {
-                            "tabla_seleccion" -> {
-                                tabNavController.navigate("tabla_naturales/$materiaId/$nivelId/$preguntaId")
-                            }
-                            "crucigrama_naturales" -> {
-                                tabNavController.navigate("crucigrama_naturales/$materiaId/$nivelId/$preguntaId")
-                            }
-                            else -> {
-                                tabNavController.navigate("tabla_naturales/$materiaId/$nivelId/$preguntaId")
+                composable<LibrosTab> {
+                    LibrosScreen(
+                        navigateBack = { tabNavController.popBackStack() }
+                    )
+                }
+
+                composable<AplicacionesTab> {
+                    AplicacionesScreen(
+                        navigateBack = { tabNavController.popBackStack() }
+                    )
+                }
+
+                composable<VideosTab> {
+                    VideosScreen(
+                        navigateBack = { tabNavController.popBackStack() }
+                    )
+                }
+
+                composable<ArticulosTab> {
+                    ArticulosScreen(
+                        navigateBack = { tabNavController.popBackStack() }
+                    )
+                }
+
+                composable<DatosCuriososTab> {
+                    DatosCuriososScreen(
+                        navigateBack = { tabNavController.popBackStack() }
+                    )
+                }
+
+                composable<MaterialAudiovisualTab> {
+                    MaterialAudiovisualScreen(
+                        navigateBack = { tabNavController.popBackStack() }
+                    )
+                }
+
+                composable<ProgramacionTab> {
+                    ProgramacionScreen(
+                        navigateBack = { tabNavController.popBackStack() }
+                    )
+                }
+
+                composable<PaginasApoyoTab> {
+                    PaginasApoyoScreen(
+                        navigateBack = { tabNavController.popBackStack() }
+                    )
+                }
+
+
+                composable<PreguntasRoute> { backStackEntry ->
+                    val materiaId = backStackEntry.arguments?.getString("materiaId") ?: ""
+                    val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
+
+                    PreguntasScreen(
+                        materiaId = materiaId,
+                        nivelId = nivelId,
+                        navigateBack = { tabNavController.popBackStack() },
+                        onNavigateTipoBoton = { tipo, preguntaId ->
+                            when (tipo) {
+                                "tabla_seleccion" -> {
+                                    tabNavController.navigate("tabla_naturales/$materiaId/$nivelId/$preguntaId")
+                                }
+
+                                "crucigrama_naturales" -> {
+                                    tabNavController.navigate("crucigrama_naturales/$materiaId/$nivelId/$preguntaId")
+                                }
+
+                                else -> {
+                                    tabNavController.navigate("tabla_naturales/$materiaId/$nivelId/$preguntaId")
+                                }
                             }
                         }
-                    }
-                )
-            }
+                    )
+                }
 
 //            composable("tabla_naturales/{preguntaId}") { backStackEntry ->
 //                val preguntaId = backStackEntry.arguments?.getString("preguntaId") ?: ""
@@ -264,60 +287,136 @@ fun MainScaffold(
 //                )
 //            }
 
-            composable("tabla_naturales/{materiaId}/{nivelId}/{preguntaId}") { backStackEntry ->
-                val materiaId = backStackEntry.arguments?.getString("materiaId") ?: ""
-                val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
-                val preguntaId = backStackEntry.arguments?.getString("preguntaId") ?: ""
+                composable("tabla_naturales/{materiaId}/{nivelId}/{preguntaId}") { backStackEntry ->
+                    val materiaId = backStackEntry.arguments?.getString("materiaId") ?: ""
+                    val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
+                    val preguntaId = backStackEntry.arguments?.getString("preguntaId") ?: ""
 
-                val vm: MateriaViewModel = hiltViewModel()
-                vm.setContext(materiaId, nivelId)
+                    val vm: MateriaViewModel = hiltViewModel()
+                    vm.setContext(materiaId, nivelId)
 
-                TablaNaturalesScreen(
-                    preguntaId = preguntaId,
-                    navigateBack = { tabNavController.popBackStack() },
-                    onGameResult = { gano ->
-                        vm.registrarMinijuegoResultadoConFetch(materiaId, nivelId, preguntaId, gano)
-                        if (gano) tabNavController.popBackStack()
+                    TablaNaturalesScreen(
+                        preguntaId = preguntaId,
+                        navigateBack = { tabNavController.popBackStack() },
+                        onGameResult = { gano ->
+                            vm.registrarMinijuegoResultadoConFetch(
+                                materiaId,
+                                nivelId,
+                                preguntaId,
+                                gano
+                            )
+                            if (gano) tabNavController.popBackStack()
+                        }
+                    )
+                }
+
+                composable("crucigrama_naturales/{materiaId}/{nivelId}/{preguntaId}") { backStackEntry ->
+                    val materiaId = backStackEntry.arguments?.getString("materiaId") ?: ""
+                    val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
+                    val preguntaId = backStackEntry.arguments?.getString("preguntaId") ?: ""
+
+                    val vm: MateriaViewModel = hiltViewModel()
+                    vm.setContext(materiaId, nivelId)
+
+                    CrucigramaMcmMcdScreen(
+                        preguntaId = preguntaId,
+                        navigateBack = { tabNavController.popBackStack() },
+                        onGameResult = { gano ->
+                            vm.registrarMinijuegoResultadoConFetch(
+                                materiaId,
+                                nivelId,
+                                preguntaId,
+                                gano
+                            )
+                            if (gano) tabNavController.popBackStack()
+                        }
+                    )
+                }
+
+                composable<encuestaTab> {
+                    EncuestaRoute(
+                        navigateBack = { tabNavController.popBackStack() }
+                    )
+                }
+
+                composable<CuestionarioAritmeticaRoute> { backStackEntry ->
+                    val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
+
+                    CuestionarioAritmeticaRouteScreen(
+                        nivelId = nivelId,
+                        navigateBack = { tabNavController.popBackStack() }
+                    )
+                }
+            }
+        }
+
+        if (showTour == true) {
+            when (step) {
+                // Después — navegación limpia igual que las tabs normales
+                0 -> CoachMark("Este es el inicio") {
+                    tabNavController.navigate(RecomendacionesTab) {
+                        popUpTo(tabNavController.graph.startDestinationId) {
+                            saveState = true
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                )
-            }
-
-            composable("crucigrama_naturales/{materiaId}/{nivelId}/{preguntaId}") { backStackEntry ->
-                val materiaId = backStackEntry.arguments?.getString("materiaId") ?: ""
-                val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
-                val preguntaId = backStackEntry.arguments?.getString("preguntaId") ?: ""
-
-                val vm: MateriaViewModel = hiltViewModel()
-                vm.setContext(materiaId, nivelId)
-
-                CrucigramaMcmMcdScreen(
-                    preguntaId = preguntaId,
-                    navigateBack = { tabNavController.popBackStack() },
-                    onGameResult = { gano ->
-                        vm.registrarMinijuegoResultadoConFetch(materiaId, nivelId, preguntaId, gano)
-                        if (gano) tabNavController.popBackStack()
+                    step++
+                }
+                1 -> CoachMark("Aquí puedes ver las materias") {
+                    tabNavController.navigate(MaterialTab) {
+                        popUpTo(tabNavController.graph.startDestinationId) {
+                            saveState = true        // ← guarda estado de HomeTab
+                            inclusive = false       // ← NO elimina HomeTab del stack
+                        }
+                        launchSingleTop = true
+                        restoreState = true
                     }
-                )
+                    step++
+                }
+                2 -> CoachMark("Material de apoyo") {
+                    tabNavController.navigate(MaterialIntTab) {
+                        popUpTo(tabNavController.graph.startDestinationId) {
+                            saveState = true
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                    step++
+                }
+                3 -> CoachMark("Contenido interesante") {
+                    tabNavController.navigate(RetosTab) {
+                        popUpTo(tabNavController.graph.startDestinationId) {
+                            saveState = true
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                    step++
+                }
+                4 -> CoachMark("Pon a prueba tus conocimientos") {
+                    tabNavController.navigate(HomeTab) {
+                        popUpTo(tabNavController.graph.startDestinationId) {
+                            saveState = true
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                    scope.launch { dataStore.setShowTour(false) }
+                    // ✅ Al terminar el tour, volver al inicio limpiamente
+                    tabNavController.navigate(HomeTab) {
+                        popUpTo(tabNavController.graph.startDestinationId) {
+                            inclusive = false
+                        }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
+                }
             }
-
-            composable<encuestaTab> {
-                EncuestaRoute(
-                    navigateBack = { tabNavController.popBackStack() }
-                )
-            }
-
-            composable<CuestionarioAritmeticaRoute> { backStackEntry ->
-                val nivelId = backStackEntry.arguments?.getString("nivelId") ?: ""
-
-                CuestionarioAritmeticaRouteScreen(
-                    nivelId = nivelId,
-                    navigateBack = { tabNavController.popBackStack() }
-                )
-            }
-
-
-
-
         }
     }
 }

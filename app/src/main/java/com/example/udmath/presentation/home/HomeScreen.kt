@@ -58,16 +58,6 @@ fun HomeScreen(
     val scope = rememberCoroutineScope()
     val userState = viewModel.user.collectAsState()
     val context = LocalContext.current
-    val dataStore = remember { DataStoreManager(context) }
-
-    val showTour by dataStore.showTour.collectAsState(initial = false)
-    var step by remember { mutableStateOf(0) }
-
-    LaunchedEffect(showTour) {
-        if (showTour == true) {
-            step = 0
-        }
-    }
 
 
     //Definimos el gradiente de colores
@@ -172,52 +162,6 @@ fun HomeScreen(
                 }
             }
         }
-
-
-
-        if (showTour) {
-            when (step) {
-
-                0 -> CoachMark("Este es el inicio") {
-                    step++
-                }
-
-                1 -> CoachMark("Aquí puedes ver las materias") {
-                    navController.navigate(RecomendacionesTab) {
-                        popUpTo(navController.graph.startDestinationId)
-                        launchSingleTop = true
-                    }
-                    step++
-                }
-
-                2 -> CoachMark("Material de apoyo") {
-                    navController.navigate(MaterialTab) {
-                        popUpTo(navController.graph.startDestinationId)
-                        launchSingleTop = true
-                    }
-                    step++
-                }
-
-                3 -> CoachMark("Contenido interesante") {
-                    navController.navigate(MaterialIntTab) {
-                        popUpTo(navController.graph.startDestinationId)
-                        launchSingleTop = true
-                    }
-                    step++
-                }
-
-                4 -> CoachMark("Pon a prueba tus conocimientos") {
-                    navController.navigate(RetosTab) {
-                        popUpTo(navController.graph.startDestinationId)
-                        launchSingleTop = true
-                    }
-                    scope.launch {
-                        dataStore.setShowTour(false)
-                    }
-                }
-            }
-        }
-
 
 
     }

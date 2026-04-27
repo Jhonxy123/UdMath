@@ -130,14 +130,16 @@ fun RegisterScreen(
                 password = state.password,
                 onTextChanged = { viewModel.onPasswordChange(it) },
                 showPassword = state.showPassword,
-                onToggleVisibility = { viewModel.togglePasswordVisibility() }
+                onToggleVisibility = { viewModel.togglePasswordVisibility() },
+                texto = "Contraseña"
             )
 
             PasswordText(
                 password = state.confirmPassword,
                 onTextChanged = { viewModel.onConfirmPasswordChange(it) },
                 showPassword = state.showConfirmPassword,
-                onToggleVisibility = { viewModel.toggleConfirmPasswordVisibility() }
+                onToggleVisibility = { viewModel.toggleConfirmPasswordVisibility() },
+                texto = "Confirmar Contraseña"
             )
 
             Spacer(modifier = Modifier.height(18.dp))

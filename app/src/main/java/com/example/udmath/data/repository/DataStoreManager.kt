@@ -14,7 +14,8 @@ class DataStoreManager(private val context: Context) {
         val SHOW_TOUR = booleanPreferencesKey("show_tour")
     }
 
-    val showTour: Flow<Boolean> = context.dataStore.data
+    // Flow<Boolean?> para distinguir "cargando" de "false"
+    val showTour: Flow<Boolean?> = context.dataStore.data
         .map { preferences ->
             preferences[SHOW_TOUR] ?: true
         }

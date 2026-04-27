@@ -164,7 +164,8 @@ fun PasswordText(
     onTextChanged: (String) -> Unit,
     showPassword: Boolean,
     onToggleVisibility: () -> Unit,
-    isError: Boolean = false
+    isError: Boolean = false,
+    texto: String
 ) {
     val statePassword = remember { TextFieldState() }
     var isFocused by remember { mutableStateOf(false) }
@@ -198,7 +199,7 @@ fun PasswordText(
             .padding(top = 16.dp)
     ) {
         Text(
-            text = "Contraseña",
+            text = texto,
             fontSize = 16.sp,
             fontWeight = FontWeight.SemiBold,
             color = Blue
