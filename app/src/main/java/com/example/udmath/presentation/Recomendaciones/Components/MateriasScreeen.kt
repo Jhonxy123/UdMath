@@ -107,7 +107,7 @@
                 }
             }
 
-            if (materia == "algebra" && materiaCompleta) {
+            if (materiaCompleta) {
                 Spacer(Modifier.height(12.dp))
 
                 Button(
