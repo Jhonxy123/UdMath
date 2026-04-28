@@ -352,8 +352,10 @@ fun MainScaffold(
 
         if (showTour == true) {
             when (step) {
-                // Después — navegación limpia igual que las tabs normales
-                0 -> CoachMark("Este es el inicio") {
+
+                0 -> CoachMark(
+                    "Bienvenido al inicio. Aquí podrás ver la información de tu cuenta y responder el cuestionario de satisfacción."
+                ) {
                     tabNavController.navigate(RecomendacionesTab) {
                         popUpTo(tabNavController.graph.startDestinationId) {
                             saveState = true
@@ -364,18 +366,24 @@ fun MainScaffold(
                     }
                     step++
                 }
-                1 -> CoachMark("Aquí puedes ver las materias") {
+
+                1 -> CoachMark(
+                    "En esta sección encontrarás las diferentes materias disponibles para reforzar tus conocimientos."
+                ) {
                     tabNavController.navigate(MaterialTab) {
                         popUpTo(tabNavController.graph.startDestinationId) {
-                            saveState = true        // ← guarda estado de HomeTab
-                            inclusive = false       // ← NO elimina HomeTab del stack
+                            saveState = true
+                            inclusive = false
                         }
                         launchSingleTop = true
                         restoreState = true
                     }
                     step++
                 }
-                2 -> CoachMark("Material de apoyo") {
+
+                2 -> CoachMark(
+                    "Aquí encontrarás material de apoyo como libros, aplicaciones y videos que te ayudarán en tu proceso de estudio."
+                ) {
                     tabNavController.navigate(MaterialIntTab) {
                         popUpTo(tabNavController.graph.startDestinationId) {
                             saveState = true
@@ -386,7 +394,10 @@ fun MainScaffold(
                     }
                     step++
                 }
-                3 -> CoachMark("Contenido interesante") {
+
+                3 -> CoachMark(
+                    "En contenido interesante descubrirás recursos y temas llamativos que ampliarán tu aprendizaje."
+                ) {
                     tabNavController.navigate(RetosTab) {
                         popUpTo(tabNavController.graph.startDestinationId) {
                             saveState = true
@@ -397,7 +408,10 @@ fun MainScaffold(
                     }
                     step++
                 }
-                4 -> CoachMark("Pon a prueba tus conocimientos") {
+
+                4 -> CoachMark(
+                    "En retos podrás poner a prueba tus conocimientos y fortalecer tu lógica de forma divertida."
+                ) {
                     tabNavController.navigate(HomeTab) {
                         popUpTo(tabNavController.graph.startDestinationId) {
                             saveState = true
@@ -406,8 +420,9 @@ fun MainScaffold(
                         launchSingleTop = true
                         restoreState = true
                     }
+
                     scope.launch { dataStore.setShowTour(false) }
-                    // ✅ Al terminar el tour, volver al inicio limpiamente
+
                     tabNavController.navigate(HomeTab) {
                         popUpTo(tabNavController.graph.startDestinationId) {
                             inclusive = false
