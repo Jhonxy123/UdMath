@@ -19,10 +19,13 @@ import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.example.udmath.presentation.components.NavigationDrawer
 import com.example.udmath.presentation.components.TopBar
@@ -34,9 +37,18 @@ import androidx.compose.ui.unit.dp
 import com.example.udmath.R
 import com.example.udmath.ui.theme.white
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.udmath.data.repository.DataStoreManager
+import androidx.compose.runtime.*
+import androidx.navigation.NavHostController
+import com.example.udmath.presentation.components.CoachMark
+import com.example.udmath.presentation.navigation.MaterialIntTab
+import com.example.udmath.presentation.navigation.MaterialTab
+import com.example.udmath.presentation.navigation.RecomendacionesTab
+import com.example.udmath.presentation.navigation.RetosTab
 
 @Composable
 fun HomeScreen(
+    navController: NavHostController,
     viewModel: HomeViewModel = hiltViewModel(),
     onLoggedOut: () -> Unit = {},   // navController lo pasará; para Preview queda vacío
     navigateToProfile: () -> Unit = {}
@@ -45,6 +57,7 @@ fun HomeScreen(
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val userState = viewModel.user.collectAsState()
+    val context = LocalContext.current
 
 
     //Definimos el gradiente de colores
@@ -64,89 +77,93 @@ fun HomeScreen(
         }
     }
 
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                NavigationDrawer(
-                    user = userState.value,
-                    // 1. Cerramos el drawer
-                    // 2. Avisamos al ViewModel que se pidió logout
-                    onLogout = {
+    Box {
+        ModalNavigationDrawer(
+            drawerState = drawerState,
+            drawerContent = {
+                ModalDrawerSheet {
+                    NavigationDrawer(
+                        user = userState.value,
                         // 1. Cerramos el drawer
-                        scope.launch { drawerState.close() }
                         // 2. Avisamos al ViewModel que se pidió logout
-                        viewModel.onLogoutClicked()
-                    },
-
-                    onProfileClicked = {
-                        scope.launch { drawerState.close() }
-                        navigateToProfile()
-                    }
-
-
-                )
-            }
-        }
-    ) {
-        Box(
-            modifier = Modifier
-                //CAMBIAR EL COLOR DEL FONDO
-                .background(blueGradient)
-                .fillMaxSize()
-        ) {
-            Scaffold(
-                containerColor = Color.Transparent,
-                topBar = {
-                    TopBar(
-                        onDrawerClicked = {
-                            scope.launch {
-                                drawerState.open()
-                            }
+                        onLogout = {
+                            // 1. Cerramos el drawer
+                            scope.launch { drawerState.close() }
+                            // 2. Avisamos al ViewModel que se pidió logout
+                            viewModel.onLogoutClicked()
                         },
-                        text = "Inicio"
+
+                        onProfileClicked = {
+                            scope.launch { drawerState.close() }
+                            navigateToProfile()
+                        }
+
+
                     )
                 }
-            ) { paddingValues ->
-                Box(
-                    modifier = Modifier
-                        .padding(paddingValues)
-                        .fillMaxSize()
-                ) {
-                    Column(
-                        modifier = Modifier.fillMaxSize()
+            }
+        ) {
+            Box(
+                modifier = Modifier
+                    //CAMBIAR EL COLOR DEL FONDO
+                    .background(blueGradient)
+                    .fillMaxSize()
+            ) {
+                Scaffold(
+                    containerColor = Color.Transparent,
+                    topBar = {
+                        TopBar(
+                            onDrawerClicked = {
+                                scope.launch {
+                                    drawerState.open()
+                                }
+                            },
+                            text = "Inicio"
+                        )
+                    }
+                ) { paddingValues ->
+                    Box(
+                        modifier = Modifier
+                            .padding(paddingValues)
+                            .fillMaxSize()
                     ) {
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(50.dp)
-                        )
+                        Column(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(50.dp)
+                            )
 
-                        Image(
-                            painter = painterResource(id = R.drawable.logo_inicio),
-                            contentDescription = "Logo",
-                            Modifier.size(400.dp)
-                        )
+                            Image(
+                                painter = painterResource(id = R.drawable.logo_inicio),
+                                contentDescription = "Logo",
+                                Modifier.size(400.dp)
+                            )
 
-                        Text(
-                            modifier = Modifier.padding(start = 20.dp),
-                            textAlign = TextAlign.Left,
-                            text = "UdMath",
-                            fontWeight = FontWeight.Bold,
-                            color = white
-                        )
+                            Text(
+                                modifier = Modifier.padding(start = 20.dp),
+                                textAlign = TextAlign.Left,
+                                text = "UdMath",
+                                fontWeight = FontWeight.Bold,
+                                color = white
+                            )
 
-                        Text(
-                            modifier = Modifier.padding(start = 20.dp),
-                            text = "Bienvenido a UdMath usuario, esta aplicación ha sido diseñada para ayudarte en " +
-                                    "el recorrido de tus materias de ciencias basicas, " +
-                                    "para comenzar selecciona en la parte inferior la sección a la que desea ingresar. ",
-                            color = Color.White
-                        )
+                            Text(
+                                modifier = Modifier.padding(start = 20.dp),
+                                text = "Bienvenido a UdMath usuario, esta aplicación ha sido diseñada para ayudarte en " +
+                                        "el recorrido de tus materias de ciencias basicas, " +
+                                        "para comenzar selecciona en la parte inferior la sección a la que desea ingresar. ",
+                                color = Color.White
+                            )
+                        }
                     }
                 }
             }
         }
+
+
     }
 }
 
