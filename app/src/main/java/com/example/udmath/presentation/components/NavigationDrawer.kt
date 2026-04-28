@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -32,26 +34,30 @@ import com.example.udmath.R
 import com.example.udmath.domain.model.UserUi
 import com.example.udmath.ui.theme.white
 
-
 val blueGradient = Brush.verticalGradient(
     colors = listOf(
-        Color(0xFF3980C2),  // Azul claro (parte superior)
-        Color(0xFF184998)   // Azul oscuro (parte inferior)
+        Color(0xFF3980C2),  // Azul claro
+        Color(0xFF184998)   // Azul oscuro
     )
 )
-
-
 
 @Composable
 fun NavigationDrawer(
     user: UserUi?,
-    onLogout: () -> Unit = {},  // Función de cierre de sesión callback
+    onLogout: () -> Unit = {},
     onProfileClicked: () -> Unit = {}
-){
+) {
 
-    Column(modifier = Modifier.fillMaxSize()
-        .background(blueGradient)
-        .padding(horizontal = 15.dp, vertical = 30.dp),
+    val uriHandler = LocalUriHandler.current
+
+    // 🔗 Cambia este link por tu Google Forms real
+    val encuestaUrl = "https://forms.cloud.microsoft/Pages/ResponsePage.aspx?id=74gT1bBqY0OflNVmRKRZcATKYjdzK4lDhdvnvkFTn9RUOUdLNE1ZNEdVTFY1U1ZaTkM4T1U2VzI3WC4u"
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(blueGradient)
+            .padding(horizontal = 15.dp, vertical = 30.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
@@ -78,7 +84,7 @@ fun NavigationDrawer(
 
         Spacer(modifier = Modifier.fillMaxWidth().height(15.dp))
 
-        // CORREO DEL USUARIO
+        // Correo del usuario
         Text(
             text = user?.email ?: "Invitado",
             color = white,
@@ -88,21 +94,32 @@ fun NavigationDrawer(
 
         Spacer(modifier = Modifier.fillMaxWidth().height(50.dp))
 
-        NavigationDrawerButton("Editar Perfil", Icons.Default.Edit, onclick = { onProfileClicked() })
+        // 🔹 Botón editar perfil
+        NavigationDrawerButton(
+            "Editar Perfil",
+            Icons.Default.Edit,
+            onclick = { onProfileClicked() }
+        )
 
-        //Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
+        Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
 
-        //NavigationDrawerButton("Ajustes", Icons.Default.Settings, onclick = {})
+        // 🔹 NUEVO BOTÓN: Encuesta de Satisfacción
+        NavigationDrawerButton(
+            "Encuesta Satisfacción",
+            Icons.Default.Info,
+            onclick = {
+                uriHandler.openUri(encuestaUrl)
+            }
+        )
 
-        //Spacer(modifier = Modifier.fillMaxWidth().height(20.dp))
-
-        //NavigationDrawerButton("Progreso", Icons.Default.DateRange, onclick = {})
-
-        // 🔹 Este Spacer empuja el siguiente contenido hacia abajo 👇
+        // 🔹 Empuja lo de abajo
         Spacer(modifier = Modifier.weight(1f))
 
-        NavigationDrawerButton("Cerrar Sesión", Icons.Default.ExitToApp, onclick = { onLogout() })
-
+        // 🔹 Cerrar sesión
+        NavigationDrawerButton(
+            "Cerrar Sesión",
+            Icons.Default.ExitToApp,
+            onclick = { onLogout() }
+        )
     }
-
 }
